@@ -31,6 +31,9 @@ public class Users implements java.io.Serializable {
 	@Column(name = "email", nullable = true)
 	private String email;
 
+	@Column(name = "role", nullable = true)
+	private String role;
+
 	@Column(name = "username", nullable = true)
 	private String username;
 
@@ -46,11 +49,11 @@ public class Users implements java.io.Serializable {
 	public Users() {
 	}
 
-	public Users(String name, String lastname, String email, String username, String password, String telephone,
-			String mobile) {
+	public Users(String name, String lastname, String email, String username, String password, String telephone, String mobile, String role) {
 		this.name = name;
 		this.lastname = lastname;
 		this.email = email;
+		this.role = role;
 		this.username = username;
 		this.password = password;
 		this.telephone = telephone;
@@ -119,6 +122,14 @@ public class Users implements java.io.Serializable {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override

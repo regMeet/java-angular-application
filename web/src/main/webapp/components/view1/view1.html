@@ -1,0 +1,16 @@
+<p>This is the partial for view 1.</p>
+
+<div ng-controller="View1Ctrl">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>Age</td>
+			</tr>
+		</thead>
+		<tr ng-repeat="person in people">
+			<td>{{ person.name }}</td>
+			<td>{{ person.age }}</td>
+		</tr>
+	</table>
+</div>

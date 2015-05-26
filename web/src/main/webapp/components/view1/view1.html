@@ -4,12 +4,19 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
+				<td>ID</td>
 				<td>Name</td>
-				<td>Age</td>
+				<td>Lastname</td>
+				<td>email</td>
+				<td>role</td>
+				<td>Username</td>
+				<td>Password</td>
+				<td>telephone</td>
+				<td>Mobile</td>
 			</tr>
 		</thead>
 		<tr ng-repeat="person in people">
-			<td>{{ person.id }}</td>
+			<td>{{ person.idUser }}</td>
 			<td>{{ person.name }}</td>
 			<td>{{ person.lastname }}</td>
 			<td>{{ person.email }}</td>

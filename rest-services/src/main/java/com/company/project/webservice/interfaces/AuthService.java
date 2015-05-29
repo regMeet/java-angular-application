@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Response;
+import javax.ws.rs.core.Response;
+
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.company.project.persistence.entities.Users;
 import com.company.project.webservice.implementations.AuthServiceImpl.Payload;

@@ -2,9 +2,12 @@ package com.company.project.services.interfaces;
 
 import com.company.project.persistence.entities.Users;
 import com.company.project.services.interfaces.base.BaseService;
+import com.google.common.base.Optional;
 
 public interface UserService  extends BaseService<Users>{
 
-	Users findByUserName(String name);
+	Optional<Users> findByUsername(String username);
+	
+	Optional<Users> findByEmail(String email);
 
 }

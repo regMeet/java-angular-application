@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -15,7 +17,20 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Users", catalog = "Angular")
+@NamedQueries({ 
+		@NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
+		@NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
+		@NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
+//		@NamedQuery(name = "Users.findByFacebook", query = "SELECT u FROM Users u WHERE u.facebook = :facebook"),
+//		@NamedQuery(name = "Users.findByGoogle", query = "SELECT u FROM Users u WHERE u.google = :google"),
+//		@NamedQuery(name = "Users.findByGithub", query = "SELECT u FROM Users u WHERE u.github = :github"),
+//		@NamedQuery(name = "Users.findByLinkedin", query = "SELECT u FROM Users u WHERE u.linkedin = :linkedin"),
+//		@NamedQuery(name = "Users.findByFoursquare", query = "SELECT u FROM Users u WHERE u.foursquare = :foursquare"),
+//		@NamedQuery(name = "Users.findByTwitter", query = "SELECT u FROM Users u WHERE u.twitter = :twitter") 
+})
 public class Users implements java.io.Serializable {
+	public static final String FIND_BY_USERNAME = "Users.findByUsername";
+	public static final String FIND_BY_EMAIL = "Users.findByEmail";
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

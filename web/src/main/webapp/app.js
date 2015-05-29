@@ -3,13 +3,15 @@
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
     'ngRoute',
+    "satellizer",
     'myApp.view1',
-    'userServices'
+    'userServices',
+    'myApp.oauth'
 ])
 .config(['$routeProvider', '$httpProvider',
-    function($routeProvider, $httpProvider) {
-	$httpProvider.defaults.useXDomain = true;
-	delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    function($routeProvider, $httpProvider, $authProvider) {
+		$httpProvider.defaults.useXDomain = true;
+		delete $httpProvider.defaults.headers.common['X-Requested-With'];
         $routeProvider
             /*
             .when('/view1', {
@@ -20,4 +22,9 @@ angular.module('myApp', [
             .otherwise({
                 redirectTo: '/view1'
             });
+        // Parametros de configuración de satellizer
+        $authProvider.loginUrl = "http://api.com/auth/login";
+        $authProvider.signupUrl = "http://api.com/auth/signup";
+        $authProvider.tokenName = "token";
+        $authProvider.tokenPrefix = "myApp";
     }]);

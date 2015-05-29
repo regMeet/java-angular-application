@@ -8,19 +8,24 @@ import com.company.project.persistence.dao.interfaces.UserDAO;
 import com.company.project.persistence.entities.Users;
 import com.company.project.services.implementations.base.BaseServiceImpl;
 import com.company.project.services.interfaces.UserService;
+import com.google.common.base.Optional;
 
 @Service("userService")
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl<Users, UserDAO> implements UserService {
-	
+
 	@Autowired
 	public UserServiceImpl(UserDAO baseDao) {
 		super(baseDao);
 	}
 
 	@Override
-	public Users findByUserName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<Users> findByUsername(String username) {
+		return baseDao.findByUsername(username);
+	}
+
+	@Override
+	public Optional<Users> findByEmail(String email) {
+		return baseDao.findByEmail(email);
 	}
 }

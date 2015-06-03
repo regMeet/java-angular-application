@@ -40,7 +40,7 @@
     </filter>
     <filter-mapping>
         <filter-name>authFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/api/*</url-pattern>
     </filter-mapping>
 
 </web-app>

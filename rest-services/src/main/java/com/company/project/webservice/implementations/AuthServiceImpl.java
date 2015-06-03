@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.company.project.Auth.AuthUtils;
 import com.company.project.Auth.ErrorMessage;
@@ -25,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.nimbusds.jose.JOSEException;
 
+@RestController
 @RequestMapping("/auth")
 public class AuthServiceImpl implements AuthService {
 
@@ -39,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
 	public static final String CONFLICT_MSG = "There is already a %s account that belongs to you";
 	public static final String NOT_FOUND_MSG = "User not found";
+	public static final String EXISTING_ACCOUNT_ERROR_MSG = "The email already exists";
 	public static final String LOGING_ERROR_MSG = "Wrong email and/or password";
 	public static final String UNLINK_ERROR_MSG = "Could not unlink %s account because it is your only sign-in method";
 
@@ -49,22 +55,35 @@ public class AuthServiceImpl implements AuthService {
 		this.userService = userService;
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	@Override
-	public Response login(Users user, HttpServletRequest request) throws JOSEException {
-//		final Optional<Users> foundUser = userService.findByEmail(user.getEmail());
-//		if (foundUser.isPresent() && PasswordService.checkPassword(user.getPassword(), foundUser.get().getPassword())) {
-//			final Token token = AuthUtils.createToken(request.getRemoteHost(), foundUser.get().getIdUser());
-//			return Response.ok().entity(token).build();
-//		}
-		System.out.println("loginnnnnn");
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public @ResponseBody Response login(@RequestBody @Valid Users user, HttpServletRequest request) throws JOSEException {
+		if (user.getEmail() != null) {
+			final Optional<Users> userDto = userService.findByEmail(user.getEmail());
+			if (userDto.isPresent()) {
+				String passwordDto = userDto.get().getPassword();
+				boolean checkPassword = PasswordService.checkPassword(user.getPassword(), passwordDto);
+				if (checkPassword) {
+					final Token token = AuthUtils.createToken(request.getRemoteHost(), userDto.get().getIdUser());
+					return Response.ok().entity(token).build();
+				}
+			}
+		}
 		return Response.status(Status.UNAUTHORIZED).entity(new ErrorMessage(LOGING_ERROR_MSG)).build();
 	}
 
 	@Override
-	public Response signup(Users user, HttpServletRequest request) throws JOSEException {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public @ResponseBody Response signup(@RequestBody @Valid Users user, HttpServletRequest request) throws JOSEException {
+		final Optional<Users> existingUser = userService.findByEmail(user.getEmail());
+		if (!existingUser.isPresent()) {
+			user.setPassword(PasswordService.hashPassword(user.getPassword()));
+			userService.create(user);
+			final Token token = AuthUtils.createToken(request.getRemoteHost(), user.getIdUser());
+			return Response.status(Status.CREATED).entity(token).build();
+		}
+
+		return Response.status(Status.CONFLICT).entity(new ErrorMessage(EXISTING_ACCOUNT_ERROR_MSG)).build();
 	}
 
 	@Override

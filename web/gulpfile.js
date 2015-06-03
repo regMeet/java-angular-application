@@ -70,8 +70,15 @@ gulp.task('minify-css-js', function() {
 	// compress resources from index.html
 	gulp.src('src/main/webapp/index.html')
 		.pipe(usemin({
-			vendor: [filesize(), uglify(), rev(), filesize()],
-			scripts: [filesize(), ngmin(), uglify(), rev(), filesize()],
+			vendor: [filesize(),
+//			         uglify(),
+//			         rev(),
+			         filesize()],
+			scripts: [filesize(),
+//			          ngmin(),
+//			          uglify(),
+//			          rev(),
+			          filesize()],
 			stylesheets: ['concat', filesize(), csso(), rev(), filesize()]
 		}))
 		.pipe(gulp.dest('target/overlay'));

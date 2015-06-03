@@ -3,28 +3,26 @@
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
     'ngRoute',
-    "satellizer",
+    'satellizer',
+    'myApp.auth',
+    'myApp.home',
     'myApp.view1',
-    'userServices',
-    'myApp.oauth'
+    'userServices'
 ])
-.config(['$routeProvider', '$httpProvider',
-    function($routeProvider, $httpProvider, $authProvider) {
-		$httpProvider.defaults.useXDomain = true;
-		delete $httpProvider.defaults.headers.common['X-Requested-With'];
+.config(['$routeProvider', '$authProvider',
+    function($routeProvider, $authProvider) {
         $routeProvider
-            /*
-            .when('/view1', {
-                templateUrl: 'components/view1/view1.html',
-                controller: 'View1Ctrl'
-            })
-            })*/
             .otherwise({
-                redirectTo: '/view1'
+                redirectTo: '/login'
             });
         // Parametros de configuración de satellizer
-        $authProvider.loginUrl = "http://api.com/auth/login";
-        $authProvider.signupUrl = "http://api.com/auth/signup";
-        $authProvider.tokenName = "token";
-        $authProvider.tokenPrefix = "myApp";
+        //$authProvider.authHeader = 'Authorization'; // default
+        $authProvider.authHeader = 'x-access-token';
+        $authProvider.httpInterceptor = true; // Add Authorization header to HTTP request
+
+        $authProvider.baseUrl = 'http://localhost:8089/web-services';
+        $authProvider.loginUrl = '/auth/login';
+        $authProvider.signupUrl = '/auth/signup';
+        $authProvider.tokenName = 'satellizer';
+        $authProvider.tokenPrefix = 'myApp';
     }]);

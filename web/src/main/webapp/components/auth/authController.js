@@ -12,9 +12,7 @@ angular.module('myApp.auth')
 
 .controller('SignUpController', [ '$scope', '$auth', '$location', function($scope, $auth, $location) {
 	$scope.signup = {};
-    console.log('Controller SignUpController Loaded');
 	$scope.signup = function(){
-		console.log('Controller SignUpController Loaded---');
         $auth.signup({
             email: $scope.signup.email,
             password: $scope.signup.password
@@ -22,7 +20,8 @@ angular.module('myApp.auth')
         .then(function() {
             // Si se ha registrado correctamente,
             // Podemos redirigirle a otra parte
-            $location.path("/private");
+        	console.log("signup successful");
+            $location.path("/view1");
         })
         .catch(function(response) {
             // Si ha habido errores, llegaremos a esta función
@@ -32,9 +31,7 @@ angular.module('myApp.auth')
 
 .controller('LoginController', [ '$scope', '$auth', '$location', function($scope, $auth, $location) {
 	$scope.login = {};
-	console.log('Controller LoginController Loaded');
 	$scope.login = function(){
-		console.log('Controller LoginController Loaded 21');
 	    $auth.login({
 	        email: $scope.login.email,
 	        password: $scope.login.password
@@ -42,6 +39,7 @@ angular.module('myApp.auth')
 	    .then(function(){
 	        // Si se ha logueado correctamente, lo tratamos aquí.
 	        // Podemos también redirigirle a una ruta
+	    	console.log("login successful");
 	        $location.path("/private");
 	    })
 	    .catch(function(response){

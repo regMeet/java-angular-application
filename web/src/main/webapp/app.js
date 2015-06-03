@@ -13,16 +13,18 @@ angular.module('myApp', [
     function($routeProvider, $authProvider) {
         $routeProvider
             .otherwise({
-                redirectTo: '/login'
+                redirectTo: '/'
             });
         // Parametros de configuración de satellizer
         //$authProvider.authHeader = 'Authorization'; // default
         $authProvider.authHeader = 'x-access-token';
         $authProvider.httpInterceptor = true; // Add Authorization header to HTTP request
+        // https://github.com/sahat/satellizer/issues/261
+        $authProvider.tokenRoot = 'entity'; // set the token parent element if the token is not the JSON root
 
         $authProvider.baseUrl = 'http://localhost:8089/web-services';
         $authProvider.loginUrl = '/auth/login';
         $authProvider.signupUrl = '/auth/signup';
-        $authProvider.tokenName = 'satellizer';
+        $authProvider.tokenName = 'token';
         $authProvider.tokenPrefix = 'myApp';
     }]);

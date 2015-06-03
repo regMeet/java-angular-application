@@ -23,6 +23,7 @@
     "postinstall": "bower install",
 
     "prestart": "npm install",
+    "startSatellizer": "http-server -a localhost -p 8000 -c-1 client/",
     "start2": "http-server -a localhost -p 8000 -c-1 target/front-end-angular-client",
     "start": "gulp start",
 

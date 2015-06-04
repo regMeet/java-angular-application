@@ -12,7 +12,7 @@ angular.module('myApp.auth', ['ngRoute'])
 	        controller: 'SignUpController'
 	    })
 	    .when('/logout', {
-	        templateUrl: null,
+	        template: ' ',
 	        controller: 'LogoutController'
 	    });
 }]);

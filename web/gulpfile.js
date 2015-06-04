@@ -34,7 +34,9 @@ var paths = {
 	    shared:				shared_path + '**/*.*',
 	    app_js:         	webapp_path + 'app.js',
 	    app_css:         	webapp_path + 'app.css',
+	    app: 	        	webapp_path + 'app.{js,css}',
 	    index:          	webapp_path + '/index.html',
+	    icon:          		webapp_path + '/favicon.png',
 };
 
 gulp.task('lint', function() {
@@ -90,13 +92,18 @@ gulp.task('copy-templates', function() {
         .pipe(gulp.dest('target/overlay/templates'));
 });
 
+gulp.task('copy-icon', function() {
+    return gulp.src(paths.icon)
+        .pipe(gulp.dest('target/overlay'));
+});
+
 /**
  * Watch custom files
  */
 gulp.task('watch', function() {
     gulp.watch([paths.html_templates], ['copy-templates']);
-    gulp.watch([paths.app_scripts], ['keep-index-html']);
-    gulp.watch([paths.app_scripts], ['minify-css-js']);
+    gulp.watch([paths.app_scripts, paths.index ], ['keep-index-html', 'minify-css-js']);
+    gulp.watch([paths.app], ['minify-css-js']);
     
     // gulp-plumber
     // https://github.com/floatdrop/gulp-plumber
@@ -118,6 +125,6 @@ gulp.on('err', function (err) {
 	throw err;
 });
 
-gulp.task('build', ['lint', 'keep-index-html', 'minify-css-js', 'copy-templates']);
+gulp.task('build', ['lint', 'keep-index-html', 'minify-css-js', 'copy-templates', 'copy-icon']);
 gulp.task('default', ['build']);
 gulp.task('start', ['webserver', 'watch']);

@@ -7,6 +7,7 @@ angular.module('myApp', [
     'myApp.auth',
     'myApp.home',
     'myApp.view1',
+    'mgcrea.ngStrap',
     'userServices'
 ])
 .config(['$routeProvider', '$authProvider',

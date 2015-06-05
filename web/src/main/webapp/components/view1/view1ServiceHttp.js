@@ -1,7 +1,22 @@
 'use strict';
 
-var userServices = angular.module('userServices', ['ngResource']);
+var userServices = angular.module('userServices', []);
 
+userServices.factory('User', [ '$http', function($http) {
+	var urlBase = 'http://localhost:8089/web-services/api/users/';
+	return {
+		getUsers : function() {
+			return $http.get(urlBase);
+		},
+		updateProfile : function(profileData) {
+			return $http.put('/api/me', profileData);
+		}
+	};
+} ]);
+
+
+/*
+var userServices = angular.module('userServices', ['ngResource']);
 userServices.service('User', ['$http', function ($http) {
 
     var urlBase = 'http://localhost:8089/web-services/api/users/';
@@ -30,3 +45,4 @@ userServices.service('User', ['$http', function ($http) {
         return $http.get(urlBase + '/' + id + '/orders');
     };
 }]);
+*/

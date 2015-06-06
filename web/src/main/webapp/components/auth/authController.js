@@ -48,11 +48,30 @@ angular.module('myApp.auth')
 	};
 } ])
 
-.controller('LogoutController', [ '$scope', '$auth', '$location', function($scope, $auth, $location) {
-	console.log('Controller LoginController Loaded');
-	$auth.logout()
-	    .then(function() {
-	        // Desconectamos al usuario y lo redirijimos
-	        $location.path("/");
-	    });
+.controller('LogoutController', [ '$scope', '$auth', '$location', '$alert', function($scope, $auth, $location, $alert) {
+	if (!$auth.isAuthenticated()) {
+        return;
+    }
+	if ($auth.isAuthenticated()) {
+		console.log("logout successful");
+    }
+    $auth.logout()
+    .then(function() {
+//        $alert({
+//          content: 'You have been logged out',
+//          animation: 'fadeZoomFadeDown',
+//          type: 'material',
+//          duration: 3
+//        });
+    });
 } ]);
+
+/*
+controller('LogoutController', [ '$scope', '$auth', '$location', function($scope, $auth, $location) {
+    console.log('Controller LoginController Loaded');
+    $auth.logout()
+        .then(function() {
+            // Desconectamos al usuario y lo redirijimos
+            $location.path("/");
+        });
+*/

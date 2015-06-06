@@ -10,15 +10,13 @@ angular.module('myApp', [
     'mgcrea.ngStrap',
     'userServices'
 ])
-.config(['$routeProvider', '$authProvider',
-    function($routeProvider, $authProvider) {
+.config(['$routeProvider', '$authProvider', '$httpProvider', 'satellizer.config', function($routeProvider, $authProvider, $httpProvider, config) {
         $routeProvider
             .otherwise({
                 redirectTo: '/'
             });
         // Parametros de configuración de satellizer
-        //$authProvider.authHeader = 'Authorization'; // default
-        $authProvider.authHeader = 'x-access-token';
+        $authProvider.authHeader = 'Authorization'; // default
         $authProvider.httpInterceptor = true; // Add Authorization header to HTTP request
         // https://github.com/sahat/satellizer/issues/261
         $authProvider.tokenRoot = 'entity'; // set the token parent element if the token is not the JSON root
@@ -28,4 +26,5 @@ angular.module('myApp', [
         $authProvider.signupUrl = '/auth/signup';
         $authProvider.tokenName = 'token';
         $authProvider.tokenPrefix = 'myApp';
+        
     }]);

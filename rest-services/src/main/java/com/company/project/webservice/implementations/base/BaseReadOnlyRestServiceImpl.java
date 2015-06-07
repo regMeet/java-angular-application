@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.company.project.services.interfaces.base.BaseReadOnlyService;
 import com.company.project.webservice.interfaces.base.BaseReadOnlyRestService;
+import com.google.common.base.Optional;
 
 public class BaseReadOnlyRestServiceImpl<E extends Serializable, S extends BaseReadOnlyService<E>> implements BaseReadOnlyRestService<E> {
 
@@ -28,7 +29,7 @@ public class BaseReadOnlyRestServiceImpl<E extends Serializable, S extends BaseR
 	}
 
 	@Override
-	public E findById(Object id) {
+	public Optional<E> findById(Object id) {
 		return baseService.findById(id);
 	}
 

@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.company.project.persistence.entities.Users;
 import com.company.project.services.interfaces.UserService;
+import com.google.common.base.Optional;
 
 public class AppTestUser {
 	public static void main(String[] args) {
@@ -13,8 +14,8 @@ public class AppTestUser {
 		UserService cityService = (UserService) context.getBean("userService");
 
 		/** select **/
-		Users user = cityService.findById(9);
-		System.out.println(user);
+		Optional<Users> user = cityService.findById(9);
+		System.out.println(user.get());
 		
 		/** insert **/
 		Users user2 = new Users();
@@ -26,7 +27,7 @@ public class AppTestUser {
 		cityService.update(user2);
 
 		/** delete **/
-		cityService.delete(user);
+		cityService.delete(user.get());
 		
 		cityService.delete(user2.getIdUser());
 

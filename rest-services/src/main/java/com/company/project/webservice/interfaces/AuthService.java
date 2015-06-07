@@ -6,8 +6,6 @@ import java.text.ParseException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.company.project.persistence.entities.Users;
 import com.company.project.webservice.implementations.AuthServiceImpl.Payload;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -25,14 +23,6 @@ public interface AuthService {
 
 	public abstract Response loginGoogle(Payload payload, HttpServletRequest request) throws JOSEException, ParseException,
 			JsonParseException, JsonMappingException, IOException;
-
-	public abstract Response loginLinkedin();
-
-	public abstract Response loginGithub();
-
-	public abstract Response loginFoursquare();
-
-	public abstract Response loginTwitter(HttpServletRequest request);
 
 	public abstract Response unlink(String provider, HttpServletRequest request) throws ParseException, IllegalArgumentException,
 			IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException;

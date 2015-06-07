@@ -9,6 +9,16 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 
     
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:/ClientSecrets.properties" />
+    </bean>
 
+    <bean id="facebookUtil" class="com.company.project.Auth.Provider.FacebookUtil">
+        <constructor-arg value="${facebook}"/>
+    </bean>
+
+    <bean id="googleUtil" class="com.company.project.Auth.Provider.GoogleUtil">
+        <constructor-arg value="${google}" />
+    </bean>
 
 </beans>

@@ -5,13 +5,15 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import com.google.common.base.Optional;
+
 public interface BaseReadOnlyDAO<E extends Serializable> extends Serializable{
 
 	public abstract List<E> findAll();
 
 	public abstract List<E> find(int maxResults, int firstResult);
 
-	public abstract E findById(Object id);
+	public abstract Optional<E> findById(Object id);
 
 	public abstract int getCount();
 	

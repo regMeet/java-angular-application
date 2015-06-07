@@ -2,13 +2,21 @@ package com.company.project.webservice.implementations;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.NotBlank;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,23 +25,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.project.Auth.AuthUtils;
+import com.company.project.Auth.ClientSecretsConfig;
 import com.company.project.Auth.ErrorMessage;
 import com.company.project.Auth.PasswordService;
 import com.company.project.Auth.Token;
+import com.company.project.Auth.Provider.FacebookUtil;
 import com.company.project.persistence.entities.Users;
+import com.company.project.persistence.entities.Users.Provider;
 import com.company.project.services.interfaces.UserService;
 import com.company.project.webservice.interfaces.AuthService;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.nimbusds.jose.JOSEException;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthServiceImpl implements AuthService {
-
-	private UserService userService;
+	final static Logger log = Logger.getLogger(AuthServiceImpl.class);
 
 	public static final String CLIENT_ID_KEY = "client_id";
 	public static final String REDIRECT_URI_KEY = "redirect_uri";
@@ -47,8 +59,14 @@ public class AuthServiceImpl implements AuthService {
 	public static final String EXISTING_ACCOUNT_ERROR_MSG = "The email already exists";
 	public static final String LOGING_ERROR_MSG = "Wrong email and/or password";
 	public static final String UNLINK_ERROR_MSG = "Could not unlink %s account because it is your only sign-in method";
+	public static final String FACEBOOK_ERROR_MSG = "An error happened when trying to log in by Facebook";
 
 	public static final ObjectMapper MAPPER = new ObjectMapper();
+
+	private final UserService userService;
+	private final Client client = ClientBuilder.newClient();
+	@Autowired
+	private FacebookUtil facebookUtil;
 
 	@Autowired
 	public AuthServiceImpl(UserService userService) {
@@ -87,39 +105,53 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public Response loginFacebook(Payload payload, HttpServletRequest request) throws JsonParseException, JsonMappingException,
+	@RequestMapping(value = "/facebook", method = RequestMethod.POST)
+	public Response loginFacebook(@RequestBody @Valid Payload payload, HttpServletRequest request) throws JsonParseException, JsonMappingException,
 			IOException, ParseException, JOSEException {
-		// TODO Auto-generated method stub
-		return null;
+		Response response;
+
+		// Step 1. Exchange authorization code for access token.
+		response = client.target(FacebookUtil.ACCESS_TOKEN_URL)
+				.queryParam(CLIENT_ID_KEY, payload.getClientId())
+				.queryParam(REDIRECT_URI_KEY, payload.getRedirectUri())
+				.queryParam(CLIENT_SECRET, facebookUtil.getSecret())
+				.queryParam(CODE_KEY, payload.getCode())
+				.request("text/plain")
+				.accept(MediaType.TEXT_PLAIN)
+				.get();
+
+		String readEntity = response.readEntity(String.class);
+		final String paramStr = Preconditions.checkNotNull(readEntity);
+
+		JSONObject json = null;
+		try {
+			// {"access_token":"token","token_type":"bearer","expires_in":5178920}
+			json = (JSONObject) new JSONParser().parse(paramStr);
+		} catch (org.json.simple.parser.ParseException e) {
+			log.error("An exception has been thrown while parsing json from facebook response "+ e.getMessage());
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(FACEBOOK_ERROR_MSG)).build();
+		}
+
+		String accessToken = (String) json.get("access_token");
+		String tokenType = (String) json.get("token_type"); // bearer
+		Long expiresIn = (Long) json.get("expires_in");
+
+		// Step 2. Retrieve profile information about the current user.
+		response = client.target(FacebookUtil.GRAPH_API_URL)
+				.queryParam("access_token", accessToken)
+				.queryParam("expiresIn", expiresIn.toString())
+				.request("text/plain")
+				.get();
+
+		final Map<String, Object> userInfo = getResponseEntity(response);
+
+		// Step 3. Process the authenticated the user.
+		return processUser(request, Provider.FACEBOOK, userInfo.get("id").toString(), userInfo.get("name").toString());
 	}
 
 	@Override
 	public Response loginGoogle(Payload payload, HttpServletRequest request) throws JOSEException, ParseException, JsonParseException,
 			JsonMappingException, IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response loginLinkedin() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response loginGithub() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response loginFoursquare() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response loginTwitter(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -155,5 +187,55 @@ public class AuthServiceImpl implements AuthService {
 		public String getCode() {
 			return code;
 		}
+	}
+
+	/*
+	 * Helper methods
+	 */
+	private Map<String, Object> getResponseEntity(final Response response) throws JsonParseException, JsonMappingException, IOException {
+		return MAPPER.readValue(response.readEntity(String.class), new TypeReference<Map<String, Object>>() {
+		});
+	}
+
+	private Response processUser(final HttpServletRequest request, final Provider provider, final String id, final String username)
+			throws JOSEException, ParseException {
+		final Optional<Users> user = userService.findByProvider(provider, id);
+
+		// Step 3a. If user is already signed in then link accounts.
+		Users userToSave;
+		final String authHeader = request.getHeader(AuthUtils.AUTH_HEADER_KEY);
+		if (StringUtils.isNotBlank(authHeader)) {
+			if (user.isPresent()) {
+				return Response.status(Status.CONFLICT).entity(new ErrorMessage(String.format(CONFLICT_MSG, provider.capitalize())))
+						.build();
+			}
+
+			final String subject = AuthUtils.getSubject(authHeader);
+			final Optional<Users> foundUser = userService.findById(Long.parseLong(subject));
+			if (!foundUser.isPresent()) {
+				return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(NOT_FOUND_MSG)).build();
+			}
+
+			userToSave = foundUser.get();
+			userToSave.setProviderId(provider, id);
+			if (userToSave.getUsername() == null) {
+				userToSave.setUsername(username);
+			}
+//			userService.create(userToSave);
+			userService.update(userToSave);
+		} else {
+			// Step 3b. Create a new user account or return an existing one.
+			if (user.isPresent()) {
+				userToSave = user.get();
+			} else {
+				userToSave = new Users();
+				userToSave.setProviderId(provider, id);
+				userToSave.setUsername(username);
+				userService.create(userToSave);
+			}
+		}
+
+		final Token token = AuthUtils.createToken(request.getRemoteHost(), userToSave.getIdUser());
+		return Response.ok().entity(token).build();
 	}
 }

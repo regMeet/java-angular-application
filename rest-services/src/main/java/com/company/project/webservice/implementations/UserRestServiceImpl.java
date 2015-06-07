@@ -21,6 +21,7 @@ import com.company.project.persistence.entities.Users;
 import com.company.project.services.interfaces.UserService;
 import com.company.project.webservice.implementations.base.BaseRestServiceImpl;
 import com.company.project.webservice.interfaces.UserRestService;
+import com.google.common.base.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -56,8 +57,8 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<Users, UserService>
 	}
 
 	@RequestMapping(value = "/{idUser}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Users findById(@PathVariable("idUser") Integer idUser) {
-		Users user = baseService.findById(idUser);
+	public @ResponseBody Optional<Users> findById(@PathVariable("idUser") Integer idUser) {
+		Optional<Users> user = baseService.findById(idUser);
 		return user;
 	}
 

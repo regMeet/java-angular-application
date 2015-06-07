@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.company.project.persistence.dao.interfaces.base.BaseReadOnlyDAO;
+import com.google.common.base.Optional;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class BaseReadOnlyDAOImpl<E extends Serializable> implements BaseReadOnlyDAO<E> {
@@ -57,10 +58,10 @@ public class BaseReadOnlyDAOImpl<E extends Serializable> implements BaseReadOnly
 		return q.getResultList();
 	}
 
-	public E findById(Object id) {
+	public Optional<E> findById(Object id) {
 		log.debug("getting "+ clazz +" instance with id: " + id);
 		E entity = em.find(clazz, id);
-		return entity;
+		return Optional.fromNullable(entity);
 	}
 	
 //	public City findById(Integer id) {

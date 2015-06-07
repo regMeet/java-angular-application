@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.company.project.persistence.dao.interfaces.base.BaseReadOnlyDAO;
 import com.company.project.services.interfaces.base.BaseReadOnlyService;
+import com.google.common.base.Optional;
 
 @Transactional
 public class BaseReadOnlyServiceImpl<E extends Serializable, D extends BaseReadOnlyDAO<E>> implements BaseReadOnlyService<E> {
@@ -30,7 +31,7 @@ public class BaseReadOnlyServiceImpl<E extends Serializable, D extends BaseReadO
 	}
 
 	@Override
-	public E findById(Object id) {
+	public Optional<E> findById(Object id) {
 		return baseDao.findById(id);
 	}
 

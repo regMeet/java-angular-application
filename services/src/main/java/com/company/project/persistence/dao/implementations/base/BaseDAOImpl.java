@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.company.project.persistence.dao.interfaces.base.BaseDAO;
+import com.google.common.base.Optional;
 
 @SuppressWarnings("unchecked")
 public class BaseDAOImpl<E extends Serializable> extends BaseReadOnlyDAOImpl<E>	implements BaseDAO<E> {
@@ -53,8 +54,8 @@ public class BaseDAOImpl<E extends Serializable> extends BaseReadOnlyDAOImpl<E>	
 	
 	@Override
 	public void delete(Integer id) {
-		E entity = findById(id);
-		em.remove(entity);
+		Optional<E> entity = findById(id);
+		em.remove(entity.get());
 	}
 	
 //	public City merge(City detachedInstance) {

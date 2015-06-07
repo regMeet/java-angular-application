@@ -1,6 +1,6 @@
 'use strict';
 
-var userServices = angular.module('userServices', []);
+var userServices = angular.module('myApp.userServices', []);
 
 userServices.factory('User', [ '$http', function($http) {
 	var urlBase = 'http://localhost:8089/web-services/api/users/';

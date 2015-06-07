@@ -7,6 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>My AngularJS App</title>
+  <link href="favicon.png" rel="shortcut icon">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
@@ -16,6 +17,11 @@
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="app.css">
 	<!-- endbuild -->
+	<link href="//fonts.googleapis.com/css?family=Roboto|Montserrat:400,700|Open+Sans:400,300,600" rel="stylesheet">
+ 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.css" rel="stylesheet">
 
 </head>
 <body>
@@ -37,6 +43,8 @@
 	  </ul>
 	</div>
 
+	<div ui-view class="fadeZoom"></div>
+
 	<!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
  	<![endif]-->
@@ -49,6 +57,9 @@
 	<script src="bower_components/angular-resource/angular-resource.js"></script>
 	<script src="bower_components/satellizer/satellizer.js"></script>
 	<script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+	<script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+	<script src="bower_components/angular-messages/angular-messages.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:scripts scripts/app.min.js -->
@@ -60,6 +71,8 @@
 	<script src="components/view1/view1Routes.js"></script>
 	<script src="components/view1/view1Controller.js"></script>
 	<script src="components/view1/view1ServiceHttp.js"></script>
+	<script src="shared/directives/passwordMatch.js"></script>
+	<script src="shared/directives/passwordStrength.js"></script>
 	<!-- endbuild -->
 </body>
 </html>

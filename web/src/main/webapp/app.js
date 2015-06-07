@@ -7,8 +7,10 @@ angular.module('myApp', [
     'myApp.auth',
     'myApp.home',
     'myApp.view1',
+    'myApp.directives',
+    'myApp.userServices',
     'mgcrea.ngStrap',
-    'userServices'
+    'ngMessages'
 ])
 .config(['$routeProvider', '$authProvider', '$httpProvider', 'satellizer.config', function($routeProvider, $authProvider, $httpProvider, config) {
         $routeProvider
@@ -27,4 +29,11 @@ angular.module('myApp', [
         $authProvider.tokenName = 'token';
         $authProvider.tokenPrefix = 'myApp';
         
+        $authProvider.facebook({
+        	clientId: '853633721397866'
+        });
+
+        $authProvider.google({
+        	clientId: '84302306491-ff8lnfb0un9j7dgcvs5iejo9fhrv9lik.apps.googleusercontent.com'
+        });
     }]);

@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -25,11 +28,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.project.Auth.AuthUtils;
-import com.company.project.Auth.ClientSecretsConfig;
 import com.company.project.Auth.ErrorMessage;
 import com.company.project.Auth.PasswordService;
 import com.company.project.Auth.Token;
 import com.company.project.Auth.Provider.FacebookUtil;
+import com.company.project.Auth.Provider.GoogleUtil;
 import com.company.project.persistence.entities.Users;
 import com.company.project.persistence.entities.Users.Provider;
 import com.company.project.services.interfaces.UserService;
@@ -67,6 +70,8 @@ public class AuthServiceImpl implements AuthService {
 	private final Client client = ClientBuilder.newClient();
 	@Autowired
 	private FacebookUtil facebookUtil;
+	@Autowired
+	private GoogleUtil googleUtil;
 
 	@Autowired
 	public AuthServiceImpl(UserService userService) {
@@ -150,10 +155,33 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public Response loginGoogle(Payload payload, HttpServletRequest request) throws JOSEException, ParseException, JsonParseException,
-			JsonMappingException, IOException {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping(value = "/google", method = RequestMethod.POST)
+	public Response loginGoogle(@RequestBody @Valid Payload payload, HttpServletRequest request) throws JOSEException, ParseException,
+			JsonParseException, JsonMappingException, IOException {
+		final String accessTokenUrl = "https://accounts.google.com/o/oauth2/token";
+		final String peopleApiUrl = "https://www.googleapis.com/plus/v1/people/me/openIdConnect";
+		Response response;
+
+		// Step 1. Exchange authorization code for access token.
+		final MultivaluedMap<String, String> accessData = new MultivaluedHashMap<String, String>();
+		accessData.add(CLIENT_ID_KEY, payload.getClientId());
+		accessData.add(REDIRECT_URI_KEY, payload.getRedirectUri());
+		accessData.add(CLIENT_SECRET, googleUtil.getSecret());
+		accessData.add(CODE_KEY, payload.getCode());
+		accessData.add(GRANT_TYPE_KEY, AUTH_CODE);
+		response = client.target(accessTokenUrl).request().post(Entity.form(accessData));
+		accessData.clear();
+
+		// Step 2. Retrieve profile information about the current user.
+		final String accessToken = (String) getResponseEntity(response).get("access_token");
+		response = client.target(peopleApiUrl)
+				.request("text/plain")
+				.header(AuthUtils.AUTH_HEADER_KEY, String.format("Bearer %s", accessToken))
+				.get();
+		final Map<String, Object> userInfo = getResponseEntity(response);
+
+		// Step 3. Process the authenticated the user.
+		return processUser(request, Provider.GOOGLE, userInfo.get("sub").toString(), userInfo.get("name").toString());
 	}
 
 	@Override

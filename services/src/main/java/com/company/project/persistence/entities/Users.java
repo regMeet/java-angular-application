@@ -71,10 +71,13 @@ public class Users implements java.io.Serializable {
 	public Users() {
 	}
 
-	public Users(String name, String lastname, String email, String username, String password, String telephone, String mobile, String role) {
+	public Users(String name, String lastname, String email, String google, String facebook, String username, String password,
+			String telephone, String mobile, String role) {
 		this.name = name;
 		this.lastname = lastname;
 		this.email = email;
+		this.google = google;
+		this.facebook = facebook;
 		this.role = role;
 		this.username = username;
 		this.password = password;
@@ -112,6 +115,22 @@ public class Users implements java.io.Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getGoogle() {
+		return google;
+	}
+
+	public void setGoogle(String google) {
+		this.google = google;
+	}
+
+	public String getFacebook() {
+		return facebook;
+	}
+
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
 	}
 
 	public String getUsername() {

@@ -21,6 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -185,10 +186,33 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public Response unlink(String provider, HttpServletRequest request) throws ParseException, IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping(value = "/unlink/{provider}", method = RequestMethod.GET)
+	public Response unlink(@PathVariable("provider") String provider, HttpServletRequest request) throws ParseException,
+			IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException {
+
+		final String subject = AuthUtils.getSubject(request.getHeader(AuthUtils.AUTH_HEADER_KEY));
+		final Optional<Users> foundUser = userService.findById(Long.parseLong(subject));
+
+		if (!foundUser.isPresent()) {
+			return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(NOT_FOUND_MSG)).build();
+		}
+
+		final Users userToUnlink = foundUser.get();
+
+		// check that the user is not trying to unlink the only sign-in method
+		if (!userToUnlink.allowToUnlinkAMethodAccount()) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(String.format(UNLINK_ERROR_MSG, provider))).build();
+		}
+
+		try {
+			userToUnlink.setProviderId(Provider.valueOf(provider.toUpperCase()), null);
+		} catch (final IllegalArgumentException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		userService.create(userToUnlink);
+
+		return Response.ok().build();
 	}
 
 	/*

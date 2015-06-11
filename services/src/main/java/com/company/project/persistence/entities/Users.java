@@ -230,4 +230,13 @@ public class Users implements java.io.Serializable {
 			throw new IllegalArgumentException();
 		}
 	}
+
+	public boolean allowToUnlinkAMethodAccount() {
+		boolean emailMethod = this.getEmail() != null && this.getPassword() != null;
+		boolean googleMethod = this.getGoogle() != null;
+		boolean facebookMethod = this.getFacebook() != null;
+
+		return emailMethod || googleMethod || facebookMethod;
+	}
+
 }

@@ -6,9 +6,9 @@ angular.module('myApp', [
     'satellizer',
     'myApp.auth',
     'myApp.home',
-    'myApp.view1',
+    'myApp.profile',
+    'myApp.users',
     'myApp.directives',
-    'myApp.userServices',
     'mgcrea.ngStrap',
     'ngMessages'
 ])

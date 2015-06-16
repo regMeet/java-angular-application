@@ -1,0 +1,34 @@
+<p>This is the partial for view 1.</p>
+
+<div ng-controller="UserListCtrl" class="span6">
+	<a ng-click="createNewUser()" class="btn btn-small">create new user</a>
+	</br></br>
+	<table class="table table-striped table-condensed">
+		<thead>
+			<tr>
+				<th th style="min-width: 80px;">ID</th>
+				<th th style="min-width: 80px;">First name</th>
+				<th th style="min-width: 80px;">Last name</th>
+				<th th style="min-width: 80px;">Email</th>
+				<th th style="min-width: 80px;">Google</th>
+				<th th style="min-width: 80px;">Facebook</th>
+				<th th style="min-width: 80px;">Role</th>
+				<th th style="min-width: 80px;">Username</th>
+				<th style="width:20px;"> </th>
+            	<th style="width:20px;"> </th>
+			</tr>
+		</thead>
+		<tr ng-repeat="user in users">
+			<td>{{ user.idUser }}</td>
+			<td>{{ user.name }}</td>
+			<td>{{ user.lastname }}</td>
+			<td>{{ user.email }}</td>
+			<td>{{ user.google }}</td>
+			<td>{{ user.facebook }}</td>
+			<td>{{ user.role }}</td>
+			<td>{{ user.username }}</td>
+			<td><a ng-click="editUser(user.idUser)" class="btn btn-small btn-primary">edit</a></td>
+            <td><a ng-click="deleteUser(user.idUser)" class="btn btn-small btn-danger">delete</a></td>
+		</tr>
+	</table>
+</div>

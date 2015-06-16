@@ -32,7 +32,7 @@
 	  <ul class="nav navbar-nav">
 	    <li><a href="/#/">Home</a></li>
 	    <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
-	    <li ng-if="isAuthenticated()"><a href="/#/view1">View1</a></li>
+	    <li ng-if="isAuthenticated()"><a href="/#/user-list">Users</a></li>
 	  </ul>
 	  <ul ng-if="!isAuthenticated()" class="nav navbar-nav pull-right">
 	    <li><a href="/#/login">Login</a></li>
@@ -68,9 +68,11 @@
 	<script src="components/auth/authController.js"></script>
 	<script src="components/home/homeRoutes.js"></script>
 	<script src="components/home/homeController.js"></script>
-	<script src="components/view1/view1Routes.js"></script>
-	<script src="components/view1/view1Controller.js"></script>
-	<script src="components/view1/view1ServiceHttp.js"></script>
+	<script src="components/profile/profileRoutes.js"></script>
+	<script src="components/profile/profileController.js"></script>
+	<script src="components/users/userRoutes.js"></script>
+	<script src="components/users/userController.js"></script>
+	<script src="components/users/userServiceHttp.js"></script>
 	<script src="shared/directives/passwordMatch.js"></script>
 	<script src="shared/directives/passwordStrength.js"></script>
 	<!-- endbuild -->

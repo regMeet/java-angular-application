@@ -69,7 +69,8 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<Users, UserService>
 	}
 
 	@RequestMapping(value = "/{idUser}", method = RequestMethod.DELETE)
-	public @ResponseBody void delete(@PathVariable("idUser") Integer idUser) {
+	@ResponseStatus(value = HttpStatus.OK)
+	public void delete(@PathVariable("idUser") Integer idUser) {
 		baseService.delete(idUser);
 	}
 

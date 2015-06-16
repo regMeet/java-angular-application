@@ -22,7 +22,7 @@ angular.module('myApp.auth')
             // Si se ha registrado correctamente,
             // Podemos redirigirle a otra parte
         	console.log("signup successful");
-            $location.path("/view1");
+            $location.path("/users");
             $alert({
                 content: 'You have successfully sign up',
                 animation: 'fadeZoomFadeDown',
@@ -64,7 +64,7 @@ angular.module('myApp.auth')
 	        // Si se ha logueado correctamente, lo tratamos aquí.
 	        // Podemos también redirigirle a una ruta
 	    	console.log("login successful");
-	    	$location.path("/view1");
+	    	$location.path("/users");
 	        $alert({
 				content: 'You have successfully logged in',
 				animation: 'fadeZoomFadeDown',
@@ -87,7 +87,7 @@ angular.module('myApp.auth')
 	      $auth.authenticate(provider)
 	        .then(function() {
 	        	console.log("login successful");
-		    	$location.path("/view1");
+		    	$location.path("/users");
 	          $alert({
 	            content: 'You have successfully logged in',
 	            animation: 'fadeZoomFadeDown',

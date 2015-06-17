@@ -56,10 +56,11 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<Users, UserService>
 		return users;
 	}
 
-	@RequestMapping(value = "/{idUser}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public @ResponseBody Optional<Users> findById(@PathVariable("idUser") Integer idUser) {
+//	@RequestMapping(value = "/{idUser}", method = RequestMethod.GET, headers = "Accept=application/json")
+	@RequestMapping(value = "/{idUser}", method = RequestMethod.GET)
+	public @ResponseBody Users findById(@PathVariable("idUser") Integer idUser) {
 		Optional<Users> user = baseService.findById(idUser);
-		return user;
+		return user.get();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -75,7 +76,8 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<Users, UserService>
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	public @ResponseBody void update(@RequestBody @Valid Users user) {
+	@ResponseStatus(value = HttpStatus.OK)
+	public void update(@RequestBody @Valid Users user) {
 		baseService.update(user);
 	}
 

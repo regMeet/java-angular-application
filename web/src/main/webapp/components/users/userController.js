@@ -68,7 +68,7 @@ angular.module('myApp.users')
 //		$scope.getUsers();
 	} ])
 
-.controller('UserCreationCtrl', ['$scope', 'UsersFactory', '$location', function ($scope, UserResource, $location) {
+.controller('UserCreationCtrl', ['$scope', 'UserResource', '$location', function ($scope, UserResource, $location) {
 
 		// callback for ng-click 'createNewUser':
 	    $scope.createNewUser = function () {
@@ -78,12 +78,12 @@ angular.module('myApp.users')
 	    
 	    $scope.insertUser = function () {
 	        //Fake user data
-	        var newUser = {
-	        	username: 'testUsername',
-	            name: 'testName',
-	            lastname: 'testLastName'
-	        };
-	        UserResource.insertUser(newUser)
+//	        var newUser = {
+//	        	username: 'testUsername',
+//	            name: 'testName',
+//	            lastname: 'testLastName'
+//	        };
+	        UserResource.insertUser($scope.user)
 	            .success(function () {
 	                $scope.status = 'Inserted User! Refreshing user list.';
 	                // $scope.users.push(newUser);
@@ -104,7 +104,7 @@ angular.module('myApp.users')
 		    $location.path('/user-list');
 		};
 		
-		$scope.updateUser = function (id) {
+		$scope.updateUser = function () {
 			UserResource.updateUser($scope.user)
 	          .success(function () {
 	              $scope.status = 'Updated User! Refreshing user list.';
@@ -124,7 +124,6 @@ angular.module('myApp.users')
 	          .success(function (data) {
 	              $scope.status = 'get User! Refreshing user detail.';
 	              $scope.user = data;
-	              console.log($scope.user);
 	          })
 	          .error(function (error) {
 	              $scope.status = 'Unable to get user: ' + error.message;

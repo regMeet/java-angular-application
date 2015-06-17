@@ -33,7 +33,8 @@ userServices.service('UserResource', ['$http', function ($http) {
     };
 
     this.updateUser = function (user) {
-        return $http.put(urlBase + '/' + user.ID, user);
+    	//return $http.put(urlBase + '/' + user.ID, user);
+        return $http.put(urlBase, user);
     };
 
     this.deleteUser = function (id) {

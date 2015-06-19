@@ -6,18 +6,20 @@ angular.module('myApp.profile')
 		/**
 		 * Get user's profile information.
 		 */
-		$scope.getUsers = function() {
-			UserResource.getUsers().success(function(data) {
-				$scope.people = data;
-			}).error(function(error) {
-				$alert({
-					content : error.message,
-					animation : 'fadeZoomFadeDown',
-					type : 'material',
-					duration : 3
+		$scope.getProfile = function() {
+			UserResource.getProfile()
+				.success(function(data) {
+					$scope.user = data;
+				})
+				.error(function(error) {
+					$alert({
+						content : error.message,
+						animation : 'fadeZoomFadeDown',
+						type : 'material',
+						duration : 3
+					});
 				});
-			});
 		};
 
-		$scope.getUsers();
+		$scope.getProfile();
 	} ]);

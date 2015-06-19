@@ -23,8 +23,11 @@ userServices.service('UserResource', ['$http', function ($http) {
         return $http.get(urlBase);
     };
 
+    this.getProfile = function () {
+        return $http.get(urlBase + '/profile');
+    };
+
     this.getUser = function (id) {
-    	console.log(urlBase + '/' + id);
         return $http.get(urlBase + '/' + id);
     };
 

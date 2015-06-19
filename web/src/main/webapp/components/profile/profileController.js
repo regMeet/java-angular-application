@@ -9,7 +9,8 @@ angular.module('myApp.profile')
 		$scope.getProfile = function() {
 			UserResource.getProfile()
 				.success(function(data) {
-					$scope.user = data;
+					console.log(data);
+					$scope.user = data.entity;
 				})
 				.error(function(error) {
 					$alert({

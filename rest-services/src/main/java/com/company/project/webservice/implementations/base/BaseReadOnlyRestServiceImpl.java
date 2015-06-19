@@ -3,6 +3,8 @@ package com.company.project.webservice.implementations.base;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.company.project.services.interfaces.base.BaseReadOnlyService;
@@ -19,8 +21,9 @@ public class BaseReadOnlyRestServiceImpl<E extends Serializable, S extends BaseR
 	}
 
 	@Override
-	public List<E> findAll() {
-		return baseService.findAll();
+	public Response findAll() {
+		List<E> findAll = baseService.findAll();
+		return Response.ok().entity(findAll).build();
 	}
 
 	@Override

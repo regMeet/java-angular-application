@@ -1,13 +1,13 @@
 package com.company.project.persistence.dao.implementations.exceptions;
 
-public class NonexistentEntityException extends Exception {
+public class NonExistentEntityException extends Exception {
 	
 	private static final long serialVersionUID = 1L;
 	
-    public NonexistentEntityException(String message, Throwable cause) {
+    public NonExistentEntityException(String message, Throwable cause) {
         super(message, cause);
     }
-    public NonexistentEntityException(String message) {
+    public NonExistentEntityException(String message) {
         super(message);
     }
 }

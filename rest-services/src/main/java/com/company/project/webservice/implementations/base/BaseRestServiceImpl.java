@@ -2,7 +2,11 @@ package com.company.project.webservice.implementations.base;
 
 import java.io.Serializable;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.company.project.services.interfaces.base.BaseService;
 import com.company.project.webservice.interfaces.base.BaseRestService;
@@ -16,12 +20,12 @@ public class BaseRestServiceImpl<E extends Serializable, S extends BaseService<E
 	}
 
 	@Override
-	public void create(E entity) {
+	public void create(@RequestBody @Valid E entity) {
 		baseService.create(entity);
 	}
 
 	@Override
-	public void update(E entity) {
+	public void update(@RequestBody @Valid E entity) {
 		baseService.update(entity);
 	}
 
@@ -31,7 +35,7 @@ public class BaseRestServiceImpl<E extends Serializable, S extends BaseService<E
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(@PathVariable("id") Integer id) {
 		baseService.delete(id);
 	}
 }

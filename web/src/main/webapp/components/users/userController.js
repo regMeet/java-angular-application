@@ -12,7 +12,8 @@ angular.module('myApp.users')
 	    function getUsers() {
 	    	UserResource.getUsers()
 	            .success(function (data) {
-	                $scope.users = data;
+	            	console.log(data);
+	                $scope.users = data.entity;
 	            })
 	            .error(function (error) {
 	                $scope.status = 'Unable to load user data: ' + error.message;
@@ -108,6 +109,7 @@ angular.module('myApp.users')
 			UserResource.updateUser($scope.user)
 	          .success(function () {
 	              $scope.status = 'Updated User! Refreshing user list.';
+	              $location.path('/user-list');
 	          })
 	          .error(function (error) {
 	              $scope.status = 'Unable to update user: ' + error.message;

@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import org.joda.time.DateTime;
 
+import com.company.project.persistence.entities.Users;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -33,8 +34,9 @@ public final class AuthUtils {
 		}
 	}
 	
-	public static Token createToken(String host, long sub) throws JOSEException {
+	public static Token createToken(String host, Users user) throws JOSEException {
 		JWTClaimsSet claim = new JWTClaimsSet();
+		long sub = user.getIdUser();
 		claim.setSubject(Long.toString(sub));
 		claim.setIssuer(host);
 		claim.setIssueTime(DateTime.now().toDate());
@@ -44,7 +46,7 @@ public final class AuthUtils {
 		SignedJWT jwt = new SignedJWT(JWT_HEADER, claim);
 		jwt.sign(signer);
 		
-		return new Token(jwt.serialize());
+		return new Token(jwt.serialize(), user.getUsername());
 	}
 	
 	public static String getSerializedToken(String authHeader) {

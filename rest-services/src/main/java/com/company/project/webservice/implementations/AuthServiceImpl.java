@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
 				String passwordDto = userDto.get().getPassword();
 				boolean checkPassword = PasswordService.checkPassword(user.getPassword(), passwordDto);
 				if (checkPassword) {
-					final Token token = AuthUtils.createToken(request.getRemoteHost(), userDto.get().getIdUser());
+					final Token token = AuthUtils.createToken(request.getRemoteHost(), userDto.get());
 					return Response.ok().entity(token).build();
 				}
 			}
@@ -103,7 +103,7 @@ public class AuthServiceImpl implements AuthService {
 		if (!existingUser.isPresent()) {
 			user.setPassword(PasswordService.hashPassword(user.getPassword()));
 			userService.create(user);
-			final Token token = AuthUtils.createToken(request.getRemoteHost(), user.getIdUser());
+			final Token token = AuthUtils.createToken(request.getRemoteHost(), user);
 			return Response.status(Status.CREATED).entity(token).build();
 		}
 
@@ -287,7 +287,7 @@ public class AuthServiceImpl implements AuthService {
 			}
 		}
 
-		final Token token = AuthUtils.createToken(request.getRemoteHost(), userToSave.getIdUser());
+		final Token token = AuthUtils.createToken(request.getRemoteHost(), userToSave);
 		return Response.ok().entity(token).build();
 	}
 }

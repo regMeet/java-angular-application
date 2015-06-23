@@ -2,8 +2,8 @@
 
 angular.module('myApp.auth')
 
-.controller('HomeCtrl', [ '$scope', '$auth', '$location', function($scope, $auth, $location) {
-	$scope.greetings = "Hello world";
+.controller('HomeCtrl', [ '$scope', '$auth', '$location', '$window', '$rootScope', function($scope, $auth, $location, $window, $rootScope) {
+	$scope.currentUser = $rootScope.currentUser;
 
 	$scope.isAuthenticated = function() {
 		return $auth.isAuthenticated();
@@ -18,7 +18,9 @@ angular.module('myApp.auth')
             email: $scope.signup.email,
             password: $scope.signup.password
         })
-        .then(function() {
+        .then(function(response) {
+            $rootScope.currentUser = response.data.entity.currentUser;
+
             // Si se ha registrado correctamente,
             // Podemos redirigirle a otra parte
         	console.log("signup successful");
@@ -53,14 +55,16 @@ angular.module('myApp.auth')
     };
 } ])
 
-.controller('LoginController', [ '$scope', '$auth', '$location', '$alert', function($scope, $auth, $location, $alert) {
+.controller('LoginController', [ '$scope', '$auth', '$location', '$alert', '$rootScope', function($scope, $auth, $location, $alert, $rootScope) {
 	$scope.login = {};
 	$scope.login = function(){
 	    $auth.login({
 	        email: $scope.login.email,
 	        password: $scope.login.password
 	    })
-	    .then(function(){
+	    .then(function(response){
+            $rootScope.currentUser = response.data.entity.currentUser;
+
 	        // Si se ha logueado correctamente, lo tratamos aquí.
 	        // Podemos también redirigirle a una ruta
 	    	console.log("login successful");
@@ -85,8 +89,10 @@ angular.module('myApp.auth')
 	
 	$scope.authenticate = function(provider) {
 	      $auth.authenticate(provider)
-	        .then(function() {
+	        .then(function(response) {
 	        	console.log("login successful");
+                $rootScope.currentUser = response.data.entity.currentUser;
+
 		    	$location.path("/users");
 	          $alert({
 	            content: 'You have successfully logged in',
@@ -110,23 +116,16 @@ angular.module('myApp.auth')
 	if (!$auth.isAuthenticated()) {
         return;
     }
-	if ($auth.isAuthenticated()) {
-		console.log("logout successful");
-    }
     $auth.logout()
-    .then(function() {
-        $alert({
-          content: 'You have been logged out',
-          animation: 'fadeZoomFadeDown',
-          type: 'material',
-          duration: 3
-        });
-    });
-} ]);
+		.then(function() {
+			// Desconectamos al usuario y lo redirijimos
+            $location.path('/login');
 
-/*
- * controller('LogoutController', [ '$scope', '$auth', '$location',
- * function($scope, $auth, $location) { console.log('Controller LoginController
- * Loaded'); $auth.logout() .then(function() { // Desconectamos al usuario y lo
- * redirijimos $location.path("/"); });
- */
+	        $alert({
+	          content: 'You have been logged out',
+	          animation: 'fadeZoomFadeDown',
+	          type: 'material',
+	          duration: 3
+	        });
+		});
+} ]);

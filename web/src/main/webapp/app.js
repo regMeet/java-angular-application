@@ -15,7 +15,8 @@ angular.module('myApp', [
 .config(['$routeProvider', '$authProvider', '$httpProvider', 'satellizer.config', function($routeProvider, $authProvider, $httpProvider, config) {
         $routeProvider
             .otherwise({
-                redirectTo: '/'
+//                redirectTo: '/'
+            	templateUrl: '/templates/404.html'
             });
         // Parametros de configuración de satellizer
         $authProvider.authHeader = 'Authorization'; // default

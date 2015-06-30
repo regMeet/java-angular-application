@@ -15,3 +15,6 @@ r.query()  //does GET on /users and gets all users
 r.get({id:1}) // does GET on /users/1 and gets a specific user
 r.save(userObject)  // does a POST to /users to save the user
 r.update({ id:1 }, userObject) // Not defined by default but does PUT to /users/1 with user object.
+
+404
+http://w3layouts.com/404-white-web-mobile-website-template/

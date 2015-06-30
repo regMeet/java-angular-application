@@ -30,7 +30,7 @@
 	    <a class="navbar-brand" href="/"><i class="ion-ios7-pulse-strong"></i> Company</a>
 	  </div>
 	  <ul class="nav navbar-nav">
-	    <li><a href="/#/">Home</a></li>
+	    <li><a href="/#/home">Home</a></li>
 	    <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
 	    <li ng-if="isAuthenticated()"><a href="/#/user-list">Users</a></li>
 	  </ul>
@@ -39,6 +39,7 @@
 	    <li><a href="/#/signup">Sign up</a></li>
 	  </ul>
 	  <ul ng-if="isAuthenticated()" class="nav navbar-nav pull-right">
+	  	<li><a >Hello {{ currentUser }}</a></li>
 	    <li><a href="/#/logout">Logout</a></li>
 	  </ul>
 	</div>

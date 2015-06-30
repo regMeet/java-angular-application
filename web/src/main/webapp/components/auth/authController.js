@@ -3,14 +3,14 @@
 angular.module('myApp.auth')
 
 .controller('HomeCtrl', [ '$scope', '$auth', '$location', '$window', '$rootScope', function($scope, $auth, $location, $window, $rootScope) {
-	$scope.currentUser = $rootScope.currentUser;
+//	$scope.currentUser = $rootScope.currentUser;
 
 	$scope.isAuthenticated = function() {
 		return $auth.isAuthenticated();
 	};
 } ])
 
-.controller('SignUpController', [ '$scope', '$auth', '$location', '$alert', function($scope, $auth, $location, $alert) {
+.controller('SignUpController', [ '$scope', '$auth', '$location', '$alert', '$rootScope', function($scope, $auth, $location, $alert, $rootScope) {
 	$scope.signup = {};
 	$scope.signup = function(){
         $auth.signup({

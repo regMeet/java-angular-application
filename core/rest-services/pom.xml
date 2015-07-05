@@ -2,18 +2,15 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.company</groupId>
-        <artifactId>project</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>com.company.project</groupId>
+		<artifactId>project-backend</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
 
-    <groupId>com.company.project</groupId>
     <artifactId>project-rest-services</artifactId>
     <packaging>war</packaging>
-    <version>1.0.0-SNAPSHOT</version>
     <name>Rest Services</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
         <java-version>1.8</java-version>
@@ -28,7 +25,6 @@
         <dependency>
             <groupId>com.company.project</groupId>
             <artifactId>project-services</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <!-- Jackson -->
@@ -147,7 +143,6 @@
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
-                <version>6.1.22</version>
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <stopPort>8015</stopPort>

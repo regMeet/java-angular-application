@@ -10,7 +10,7 @@ angular.module('myApp.profile')
 			UserResource.getProfile()
 				.success(function(data) {
 					console.log(data);
-					$scope.user = data.entity;
+					$scope.user = data;
 				})
 				.error(function(error) {
 					$alert({

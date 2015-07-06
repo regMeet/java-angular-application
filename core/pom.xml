@@ -19,4 +19,88 @@
 		<module>services</module>
 		<module>rest-services</module>
 	</modules>
+
+	<properties>
+        <java-version>1.7</java-version>
+		<log4j.version>1.2.16</log4j.version>
+		<junit.version>4.12</junit.version>
+		<hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
+		<hibernate-entitymanager.version>4.3.10.Final</hibernate-entitymanager.version>
+		<hibernate-validator.version>5.1.3.Final</hibernate-validator.version>
+		<mysql-connector.version>5.1.35</mysql-connector.version>
+		<apache-commons.version>3.3.2</apache-commons.version>
+		<guava.version>18.0</guava.version>
+
+		<!-- Rest layer -->
+		<spring.version>4.1.7.RELEASE</spring.version>
+		<jackson.databind-version>2.5.4</jackson.databind-version>
+		<nimbus-jose-jwt.version>3.1.1</nimbus-jose-jwt.version>
+		<joda-time.version>2.8.1</joda-time.version>
+		<jbcrypt.version>0.3m</jbcrypt.version>
+		<javax-ws.version>2.0.1</javax-ws.version>
+		<json-simple.version>1.1.1</json-simple.version>
+		<servlet-api.version>2.5</servlet-api.version>
+		<commons-logging.version>1.2</commons-logging.version>
+		<jersey-client.version>2.19</jersey-client.version>
+		<jsp-api.version>2.2</jsp-api.version>
+
+		<checkAuthorization>false</checkAuthorization>
+		<!-- End Rest layer -->
+    </properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.company.project</groupId>
+				<artifactId>project-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.company.project</groupId>
+				<artifactId>project-data</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.company.project</groupId>
+				<artifactId>project-services</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>maven-jetty-plugin</artifactId>
+					<version>6.1.22</version>
+				</plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

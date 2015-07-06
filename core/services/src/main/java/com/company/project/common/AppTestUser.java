@@ -3,7 +3,7 @@ package com.company.project.common;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.company.project.persistence.entities.Users;
+import com.company.project.persistence.entities.User;
 import com.company.project.services.interfaces.UserService;
 import com.google.common.base.Optional;
 
@@ -14,11 +14,11 @@ public class AppTestUser {
 		UserService cityService = (UserService) context.getBean("userService");
 
 		/** select **/
-		Optional<Users> user = cityService.findById(9);
+		Optional<User> user = cityService.findById(9);
 		System.out.println(user.get());
 		
 		/** insert **/
-		Users user2 = new Users();
+		User user2 = new User();
 		user2.setName("test");
 		cityService.create(user2);
 
@@ -32,5 +32,6 @@ public class AppTestUser {
 		cityService.delete(user2.getIdUser());
 
 		System.out.println("Done");
+		
 	}
 }

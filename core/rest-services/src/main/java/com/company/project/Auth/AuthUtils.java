@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 import org.joda.time.DateTime;
 
-import com.company.project.persistence.entities.Users;
+import com.company.project.persistence.entities.User;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -34,7 +34,7 @@ public final class AuthUtils {
 		}
 	}
 	
-	public static Token createToken(String host, Users user) throws JOSEException {
+	public static Token createToken(String host, User user) throws JOSEException {
 		JWTClaimsSet claim = new JWTClaimsSet();
 		long sub = user.getIdUser();
 		claim.setSubject(Long.toString(sub));

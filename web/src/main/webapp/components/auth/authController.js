@@ -19,12 +19,12 @@ angular.module('myApp.auth')
             password: $scope.signup.password
         })
         .then(function(response) {
-            $rootScope.currentUser = response.data.entity.currentUser;
+            $rootScope.currentUser = response.data.currentUser;
 
             // Si se ha registrado correctamente,
             // Podemos redirigirle a otra parte
         	console.log("signup successful");
-            $location.path("/users");
+            $location.path("/user-list");
             $alert({
                 content: 'You have successfully sign up',
                 animation: 'fadeZoomFadeDown',
@@ -63,12 +63,12 @@ angular.module('myApp.auth')
 	        password: $scope.login.password
 	    })
 	    .then(function(response){
-            $rootScope.currentUser = response.data.entity.currentUser;
+            $rootScope.currentUser = response.data.currentUser;
 
 	        // Si se ha logueado correctamente, lo tratamos aquí.
 	        // Podemos también redirigirle a una ruta
 	    	console.log("login successful");
-	    	$location.path("/users");
+	    	$location.path("/user-list");
 	        $alert({
 				content: 'You have successfully logged in',
 				animation: 'fadeZoomFadeDown',
@@ -91,9 +91,9 @@ angular.module('myApp.auth')
 	      $auth.authenticate(provider)
 	        .then(function(response) {
 	        	console.log("login successful");
-                $rootScope.currentUser = response.data.entity.currentUser;
+                $rootScope.currentUser = response.data.currentUser;
 
-		    	$location.path("/users");
+		    	$location.path("/user-list");
 	          $alert({
 	            content: 'You have successfully logged in',
 	            animation: 'fadeZoomFadeDown',

@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -21,6 +20,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +35,8 @@ import com.company.project.Auth.PasswordService;
 import com.company.project.Auth.Token;
 import com.company.project.Auth.Provider.FacebookUtil;
 import com.company.project.Auth.Provider.GoogleUtil;
-import com.company.project.persistence.entities.Users;
-import com.company.project.persistence.entities.Users.Provider;
+import com.company.project.persistence.entities.User;
+import com.company.project.persistence.entities.User.Provider;
 import com.company.project.services.interfaces.UserService;
 import com.company.project.webservice.interfaces.AuthService;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -81,50 +82,45 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public @ResponseBody Response login(@RequestBody @Valid Users user, HttpServletRequest request) throws JOSEException {
+	public @ResponseBody ResponseEntity login(@RequestBody @Valid User user, HttpServletRequest request) throws JOSEException {
 		if (user.getEmail() != null) {
-			final Optional<Users> userDto = userService.findByEmail(user.getEmail());
+			final Optional<User> userDto = userService.findByEmail(user.getEmail());
 			if (userDto.isPresent()) {
 				String passwordDto = userDto.get().getPassword();
 				boolean checkPassword = PasswordService.checkPassword(user.getPassword(), passwordDto);
 				if (checkPassword) {
 					final Token token = AuthUtils.createToken(request.getRemoteHost(), userDto.get());
-					return Response.ok().entity(token).build();
+					return new ResponseEntity(token, HttpStatus.OK);
 				}
 			}
 		}
-		return Response.status(Status.UNAUTHORIZED).entity(new ErrorMessage(LOGING_ERROR_MSG)).build();
+		return new ResponseEntity(new ErrorMessage(LOGING_ERROR_MSG), HttpStatus.UNAUTHORIZED);
 	}
 
 	@Override
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public @ResponseBody Response signup(@RequestBody @Valid Users user, HttpServletRequest request) throws JOSEException {
-		final Optional<Users> existingUser = userService.findByEmail(user.getEmail());
+	public @ResponseBody ResponseEntity<User> signup(@RequestBody @Valid User user, HttpServletRequest request) throws JOSEException {
+		final Optional<User> existingUser = userService.findByEmail(user.getEmail());
 		if (!existingUser.isPresent()) {
 			user.setPassword(PasswordService.hashPassword(user.getPassword()));
 			userService.create(user);
 			final Token token = AuthUtils.createToken(request.getRemoteHost(), user);
-			return Response.status(Status.CREATED).entity(token).build();
+			return new ResponseEntity(token, HttpStatus.CREATED);
 		}
 
-		return Response.status(Status.CONFLICT).entity(new ErrorMessage(EXISTING_ACCOUNT_ERROR_MSG)).build();
+		return new ResponseEntity(new ErrorMessage(EXISTING_ACCOUNT_ERROR_MSG), HttpStatus.CONFLICT);
 	}
 
 	@Override
 	@RequestMapping(value = "/facebook", method = RequestMethod.POST)
-	public Response loginFacebook(@RequestBody @Valid Payload payload, HttpServletRequest request) throws JsonParseException, JsonMappingException,
-			IOException, ParseException, JOSEException {
+	public @ResponseBody ResponseEntity<User> loginFacebook(@RequestBody @Valid Payload payload, HttpServletRequest request)
+			throws JsonParseException, JsonMappingException, IOException, ParseException, JOSEException {
 		Response response;
 
 		// Step 1. Exchange authorization code for access token.
-		response = client.target(FacebookUtil.ACCESS_TOKEN_URL)
-				.queryParam(CLIENT_ID_KEY, payload.getClientId())
-				.queryParam(REDIRECT_URI_KEY, payload.getRedirectUri())
-				.queryParam(CLIENT_SECRET, facebookUtil.getSecret())
-				.queryParam(CODE_KEY, payload.getCode())
-				.request("text/plain")
-				.accept(MediaType.TEXT_PLAIN)
-				.get();
+		response = client.target(FacebookUtil.ACCESS_TOKEN_URL).queryParam(CLIENT_ID_KEY, payload.getClientId())
+				.queryParam(REDIRECT_URI_KEY, payload.getRedirectUri()).queryParam(CLIENT_SECRET, facebookUtil.getSecret())
+				.queryParam(CODE_KEY, payload.getCode()).request("text/plain").accept(MediaType.TEXT_PLAIN).get();
 
 		String readEntity = response.readEntity(String.class);
 		final String paramStr = Preconditions.checkNotNull(readEntity);
@@ -134,20 +130,17 @@ public class AuthServiceImpl implements AuthService {
 			// {"access_token":"token","token_type":"bearer","expires_in":5178920}
 			json = (JSONObject) new JSONParser().parse(paramStr);
 		} catch (org.json.simple.parser.ParseException e) {
-			log.error("An exception has been thrown while parsing json from facebook response "+ e.getMessage());
-			return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(FACEBOOK_ERROR_MSG)).build();
+			log.error("An exception has been thrown while parsing json from facebook response " + e.getMessage());
+			return new ResponseEntity(new ErrorMessage(FACEBOOK_ERROR_MSG), HttpStatus.BAD_REQUEST);
 		}
 
 		String accessToken = (String) json.get("access_token");
-		String tokenType = (String) json.get("token_type"); // bearer
+		// String tokenType = (String) json.get("token_type"); // bearer
 		Long expiresIn = (Long) json.get("expires_in");
 
 		// Step 2. Retrieve profile information about the current user.
-		response = client.target(FacebookUtil.GRAPH_API_URL)
-				.queryParam("access_token", accessToken)
-				.queryParam("expiresIn", expiresIn.toString())
-				.request("text/plain")
-				.get();
+		response = client.target(FacebookUtil.GRAPH_API_URL).queryParam("access_token", accessToken)
+				.queryParam("expiresIn", expiresIn.toString()).request("text/plain").get();
 
 		final Map<String, Object> userInfo = getResponseEntity(response);
 
@@ -157,8 +150,8 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@RequestMapping(value = "/google", method = RequestMethod.POST)
-	public Response loginGoogle(@RequestBody @Valid Payload payload, HttpServletRequest request) throws JOSEException, ParseException,
-			JsonParseException, JsonMappingException, IOException {
+	public @ResponseBody ResponseEntity<User> loginGoogle(@RequestBody @Valid Payload payload, HttpServletRequest request)
+			throws JOSEException, ParseException, JsonParseException, JsonMappingException, IOException {
 		final String accessTokenUrl = "https://accounts.google.com/o/oauth2/token";
 		final String peopleApiUrl = "https://www.googleapis.com/plus/v1/people/me/openIdConnect";
 		Response response;
@@ -175,10 +168,8 @@ public class AuthServiceImpl implements AuthService {
 
 		// Step 2. Retrieve profile information about the current user.
 		final String accessToken = (String) getResponseEntity(response).get("access_token");
-		response = client.target(peopleApiUrl)
-				.request("text/plain")
-				.header(AuthUtils.AUTH_HEADER_KEY, String.format("Bearer %s", accessToken))
-				.get();
+		response = client.target(peopleApiUrl).request("text/plain")
+				.header(AuthUtils.AUTH_HEADER_KEY, String.format("Bearer %s", accessToken)).get();
 		final Map<String, Object> userInfo = getResponseEntity(response);
 
 		// Step 3. Process the authenticated the user.
@@ -187,32 +178,34 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@RequestMapping(value = "/unlink/{provider}", method = RequestMethod.GET)
-	public Response unlink(@PathVariable("provider") String provider, HttpServletRequest request) throws ParseException,
-			IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException {
+	public @ResponseBody ResponseEntity<User> unlink(@PathVariable("provider") String provider, HttpServletRequest request)
+			throws ParseException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException {
 
 		final String subject = AuthUtils.getSubject(request.getHeader(AuthUtils.AUTH_HEADER_KEY));
-		final Optional<Users> foundUser = userService.findById(Long.parseLong(subject));
+		final Optional<User> foundUser = userService.findById(Long.parseLong(subject));
 
 		if (!foundUser.isPresent()) {
-			return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(NOT_FOUND_MSG)).build();
+			return new ResponseEntity(new ErrorMessage(NOT_FOUND_MSG), HttpStatus.NOT_FOUND);
 		}
 
-		final Users userToUnlink = foundUser.get();
+		final User userToUnlink = foundUser.get();
 
 		// check that the user is not trying to unlink the only sign-in method
 		if (!userToUnlink.allowToUnlinkAMethodAccount()) {
-			return Response.status(Status.BAD_REQUEST).entity(new ErrorMessage(String.format(UNLINK_ERROR_MSG, provider))).build();
+			String message = String.format(UNLINK_ERROR_MSG, provider);
+			ErrorMessage errorMessage = new ErrorMessage(message);
+			return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
 		}
 
 		try {
 			userToUnlink.setProviderId(Provider.valueOf(provider.toUpperCase()), null);
 		} catch (final IllegalArgumentException e) {
-			return Response.status(Status.BAD_REQUEST).build();
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 
 		userService.create(userToUnlink);
 
-		return Response.ok().build();
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	/*
@@ -249,23 +242,22 @@ public class AuthServiceImpl implements AuthService {
 		});
 	}
 
-	private Response processUser(final HttpServletRequest request, final Provider provider, final String id, final String username)
+	private ResponseEntity processUser(final HttpServletRequest request, final Provider provider, final String id, final String username)
 			throws JOSEException, ParseException {
-		final Optional<Users> user = userService.findByProvider(provider, id);
+		final Optional<User> user = userService.findByProvider(provider, id);
 
 		// Step 3a. If user is already signed in then link accounts.
-		Users userToSave;
+		User userToSave;
 		final String authHeader = request.getHeader(AuthUtils.AUTH_HEADER_KEY);
 		if (StringUtils.isNotBlank(authHeader)) {
 			if (user.isPresent()) {
-				return Response.status(Status.CONFLICT).entity(new ErrorMessage(String.format(CONFLICT_MSG, provider.capitalize())))
-						.build();
+				return new ResponseEntity(new ErrorMessage(String.format(CONFLICT_MSG, provider.capitalize())), HttpStatus.CONFLICT);
 			}
 
 			final String subject = AuthUtils.getSubject(authHeader);
-			final Optional<Users> foundUser = userService.findById(Long.parseLong(subject));
+			final Optional<User> foundUser = userService.findById(Long.parseLong(subject));
 			if (!foundUser.isPresent()) {
-				return Response.status(Status.NOT_FOUND).entity(new ErrorMessage(NOT_FOUND_MSG)).build();
+				return new ResponseEntity(new ErrorMessage(NOT_FOUND_MSG), HttpStatus.NOT_FOUND);
 			}
 
 			userToSave = foundUser.get();
@@ -273,14 +265,14 @@ public class AuthServiceImpl implements AuthService {
 			if (userToSave.getUsername() == null) {
 				userToSave.setUsername(username);
 			}
-//			userService.create(userToSave);
+			// userService.create(userToSave);
 			userService.update(userToSave);
 		} else {
 			// Step 3b. Create a new user account or return an existing one.
 			if (user.isPresent()) {
 				userToSave = user.get();
 			} else {
-				userToSave = new Users();
+				userToSave = new User();
 				userToSave.setProviderId(provider, id);
 				userToSave.setUsername(username);
 				userService.create(userToSave);
@@ -288,6 +280,6 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		final Token token = AuthUtils.createToken(request.getRemoteHost(), userToSave);
-		return Response.ok().entity(token).build();
+		return new ResponseEntity(token, HttpStatus.OK);
 	}
 }

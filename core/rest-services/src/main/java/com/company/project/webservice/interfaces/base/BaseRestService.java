@@ -25,4 +25,5 @@ public interface BaseRestService<E extends Serializable> extends BaseReadOnlyRes
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void delete(Integer id);
+
 }

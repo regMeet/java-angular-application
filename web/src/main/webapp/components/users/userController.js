@@ -13,7 +13,7 @@ angular.module('myApp.users')
 	    	UserResource.getUsers()
 	            .success(function (data) {
 	            	console.log(data);
-	                $scope.users = data.entity;
+	                $scope.users = data;
 	            })
 	            .error(function (error) {
 	                $scope.status = 'Unable to load user data: ' + error.message;

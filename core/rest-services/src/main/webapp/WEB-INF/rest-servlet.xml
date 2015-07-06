@@ -12,19 +12,11 @@
 
 	<!-- Scans within the base package of the application for @Components to configure as beans -->
 	<!-- @Controller, @Service, @Configuration, etc. -->
-	<context:component-scan base-package="com.company.project.webservice" />
+	<context:component-scan base-package="com.company.project" />
 	<mvc:annotation-driven />
+<!--     <context:annotation-config /> -->
 
-	<import resource="classpath:/spring/config/services.xml" />
-
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix">
-			<value>/WEB-INF/views/</value>
-		</property>
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
-	</bean>
+    <import resource="classpath:/spring/data.xml" />
 
 	<!-- Configure to plugin JSON as request and response in method handler -->
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">

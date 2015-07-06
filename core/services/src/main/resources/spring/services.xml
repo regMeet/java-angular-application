@@ -10,12 +10,7 @@
 
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
-    <context:component-scan base-package="com.company.project" />
-
-    <context:annotation-config />
-
-	<!-- Database Configuration -->
-	<import resource="../database/DataSource.xml" />
-	<import resource="../database/Hibernate.xml" />
+<!--     <context:component-scan base-package="com.company.project" /> -->
+<!--     <context:annotation-config /> -->
 
 </beans>

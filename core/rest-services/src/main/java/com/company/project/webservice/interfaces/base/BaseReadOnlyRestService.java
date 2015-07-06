@@ -3,8 +3,7 @@ package com.company.project.webservice.interfaces.base;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,11 +13,20 @@ import com.google.common.base.Optional;
 public interface BaseReadOnlyRestService<E extends Serializable> {
 
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody Response findAll();
+    @ResponseBody
+    public List<E> findAll();
 
-	public abstract List<E> find(int maxResults, int firstResult);
+    public List<E> find(int maxResults, int firstResult);
 
-	public abstract Optional<E> findById(Object id);
+    @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<E> findById(Integer id);
 
-	public abstract int getCount();
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public int getCount();
+
+    @RequestMapping(value = "/ping/{message}", method = RequestMethod.GET)
+    public String ping(String message);
+
+    public ResponseEntity<E> handleFoundEntity(Optional<E> foundEntity);
 }

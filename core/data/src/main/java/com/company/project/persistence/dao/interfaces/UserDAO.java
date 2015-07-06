@@ -1,11 +1,11 @@
-package com.company.project.services.interfaces;
+package com.company.project.persistence.dao.interfaces;
 
+import com.company.project.persistence.dao.interfaces.base.BaseDAO;
 import com.company.project.persistence.entities.User;
 import com.company.project.persistence.entities.User.Provider;
-import com.company.project.services.interfaces.base.BaseService;
 import com.google.common.base.Optional;
 
-public interface UserService extends BaseService<User> {
+public interface UserDAO extends BaseDAO<User> {
 
 	Optional<User> findByUsername(String username);
 

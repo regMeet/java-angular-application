@@ -22,7 +22,7 @@ angular.module('myApp', [
         $authProvider.authHeader = 'Authorization'; // default
         $authProvider.httpInterceptor = true; // Add Authorization header to HTTP request
         // https://github.com/sahat/satellizer/issues/261
-        $authProvider.tokenRoot = 'entity'; // set the token parent element if the token is not the JSON root
+        //$authProvider.tokenRoot = 'entity'; // set the token parent element if the token is not the JSON root
 
         $authProvider.baseUrl = 'http://localhost:8089/web-services';
         $authProvider.loginUrl = '/auth/login';

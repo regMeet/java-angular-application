@@ -1,10 +1,18 @@
 package com.company.project.webservice.interfaces;
 
-import com.company.project.persistence.entities.Users;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.company.project.persistence.entities.User;
 import com.company.project.webservice.interfaces.base.BaseRestService;
 
-public interface UserRestService  extends BaseRestService<Users>{
+public interface UserRestService extends BaseRestService<User> {
 
-	Users findByUserName(String name);
+	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
+	public ResponseEntity<User> findByUserName(String name);
+
+	@RequestMapping(value = "/email/{email}", method = RequestMethod.GET)
+	public ResponseEntity<User> findByEmail(String email);
 
 }

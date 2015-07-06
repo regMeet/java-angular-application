@@ -26,6 +26,8 @@ public class AuthFilter implements Filter {
 	private static final String JWT_ERROR_MSG = "Unable to parse JWT";
 	private static final String JWT_INVALID_MSG = "Invalid JWT token";
 
+	boolean checkAuthorization = true;
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
@@ -33,31 +35,38 @@ public class AuthFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String authHeader = httpRequest.getHeader(AuthUtils.AUTH_HEADER_KEY);
 
-		if (StringUtils.isBlank(authHeader) || authHeader.split(" ").length != 2) {
-			httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, AUTH_ERROR_MSG);
-		} else {
-			JWTClaimsSet claimSet = null;
-			try {
-				claimSet = (JWTClaimsSet) AuthUtils.decodeToken(authHeader);
-			} catch (ParseException e) {
-				httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, JWT_ERROR_MSG);
-				return;
-			} catch (JOSEException e) {
-				httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, JWT_INVALID_MSG);
-				return;
-			}
-
-			// ensure that the token is not expired
-			if (new DateTime(claimSet.getExpirationTime()).isBefore(DateTime.now())) {
-				httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, EXPIRE_ERROR_MSG);
+		if (checkAuthorization) {
+			if (StringUtils.isBlank(authHeader) || authHeader.split(" ").length != 2) {
+				httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, AUTH_ERROR_MSG);
 			} else {
-				chain.doFilter(request, response);
+				JWTClaimsSet claimSet = null;
+				try {
+					claimSet = (JWTClaimsSet) AuthUtils.decodeToken(authHeader);
+				} catch (ParseException e) {
+					httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, JWT_ERROR_MSG);
+					return;
+				} catch (JOSEException e) {
+					httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, JWT_INVALID_MSG);
+					return;
+				}
+
+				// ensure that the token is not expired
+				if (new DateTime(claimSet.getExpirationTime()).isBefore(DateTime.now())) {
+					httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, EXPIRE_ERROR_MSG);
+				} else {
+					chain.doFilter(request, response);
+				}
 			}
+		} else {
+			chain.doFilter(request, response);
 		}
+
 	}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
+		String authorizationParam = filterConfig.getInitParameter("checkAuthorization");
+		checkAuthorization = Boolean.parseBoolean(authorizationParam);
 	}
 
 	@Override

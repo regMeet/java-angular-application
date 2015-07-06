@@ -9,9 +9,9 @@ CREATE SCHEMA IF NOT EXISTS `Angular` DEFAULT CHARACTER SET utf8 COLLATE utf8_ge
 USE `Angular` ;
 
 -- -----------------------------------------------------
--- Table `Angular`.`Users`
+-- Table `Angular`.`User`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Angular`.`Users` (
+CREATE TABLE IF NOT EXISTS `Angular`.`User` (
   idUser INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NULL,
   lastname VARCHAR(255) NULL,

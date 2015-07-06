@@ -11,8 +11,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import com.company.project.persistence.dao.interfaces.base.BaseReadOnlyDAO;
 import com.google.common.base.Optional;
@@ -21,7 +20,7 @@ import com.google.common.base.Optional;
 public class BaseReadOnlyDAOImpl<E extends Serializable> implements BaseReadOnlyDAO<E> {
 
 	private static final long serialVersionUID = 1L;
-	private static final Log log = LogFactory.getLog(BaseReadOnlyDAOImpl.class);
+	private final static Logger log = Logger.getLogger(BaseReadOnlyDAOImpl.class);
 
 	@PersistenceContext
 	protected EntityManager em;

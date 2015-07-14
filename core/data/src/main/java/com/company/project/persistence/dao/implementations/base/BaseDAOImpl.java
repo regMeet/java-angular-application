@@ -9,7 +9,7 @@ import com.google.common.base.Optional;
 
 public class BaseDAOImpl<E extends Serializable> extends BaseReadOnlyDAOImpl<E> implements BaseDAO<E> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6022932080430514386L;
 	private final static Logger log = Logger.getLogger(BaseDAOImpl.class);
 
 	public BaseDAOImpl() {

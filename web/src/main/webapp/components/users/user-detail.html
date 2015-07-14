@@ -5,32 +5,32 @@
         <div class="control-group">
             <label class="control-label" for="inputFirstName">First name:</label>
             <div class="controls">
-                <input type="text" id="name" ng-model="user.name"/>
+                <input type="text" id="name" ng-model="vm.user.name"/>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="inputLastName">Last name:</label>
             <div class="controls">
-                <input type="text" id="lastname" ng-model="user.lastname"/>
+                <input type="text" id="lastname" ng-model="vm.user.lastname"/>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="inputUsername">User name:</label>
             <div class="controls">
-                <input type="text" id="username" ng-model="user.username"/>
+                <input type="text" id="username" ng-model="vm.user.username"/>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="inputEmail">Email:</label>
             <div class="controls">
-                <input type="text" id="email" ng-model="user.email"/>
+                <input type="text" id="email" ng-model="vm.user.email"/>
             </div>
         </div>
         <div class="control-group">
             <div class="controls">
               <!-- user-detail.html: -->
-                <a ng-click="cancel()" class="btn btn-small">cancel</a>
-                <a ng-click="updateUser()" class="btn btn-small btn-primary">update user</a>
+                <a ng-click="vm.cancel()" class="btn btn-small">cancel</a>
+                <a ng-click="vm.updateUser()" class="btn btn-small btn-primary">update user</a>
             </div>
         </div>
     </form>

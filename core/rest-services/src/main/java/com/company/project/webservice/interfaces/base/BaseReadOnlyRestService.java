@@ -18,7 +18,7 @@ public interface BaseReadOnlyRestService<E extends Serializable> {
 
     public List<E> find(int maxResults, int firstResult);
 
-    @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<E> findById(Integer id);
 

@@ -120,7 +120,7 @@
             </resource>
             <!-- Filtering src\main\webapp\WEB-INF\web.xml -->
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>src/main/webapp/</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>

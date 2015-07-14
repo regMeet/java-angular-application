@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import com.company.project.Auth.AuthUtils;
@@ -20,6 +21,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.JWTClaimsSet;
 
 public class AuthFilter implements Filter {
+	private final static Logger log = Logger.getLogger(AuthFilter.class);
 
 	private static final String AUTH_ERROR_MSG = "Please make sure your request has an Authorization header";
 	private static final String EXPIRE_ERROR_MSG = "Token has expired";
@@ -67,6 +69,8 @@ public class AuthFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 		String authorizationParam = filterConfig.getInitParameter("checkAuthorization");
 		checkAuthorization = Boolean.parseBoolean(authorizationParam);
+		log.debug("authorizationParam --- " + authorizationParam);
+		System.out.println("authorizationParam *** " + authorizationParam);
 	}
 
 	@Override

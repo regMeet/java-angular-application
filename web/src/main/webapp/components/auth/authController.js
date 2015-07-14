@@ -3,9 +3,12 @@
 angular.module('myApp.auth')
 
 .controller('HomeCtrl', [ '$scope', '$auth', '$location', '$window', '$rootScope', function($scope, $auth, $location, $window, $rootScope) {
-//	$scope.currentUser = $rootScope.currentUser;
+// $scope.currentUser = $rootScope.currentUser;
+	var vm = this;
+	vm.user = {};
 
-	$scope.isAuthenticated = function() {
+	vm.isAuthenticated = function() {
+		console.log('$auth ',$auth)
 		return $auth.isAuthenticated();
 	};
 } ])

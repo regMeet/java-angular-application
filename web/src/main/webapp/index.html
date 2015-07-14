@@ -25,20 +25,20 @@
 
 </head>
 <body>
-	<div ng-controller="HomeCtrl" class="navbar navbar-default navbar-static-top">
+	<div ng-controller="HomeCtrl as vm" class="navbar navbar-default navbar-static-top">
 	  <div class="navbar-header">
 	    <a class="navbar-brand" href="/"><i class="ion-ios7-pulse-strong"></i> Company</a>
 	  </div>
 	  <ul class="nav navbar-nav">
 	    <li><a href="/#/home">Home</a></li>
-	    <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
-	    <li ng-if="isAuthenticated()"><a href="/#/user-list">Users</a></li>
+	    <li ng-if="vm.isAuthenticated()"><a href="/#/profile">Profile</a></li>
+	    <li ng-if="vm.isAuthenticated()"><a href="/#/user-list">Users</a></li>
 	  </ul>
-	  <ul ng-if="!isAuthenticated()" class="nav navbar-nav pull-right">
+	  <ul ng-if="!vm.isAuthenticated()" class="nav navbar-nav pull-right">
 	    <li><a href="/#/login">Login</a></li>
 	    <li><a href="/#/signup">Sign up</a></li>
 	  </ul>
-	  <ul ng-if="isAuthenticated()" class="nav navbar-nav pull-right">
+	  <ul ng-if="vm.isAuthenticated()" class="nav navbar-nav pull-right">
 	  	<li><a >Hello {{ currentUser }}</a></li>
 	    <li><a href="/#/logout">Logout</a></li>
 	  </ul>

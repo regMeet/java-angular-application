@@ -15,7 +15,7 @@ userServices.factory('UserResource3', [ '$http', function($http) {
 	};
 } ]);
 
-userServices.factory('UserResource2', ['$http', function albumService($http) {
+userServices.factory('UserResource2', ['$http', function ($http) {
 		var urlBase = 'http://localhost:8089/web-services/api/users/';
 
 		// interface

@@ -15,4 +15,32 @@
 		<module>web</module>
 	</modules>
 
+	<profiles>
+        <profile>
+            <id>Default App Name</id>
+            <activation>
+                <property>
+                    <name>!env.APP_NAME</name>
+                </property>
+            </activation>
+
+            <properties>
+                <env.APP_NAME>angularProject</env.APP_NAME>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>Default Variables</id>
+            <activation>
+                <property>
+                    <name>!env.DB_NAME</name>
+                </property>
+            </activation>
+
+            <properties>
+                <env.DB_NAME>angular</env.DB_NAME>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>

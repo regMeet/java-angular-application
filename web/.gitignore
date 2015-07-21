@@ -39,3 +39,4 @@ target
 node
 # Bower
 src/main/webapp/bower_components/
+/bin/

@@ -19,11 +19,11 @@ public class AppTestUser {
 		
 		/** insert **/
 		User user2 = new User();
-		user2.setName("test");
+		user2.setFirstname("test");
 		cityService.create(user2);
 
 		/** update **/
-		user2.setName("updated");
+		user2.setFirstname("updated");
 		cityService.update(user2);
 
 		/** delete **/

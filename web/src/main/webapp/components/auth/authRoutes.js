@@ -5,11 +5,13 @@ angular.module('myApp.auth', ['ngRoute'])
 	$routeProvider
 	    .when('/login', {
 	        templateUrl: 'templates/auth/login.html',
-	        controller: 'LoginController'
+	        controller: 'LoginController',
+        	controllerAs : 'vm'
 	    })
 	    .when('/signup', {
 	        templateUrl: 'templates/auth/signup.html',
-	        controller: 'SignUpController'
+	        controller: 'SignUpController',
+        	controllerAs : 'vm'
 	    })
 	    .when('/logout', {
 	        template: ' ',

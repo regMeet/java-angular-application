@@ -4,6 +4,8 @@ package com.company.project.persistence.entities;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 		@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT u FROM User u WHERE u.email = :email"),
 		@NamedQuery(name = User.FIND_BY_FACEBOOK, query = "SELECT u FROM User u WHERE u.facebook = :facebook"),
 		@NamedQuery(name = User.FIND_BY_GOOGLE, query = "SELECT u FROM User u WHERE u.google = :google"), })
-public class User implements java.io.Serializable {
+public class User implements Serializable {
 	private static final long serialVersionUID = 164233161212022125L;
 
 	public static final String FIND_ALL = "User.findAll";

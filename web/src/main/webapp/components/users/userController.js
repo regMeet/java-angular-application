@@ -23,7 +23,7 @@ angular.module('myApp.users')
 	    	UserResource.getUsers()
 	    		.success(function(users) {  
 	    			vm.users = users;
-		            console.log('users returned to controller.', vm.users);
+//		            console.log('users returned to controller.', vm.users);
 		        })
 		        .error(function() {
 		            console.log('users retrieval failed.');

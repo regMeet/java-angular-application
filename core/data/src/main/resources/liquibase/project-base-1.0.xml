@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Angular US - Creation database data structure - user" author="Alan Albertengo" context="base">
+        <comment>Creation user table</comment>
+        <createTable tableName="_user">
+            <column name="idUser" type="INT">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="firstname" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="lastname" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="facebook" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="google" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="role" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="username" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="password" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="telephone" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="mobile" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addAutoIncrement tableName="_user" columnName="idUser" columnDataType="INT" incrementBy="1" startWith="0"/>
+    </changeSet>
+
+</databaseChangeLog>

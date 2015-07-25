@@ -2,23 +2,26 @@
 
 angular.module('myApp.auth')
 
-.controller('HomeCtrl', [ '$scope', '$authService', function($scope, $authService) {
+.controller('HomeCtrl', [ '$scope', '$authService', '$rootScope', function($scope, $authService, $rootScope) {
 	var vm = this;
+	vm.currentUser = $authService.currentUser;
 
-	vm.currentUser = $authService.getCurrentUser();
-	
 	vm.isAuthenticated = function() {
-//		vm.currentUser = $authService.currentUser;
 		return $authService.isAuthenticated();
 	};
 	
-//	$scope.$watch( $authService.currentUser, function ( currentUser ) {
-//		console.log('isAuthenticated11 ', currentUser);
-//		console.log('isAuthenticated22 ', $authService.currentUser);
-//		console.log('isAuthenticated33 ', $authService.isAuthenticated());
-//		console.log('getCurrentUser44 ', $authService.getCurrentUser());
-//		vm.currentUser = $authService.getCurrentUser();
+	$scope.$watch(function() {
+		return $authService.currentUser;
+	},
+	function(newVal) {
+		vm.currentUser = newVal;
+	});
+
+//	$scope.$watch('$authService.currentUser', function(newVal) {
+//		console.log('hey, myVar has changed!', newVal);
+//		vm.currentUser = newVal;
 //	});
+
 } ])
 
 .controller('SignUpController', [ '$authService', function($authService) {

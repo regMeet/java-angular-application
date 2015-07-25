@@ -39,7 +39,6 @@
         <filter-class>com.company.project.webservice.filter.AuthFilter</filter-class>
         <init-param>
             <param-name>checkAuthorization</param-name>
-<!--             <param-value>false</param-value> -->
             <param-value>${authorization}</param-value>
         </init-param>
     </filter>

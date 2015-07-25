@@ -2,7 +2,7 @@
 
 angular.module('myApp.profile')
 
-.controller('ProfileCtrl', [ '$scope', '$alert', 'UserResource', function($scope, $alert, UserResource) {
+.controller('ProfileCtrl', [ '$scope', '$alert', 'UserResource', '$authService', function($scope, $alert, UserResource, $authService) {
 		var vm = this;
     	vm.user = {};
 
@@ -11,9 +11,9 @@ angular.module('myApp.profile')
 		 */
 		vm.getProfile = function() {
 			UserResource.getProfile()
-			.success(function(data) {
-				console.log(data);
-				vm.user = data;
+			.success(function(user) {
+				vm.user = user;
+				$authService.setCurrentUser(user.username);
 			})
 			.error(function(error) {
 				$alert({

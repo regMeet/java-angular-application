@@ -6,10 +6,10 @@ public interface BaseDAO<E extends Serializable> extends BaseReadOnlyDAO<E>{
 
 	public abstract void create(E entity);
 
-	public abstract void update(E entity);
+	public abstract E update(E entity);
 
 	public abstract void delete(E entity);
 
-	public abstract void delete(Integer id);
+	public abstract void delete(Long id);
 
 }

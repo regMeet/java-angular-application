@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 import com.company.project.persistence.entities.User;
-import com.company.project.webservice.implementations.AuthServiceImpl.Payload;
+import com.company.project.webservice.implementations.AuthRestServiceImpl.Payload;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nimbusds.jose.JOSEException;
 
-public interface AuthService {
+public interface AuthRestService {
 
 	public abstract ResponseEntity login(User user, HttpServletRequest request) throws JOSEException;
 

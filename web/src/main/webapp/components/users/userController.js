@@ -23,7 +23,6 @@ angular.module('myApp.users')
 	    	UserResource.getUsers()
 	    		.success(function(users) {  
 	    			vm.users = users;
-//		            console.log('users returned to controller.', vm.users);
 		        })
 		        .error(function() {
 		            console.log('users retrieval failed.');
@@ -52,7 +51,7 @@ angular.module('myApp.users')
 
 	}])
 
-.controller('UserDetailCtrl', ['$scope', '$routeParams', 'UserResource', '$location', function ($scope, $routeParams, UserResource, $location) {
+.controller('UserDetailCtrl', ['$scope', '$routeParams', 'UserResource', '$location', '$authService', function ($scope, $routeParams, UserResource, $location, $authService) {
 		var vm = this;
 		vm.status = {};
     	vm.user = {};
@@ -62,6 +61,11 @@ angular.module('myApp.users')
     		UserResource.updateUser(vm.user)
     			.success(function () {
 					vm.status = 'Updated User! Refreshing user list.';
+
+					if (vm.user.idUser == $authService.userId){
+						$authService.setCurrentUser(vm.user.username);
+					}
+
 					$location.path('/user-list');
 				})
 				.error(function (error) {

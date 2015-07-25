@@ -9,8 +9,7 @@ import com.company.project.persistence.dao.interfaces.base.BaseDAO;
 import com.company.project.services.interfaces.base.BaseService;
 
 @Transactional
-public class BaseServiceImpl<E extends Serializable, D extends BaseDAO<E>> extends BaseReadOnlyServiceImpl<E, D> implements
-		BaseService<E> {
+public class BaseServiceImpl<E extends Serializable, D extends BaseDAO<E>> extends BaseReadOnlyServiceImpl<E, D> implements BaseService<E> {
 
 	@Autowired
 	public BaseServiceImpl(D baseDao) {
@@ -23,17 +22,17 @@ public class BaseServiceImpl<E extends Serializable, D extends BaseDAO<E>> exten
 	}
 
 	@Override
-	public void update(E entity) {
-		baseDao.update(entity);
+	public E update(E entity) {
+		return baseDao.update(entity);
 	}
 
 	@Override
 	public void delete(E entity) {
 		baseDao.delete(entity);
 	}
-	
+
 	@Override
-	public void delete(Integer id) {
+	public void delete(Long id) {
 		baseDao.delete(id);
 	}
 }

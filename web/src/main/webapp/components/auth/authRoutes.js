@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.auth', ['ngRoute'])
+angular.module('myApp.auth', ['ngRoute', 'ngCookies'])
 .config(['$routeProvider', function ($routeProvider) {
 	$routeProvider
 	    .when('/login', {

@@ -140,6 +140,7 @@
                     </connectors>
                     <!-- <contextXml>${basedir}/src/main/webapp/WEB-INF/META-INF/context.xml</contextXml> -->
                     <contextPath>/web-services</contextPath>
+                    <webXml>${project.basedir}/target/classes/WEB-INF/web.xml</webXml>
                 </configuration>
             </plugin>
         </plugins>

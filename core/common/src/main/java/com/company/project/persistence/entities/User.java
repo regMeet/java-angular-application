@@ -38,37 +38,37 @@ public class User implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "idUser", unique = true, nullable = false)
-	private Integer idUser;
+	@Column(name = "idUser")
+	private Long idUser;
 
-	@Column(name = "firstname", nullable = true)
+	@Column(name = "firstname")
 	private String firstname;
 
-	@Column(name = "lastname", nullable = true)
+	@Column(name = "lastname")
 	private String lastname;
 
-	@Column(name = "email", nullable = true)
+	@Column(name = "email")
 	private String email;
 
-	@Column(name = "facebook", nullable = true)
+	@Column(name = "facebook")
 	private String facebook;
 
-	@Column(name = "google", nullable = true)
+	@Column(name = "google")
 	private String google;
 
-	@Column(name = "role", nullable = true)
+	@Column(name = "role")
 	private String role;
 
-	@Column(name = "username", nullable = true)
+	@Column(name = "username")
 	private String username;
 
-	@Column(name = "password", nullable = true)
+	@Column(name = "password")
 	private String password;
 
-	@Column(name = "telephone", nullable = true)
+	@Column(name = "telephone")
 	private String telephone;
 
-	@Column(name = "mobile", nullable = true)
+	@Column(name = "mobile")
 	private String mobile;
 
 	public User() {
@@ -88,11 +88,11 @@ public class User implements Serializable {
 		this.mobile = mobile;
 	}
 
-	public Integer getIdUser() {
+	public Long getIdUser() {
 		return this.idUser;
 	}
 
-	public void setIdUser(Integer idUser) {
+	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
 	}
 

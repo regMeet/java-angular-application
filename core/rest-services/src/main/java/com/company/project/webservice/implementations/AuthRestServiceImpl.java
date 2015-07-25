@@ -32,13 +32,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.company.project.Auth.AuthUtils;
 import com.company.project.Auth.ErrorMessage;
 import com.company.project.Auth.PasswordService;
-import com.company.project.Auth.Token;
 import com.company.project.Auth.Provider.FacebookUtil;
 import com.company.project.Auth.Provider.GoogleUtil;
+import com.company.project.VO.AuthEntityVO;
 import com.company.project.persistence.entities.User;
 import com.company.project.persistence.entities.User.Provider;
 import com.company.project.services.interfaces.UserService;
-import com.company.project.webservice.interfaces.AuthService;
+import com.company.project.webservice.interfaces.AuthRestService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -49,8 +49,8 @@ import com.nimbusds.jose.JOSEException;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthServiceImpl implements AuthService {
-	final static Logger log = Logger.getLogger(AuthServiceImpl.class);
+public class AuthRestServiceImpl implements AuthRestService {
+	final static Logger log = Logger.getLogger(AuthRestServiceImpl.class);
 
 	public static final String CLIENT_ID_KEY = "client_id";
 	public static final String REDIRECT_URI_KEY = "redirect_uri";
@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
 	private GoogleUtil googleUtil;
 
 	@Autowired
-	public AuthServiceImpl(UserService userService) {
+	public AuthRestServiceImpl(UserService userService) {
 		this.userService = userService;
 	}
 
@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
 				String passwordDto = userDto.get().getPassword();
 				boolean checkPassword = PasswordService.checkPassword(user.getPassword(), passwordDto);
 				if (checkPassword) {
-					final Token token = AuthUtils.createToken(request.getRemoteHost(), userDto.get());
+					final AuthEntityVO token = AuthUtils.createToken(request.getRemoteHost(), userDto.get());
 					return new ResponseEntity(token, HttpStatus.OK);
 				}
 			}
@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
 		if (!existingUser.isPresent()) {
 			user.setPassword(PasswordService.hashPassword(user.getPassword()));
 			userService.create(user);
-			final Token token = AuthUtils.createToken(request.getRemoteHost(), user);
+			final AuthEntityVO token = AuthUtils.createToken(request.getRemoteHost(), user);
 			return new ResponseEntity(token, HttpStatus.CREATED);
 		}
 
@@ -279,7 +279,7 @@ public class AuthServiceImpl implements AuthService {
 			}
 		}
 
-		final Token token = AuthUtils.createToken(request.getRemoteHost(), userToSave);
+		final AuthEntityVO token = AuthUtils.createToken(request.getRemoteHost(), userToSave);
 		return new ResponseEntity(token, HttpStatus.OK);
 	}
 }

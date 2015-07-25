@@ -22,9 +22,11 @@ public class BaseDAOImpl<E extends Serializable> extends BaseReadOnlyDAOImpl<E> 
 	}
 
 	@Override
-	public void update(E entity) {
+	public E update(E entity) {
 		log.debug("updating City instance");
-		em.merge(entity);
+		E entityMerged = em.merge(entity);
+//		em.flush();
+		return entityMerged;
 	}
 
 	// @Override
@@ -42,21 +44,9 @@ public class BaseDAOImpl<E extends Serializable> extends BaseReadOnlyDAOImpl<E> 
 	}
 
 	@Override
-	public void delete(Integer id) {
+	public void delete(Long id) {
 		Optional<E> entity = findById(id);
 		em.remove(entity.get());
 	}
-
-	// public City merge(City detachedInstance) {
-	// log.debug("merging City instance");
-	// try {
-	// City result = em.merge(detachedInstance);
-	// log.debug("merge successful");
-	// return result;
-	// } catch (RuntimeException re) {
-	// log.error("merge failed", re);
-	// throw re;
-	// }
-	// }
 
 }

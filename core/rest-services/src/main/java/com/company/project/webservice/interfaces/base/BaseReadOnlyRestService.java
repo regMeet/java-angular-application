@@ -20,7 +20,7 @@ public interface BaseReadOnlyRestService<E extends Serializable> {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<E> findById(Integer id);
+    public ResponseEntity<E> findById(Long id);
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int getCount();
@@ -29,4 +29,5 @@ public interface BaseReadOnlyRestService<E extends Serializable> {
     public String ping(String message);
 
     public ResponseEntity<E> handleFoundEntity(Optional<E> foundEntity);
+
 }

@@ -2,16 +2,20 @@
 
 angular.module('myApp.auth')
 
-.factory('$authService', ['$auth', '$location', '$alert', function ($auth, $location, $alert) {
+.factory('$authService', ['$auth', '$location', '$alert', '$rootScope', '$cookies', function ($auth, $location, $alert, $rootScope, $cookies) {
 		var urlBase = 'http://localhost:8089/web-services/api/users/';
-		var isLoggedIn = {};
-		var currentUser;
-		
+
+		var userId = $cookies.get('userId');
+		var currentUser = $cookies.get('currentUser');
+		var role = $cookies.get('role');
+
 		// interface
 	    var service = {
+    		userId: userId,
     		currentUser : currentUser,
+    		setCurrentUser: setCurrentUser,
+    		role: role,
 	        isAuthenticated: isAuthenticated,
-	        getCurrentUser: getCurrentUser,
 	        login: login,
 	        signup: signup,
 	        authenticate: authenticate,
@@ -23,14 +27,7 @@ angular.module('myApp.auth')
 	    function isAuthenticated() {
 	    	return $auth.isAuthenticated();
 	    }
-	    
-	    function getCurrentUser() {
-	    	console.log('getCurrentUser1 ' ,service.currentUser );
-	    	console.log('getCurrentUser2 ' ,currentUser );
-	    	
-	    	return service.currentUser;
-	    }
-	    
+
 	    function signup(user) {
 	        $auth.signup({
 	        	username: user.username,
@@ -38,7 +35,7 @@ angular.module('myApp.auth')
 	            password: user.password
 	        })
 	        .then(function(response) {
-	        	service.currentUser = response.data.currentUser;
+	        	updateUser(response.data.user);
 
 	            // Si se ha registrado correctamente,
 	            // Podemos redirigirle a otra parte
@@ -50,14 +47,14 @@ angular.module('myApp.auth')
 	        	console.log("errores en el signup");
 	        });
 	    }
-	    
+
 	    function login(user) {
 	    	$auth.login({
 		        email: user.email,
 		        password: user.password
 		    })
 		    .then(function(response){
-		    	service.currentUser = response.data.currentUser;
+		    	updateUser(response.data.user);
 
 		        // Si se ha logueado correctamente, lo tratamos aquí.
 		        // Podemos también redirigirle a una ruta
@@ -68,14 +65,11 @@ angular.module('myApp.auth')
 		    	console.log(response.data.message);
 		    });
 	    }
-	    
+
 	    function authenticate(provider) {
 	    	$auth.authenticate(provider)
 	        .then(function(response) {
-	        	service.currentUser = response.data.currentUser;
-		    	console.log('currentUser ', currentUser );
-	        	currentUser = response.data.currentUser;
-	        	console.log("service.currentUser ", service.currentUser);
+	        	updateUser(response.data.user);
 
 		    	$location.path("/user-list");
 	        })
@@ -83,7 +77,21 @@ angular.module('myApp.auth')
 	        	console.log(response.data.message);
 	        });
 	    }
-	    
+
+	    function updateUser(user){
+	    	service.userId = user.userId;
+	    	service.currentUser = user.currentUser;
+	    	service.role = user.role;
+	    	$cookies.put('userId', service.userId);
+	    	$cookies.put('currentUser', service.currentUser);
+	    	$cookies.put('role', service.role);
+	    }
+
+	    function setCurrentUser(currentUser){
+	    	service.currentUser = currentUser;
+	    	$cookies.put('currentUser', service.currentUser);
+	    }
+
 	    function logout() {
 	    	if (!$auth.isAuthenticated()) {
 	            return;

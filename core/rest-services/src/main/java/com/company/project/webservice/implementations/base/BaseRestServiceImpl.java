@@ -35,7 +35,7 @@ public class BaseRestServiceImpl<E extends Serializable, S extends BaseService<E
 	}
 
 	@Override
-	public void delete(@PathVariable("id") Integer id) {
+	public void delete(@PathVariable("id") Long id) {
 		baseService.delete(id);
 	}
 }

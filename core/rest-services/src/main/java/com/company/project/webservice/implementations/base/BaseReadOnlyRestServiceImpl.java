@@ -32,7 +32,7 @@ public class BaseReadOnlyRestServiceImpl<E extends Serializable, S extends BaseR
 	}
 
 	@Override
-	public ResponseEntity<E> findById(@PathVariable("id") Integer id) {
+	public ResponseEntity<E> findById(@PathVariable("id") Long id) {
 		Optional<E> foundEntity = baseService.findById(id);
 		return handleFoundEntity(foundEntity);
 	}

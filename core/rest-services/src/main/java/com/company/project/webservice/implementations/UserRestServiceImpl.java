@@ -45,16 +45,16 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService> 
 
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws ParseException, JOSEException {
-		int idUser = getAuthUser(request);
+		Long idUser = getAuthUser(request);
 		return findById(idUser);
 	}
 
 	/*
 	 * Helper methods
 	 */
-	private int getAuthUser(HttpServletRequest request) throws ParseException, JOSEException {
+	private Long getAuthUser(HttpServletRequest request) throws ParseException, JOSEException {
 		String subject = AuthUtils.getSubject(request.getHeader(AuthUtils.AUTH_HEADER_KEY));
-		int idUser = Integer.parseInt(subject);
+		Long idUser = Long.parseLong(subject);
 		return idUser;
 	}
 

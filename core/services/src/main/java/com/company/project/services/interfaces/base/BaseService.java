@@ -6,9 +6,9 @@ public interface BaseService<E extends Serializable> extends BaseReadOnlyService
 
 	public abstract void create(E entity);
 
-	public abstract void update(E entity);
+	public abstract E update(E entity);
 
 	public abstract void delete(E entity);
 
-	public abstract void delete(Integer id);
+	public abstract void delete(Long id);
 }

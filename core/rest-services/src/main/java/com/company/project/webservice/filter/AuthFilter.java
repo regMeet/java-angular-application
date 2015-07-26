@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
-import com.company.project.Auth.AuthUtils;
+import com.company.project.services.utils.AuthUtils;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.JWTClaimsSet;
 
@@ -33,6 +33,7 @@ public class AuthFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+		// TODO: use JJWT
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		String authHeader = httpRequest.getHeader(AuthUtils.AUTH_HEADER_KEY);

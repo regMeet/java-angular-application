@@ -1,11 +1,15 @@
-package com.company.project.Auth;
+package com.company.project.services.utils;
 
 import java.text.ParseException;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import com.company.project.VO.AuthEntityVO;
 import com.company.project.VO.AuthUserVO;
+import com.company.project.api.exception.HttpAuthenticationException;
+import com.company.project.api.exception.HttpError;
 import com.company.project.persistence.entities.User;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -18,13 +22,28 @@ import com.nimbusds.jwt.ReadOnlyJWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 public final class AuthUtils {
+	final static Logger log = Logger.getLogger(AuthUtils.class);
 
 	private static final JWSHeader JWT_HEADER = new JWSHeader(JWSAlgorithm.HS256);
 	private static final String TOKEN_SECRET = "aliceinwonderland";
 	public static final String AUTH_HEADER_KEY = "Authorization";
 
-	public static String getSubject(String authHeader) throws ParseException, JOSEException {
-		return decodeToken(authHeader).getSubject();
+	public static Long getSubject(String authorizationAccessToken) throws HttpAuthenticationException {
+		Long userId = null;
+
+		if (StringUtils.isNotBlank(authorizationAccessToken)) {
+			try {
+				String subject = decodeToken(authorizationAccessToken).getSubject();
+				userId = Long.parseLong(subject);
+			} catch (ParseException e) {
+				log.error("There has been an error decoding the access token " + e.getMessage());
+				throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+			} catch (JOSEException e) {
+				log.error("There has been an error with the access token " + e.getMessage());
+				throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+			}
+		}
+		return userId;
 	}
 
 	public static ReadOnlyJWTClaimsSet decodeToken(String authHeader) throws ParseException, JOSEException {

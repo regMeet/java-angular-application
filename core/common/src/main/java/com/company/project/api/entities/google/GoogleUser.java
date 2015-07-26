@@ -1,19 +1,20 @@
-package com.company.project.api.entities.facebook;
+package com.company.project.api.entities.google;
 
 import com.company.project.api.entities.ProviderUser;
-import com.company.project.api.entities.facebook.base.FacebookEntity;
 import com.google.gson.annotations.SerializedName;
 
-public class FacebookUser extends FacebookEntity implements ProviderUser {
+public class GoogleUser implements ProviderUser {
+
+	@SerializedName("sub")
 	private String id;
 	private String name;
-	@SerializedName("first_name")
+	@SerializedName("given_name")
 	private String firstname;
-	@SerializedName("last_name")
+	@SerializedName("family_name")
 	private String lastname;
 	private String email;
 
-	public FacebookUser() {
+	public GoogleUser() {
 	}
 
 	public String getId() {

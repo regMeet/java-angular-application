@@ -32,6 +32,6 @@ public class AppTestUser {
 		cityService.delete(user2.getIdUser());
 
 		System.out.println("Done");
-		
+
 	}
 }

@@ -48,26 +48,6 @@
             <version>${jackson.databind-version}</version>
         </dependency>
 
-        <!-- Auth -->
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>${nimbus-jose-jwt.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mindrot</groupId>
-            <artifactId>jbcrypt</artifactId>
-            <version>${jbcrypt.version}</version>
-        </dependency>
-        <!-- Auth end -->
-
         <!-- Response jersey -->
         <dependency>
             <groupId>javax.ws.rs</groupId>

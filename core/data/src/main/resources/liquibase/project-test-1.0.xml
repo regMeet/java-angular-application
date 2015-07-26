@@ -12,8 +12,8 @@
             <column name="firstname" value="Alan"/>
             <column name="lastname" value="Albertengo"/>
             <column name="email" value="alan.albertengo@albertengo.com"/>
-            <column name="facebook" value="facebook"/>
-            <column name="google" value="google"/>
+            <column name="facebook" value="12345"/>
+            <column name="google" value="54321"/>
             <column name="role" value="role"/>
             <column name="username" value="admin"/>
             <column name="password" value="admin"/>

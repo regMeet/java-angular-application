@@ -7,4 +7,5 @@ CORS Cross-Origin Resource Sharing
 CSRF (Cross-Site Request Forgery)
 
 data
-mvn clean install liquibase:dropAll liquibase:update
+mvn liquibase:dropAll liquibase:update
+

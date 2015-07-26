@@ -9,7 +9,7 @@
     <changeSet id="Angular US - Creation database data structure - user" author="Alan Albertengo" context="base">
         <comment>Creation user table</comment>
         <createTable tableName="_user">
-            <column name="idUser" type="INT">
+            <column name="idUser" type="BIGINT">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="firstname" type="VARCHAR(100)">
@@ -28,7 +28,7 @@
                 <constraints nullable="true"/>
             </column>
             <column name="role" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="username" type="VARCHAR(100)">
                 <constraints nullable="true"/>

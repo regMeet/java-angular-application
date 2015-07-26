@@ -17,7 +17,7 @@ public class FacebookErrorUtils {
     private static final String OAUTH_EXCEPTION_CODE = "190";
     private static final String MALFORMED_ACCESS_TOKEN = "Malformed access token";
 
-    public static void checkFacebookErrors(FacebookEntity entity) throws HttpAuthenticationException, HttpStatusException {
+    public static void checkErrors(FacebookEntity entity) throws HttpAuthenticationException, HttpStatusException {
         FacebookError error = entity.getError();
         if (error != null) {
             if (error.getType().equals(OAUTH_EXCEPTION)) {

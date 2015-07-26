@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.company.project.Auth.AuthUtils;
+import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.persistence.entities.User;
 import com.company.project.services.interfaces.UserService;
+import com.company.project.services.utils.AuthUtils;
 import com.company.project.webservice.implementations.base.BaseRestServiceImpl;
 import com.company.project.webservice.interfaces.UserRestService;
 import com.google.common.base.Optional;
@@ -43,8 +43,8 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService> 
 		return handleFoundEntity(foundUser);
 	}
 
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws ParseException, JOSEException {
+	@Override
+	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws ParseException, JOSEException, HttpAuthenticationException {
 		Long idUser = getAuthUser(request);
 		return findById(idUser);
 	}
@@ -52,10 +52,10 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService> 
 	/*
 	 * Helper methods
 	 */
-	private Long getAuthUser(HttpServletRequest request) throws ParseException, JOSEException {
-		String subject = AuthUtils.getSubject(request.getHeader(AuthUtils.AUTH_HEADER_KEY));
-		Long idUser = Long.parseLong(subject);
-		return idUser;
+	private Long getAuthUser(HttpServletRequest request) throws ParseException, JOSEException, HttpAuthenticationException {
+		String authorizationHeader = request.getHeader(AuthUtils.AUTH_HEADER_KEY);
+		Long userId = AuthUtils.getSubject(authorizationHeader);
+		return userId;
 	}
 
 }

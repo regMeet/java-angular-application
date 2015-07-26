@@ -1,16 +1,16 @@
 package com.company.project.webservice.interfaces;
 
-import java.io.IOException;
 import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
 
+import com.company.project.VO.AuthEntityVO;
+import com.company.project.VO.SatellizerPayloadVO;
+import com.company.project.api.exception.HttpAuthenticationException;
+import com.company.project.api.exception.HttpStatusException;
 import com.company.project.persistence.entities.User;
-import com.company.project.webservice.implementations.AuthRestServiceImpl.Payload;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.nimbusds.jose.JOSEException;
 
 public interface AuthRestService {
@@ -19,12 +19,10 @@ public interface AuthRestService {
 
 	public abstract ResponseEntity signup(User user, HttpServletRequest request) throws JOSEException;
 
-	public abstract ResponseEntity loginFacebook(Payload payload, HttpServletRequest request) throws JsonParseException,
-			JsonMappingException, IOException, ParseException, JOSEException;
+	public abstract AuthEntityVO loginFacebook(SatellizerPayloadVO payload, HttpServletRequest request) throws HttpStatusException;
 
-	public abstract ResponseEntity loginGoogle(Payload payload, HttpServletRequest request) throws JOSEException, ParseException,
-			JsonParseException, JsonMappingException, IOException;
+	public abstract AuthEntityVO loginGoogle(SatellizerPayloadVO payload, HttpServletRequest request) throws HttpStatusException;
 
 	public abstract ResponseEntity unlink(String provider, HttpServletRequest request) throws ParseException, IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException;
+			IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException, HttpAuthenticationException;
 }

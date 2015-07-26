@@ -11,8 +11,8 @@ import com.company.project.services.implementations.base.BaseServiceImpl;
 import com.company.project.services.interfaces.UserService;
 import com.google.common.base.Optional;
 
-@Service("userService")
 @Transactional
+@Service("userService")
 public class UserServiceImpl extends BaseServiceImpl<User, UserDAO> implements UserService {
 
 	@Autowired
@@ -34,4 +34,5 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDAO> implements U
 	public Optional<User> findByProvider(Provider provider, String providerId) {
 		return baseDao.findByProvider(provider, providerId);
 	}
+
 }

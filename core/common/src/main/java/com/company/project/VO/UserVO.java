@@ -1,4 +1,4 @@
-package com.company.project.api.entities;
+package com.company.project.VO;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 public class UserVO {
 
 	@NotNull
-	@Size(min = 2, max = 50, message="el error loco")
+	@Size(min = 2, max = 50, message = "user.null")
 	// @Min(1)
 	// @Max(20)
 	String firstName;

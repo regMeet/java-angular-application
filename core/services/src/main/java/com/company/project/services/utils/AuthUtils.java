@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
-import com.company.project.VO.AuthEntityVO;
+import com.company.project.VO.AuthEntityResponseVO;
 import com.company.project.VO.AuthUserVO;
 import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpError;
@@ -55,7 +55,7 @@ public final class AuthUtils {
 		}
 	}
 
-	public static AuthEntityVO createToken(String host, User user) throws JOSEException {
+	public static AuthEntityResponseVO createToken(String host, User user) throws JOSEException {
 		JWTClaimsSet claim = new JWTClaimsSet();
 		long sub = user.getIdUser();
 		claim.setSubject(Long.toString(sub));
@@ -67,7 +67,7 @@ public final class AuthUtils {
 		SignedJWT jwt = new SignedJWT(JWT_HEADER, claim);
 		jwt.sign(signer);
 
-		return new AuthEntityVO(jwt.serialize(), new AuthUserVO(user));
+		return new AuthEntityResponseVO(jwt.serialize(), new AuthUserVO(user));
 	}
 
 	public static String getSerializedToken(String authHeader) {

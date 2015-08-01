@@ -1,28 +1,26 @@
 package com.company.project.webservice.interfaces;
 
-import java.text.ParseException;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.http.ResponseEntity;
-
-import com.company.project.VO.AuthEntityVO;
+import com.company.project.VO.AuthEntityResponseVO;
+import com.company.project.VO.AuthLogInUserVO;
+import com.company.project.VO.AuthSignUpUserVO;
 import com.company.project.VO.SatellizerPayloadVO;
+import com.company.project.VO.UserVO;
 import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpStatusException;
-import com.company.project.persistence.entities.User;
-import com.nimbusds.jose.JOSEException;
 
 public interface AuthRestService {
 
-	public abstract ResponseEntity login(User user, HttpServletRequest request) throws JOSEException;
+	public AuthEntityResponseVO login(AuthLogInUserVO logInUser, HttpServletRequest request) throws HttpAuthenticationException;
 
-	public abstract ResponseEntity signup(User user, HttpServletRequest request) throws JOSEException;
+	public abstract AuthEntityResponseVO signup(AuthSignUpUserVO signupUser, HttpServletRequest request) throws HttpAuthenticationException;
 
-	public abstract AuthEntityVO loginFacebook(SatellizerPayloadVO payload, HttpServletRequest request) throws HttpStatusException;
+	public abstract AuthEntityResponseVO loginFacebook(SatellizerPayloadVO payload, HttpServletRequest request) throws HttpStatusException;
 
-	public abstract AuthEntityVO loginGoogle(SatellizerPayloadVO payload, HttpServletRequest request) throws HttpStatusException;
+	public abstract AuthEntityResponseVO loginGoogle(SatellizerPayloadVO payload, String authorizationHeader, HttpServletRequest request)
+			throws HttpStatusException;
 
-	public abstract ResponseEntity unlink(String provider, HttpServletRequest request) throws ParseException, IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException, JOSEException, HttpAuthenticationException;
+	public abstract UserVO unlink(String provider, String authorizationHeader) throws HttpStatusException;
+
 }

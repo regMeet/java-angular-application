@@ -1,4 +1,4 @@
-package com.company.project.Auth;
+package com.company.project;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;

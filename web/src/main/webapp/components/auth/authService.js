@@ -44,13 +44,13 @@ angular.module('myApp.auth')
 	        })
 	        .catch(function(response) {
 	            // Si ha habido errores, llegaremos a esta función
-	        	console.log("errores en el signup");
+	        	console.log("errores en el signup", response);
 	        });
 	    }
 
 	    function login(user) {
 	    	$auth.login({
-		        email: user.email,
+	    		emailOrUsername: user.emailOrUsername,
 		        password: user.password
 		    })
 		    .then(function(response){
@@ -62,7 +62,7 @@ angular.module('myApp.auth')
 		    })
 		    .catch(function(response){
 		        // Si ha habido errores llegamos a esta parte
-		    	console.log(response.data.message);
+		    	console.log("errores en el login", response);
 		    });
 	    }
 

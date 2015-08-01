@@ -26,7 +26,13 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
 	private static final long serialVersionUID = 1L;
 
 	public Optional<User> findByUsername(String username) {
-		User foundUser = (User) em.createNamedQuery(User.FIND_BY_USERNAME).setParameter("email", username).getSingleResult();
+		User foundUser = null;
+		try {
+			foundUser = (User) em.createNamedQuery(User.FIND_BY_USERNAME).setParameter("username", username).getSingleResult();
+		} catch (NoResultException nre) {
+			log.info(String.format("The user with username: %s has not been found", username));
+		}
+
 		return Optional.fromNullable(foundUser);
 	}
 

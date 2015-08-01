@@ -225,14 +225,14 @@ public class User implements Serializable {
 
 	public void setProviderId(final Provider provider, final String value) {
 		switch (provider) {
-		case FACEBOOK:
-			this.facebook = value;
-			break;
-		case GOOGLE:
-			this.google = value;
-			break;
-		default:
-			throw new IllegalArgumentException();
+			case FACEBOOK:
+				this.facebook = value;
+				break;
+			case GOOGLE:
+				this.google = value;
+				break;
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
 

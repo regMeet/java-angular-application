@@ -2,7 +2,7 @@
 
 angular.module('myApp.auth')
 
-.factory('$authService', ['$auth', '$location', '$alert', '$rootScope', '$cookies', function ($auth, $location, $alert, $rootScope, $cookies) {
+.factory('$authenticationService', ['$auth', '$location', '$alert', '$rootScope', '$cookies', 'USER_ROLES', function ($auth, $location, $alert, $rootScope, $cookies, USER_ROLES) {
 		var urlBase = 'http://localhost:8089/web-services/api/users/';
 
 		var userId = $cookies.get('userId');
@@ -40,7 +40,7 @@ angular.module('myApp.auth')
 	            // Si se ha registrado correctamente,
 	            // Podemos redirigirle a otra parte
 	        	console.log("signup successful");
-	            $location.path("/user-list");
+	            $location.path("/home");
 	        })
 	        .catch(function(response) {
 	            // Si ha habido errores, llegaremos a esta función
@@ -58,7 +58,7 @@ angular.module('myApp.auth')
 
 		        // Si se ha logueado correctamente, lo tratamos aquí.
 		        // Podemos también redirigirle a una ruta
-		    	$location.path("/user-list");
+		    	$location.path("/home");
 		    })
 		    .catch(function(response){
 		        // Si ha habido errores llegamos a esta parte
@@ -71,7 +71,7 @@ angular.module('myApp.auth')
 	        .then(function(response) {
 	        	updateUser(response.data.user);
 
-		    	$location.path("/user-list");
+		    	$location.path("/home");
 	        })
 	        .catch(function(response) {
 	        	console.log(response.data.message);
@@ -81,7 +81,14 @@ angular.module('myApp.auth')
 	    function updateUser(user){
 	    	service.userId = user.userId;
 	    	service.currentUser = user.currentUser;
-	    	service.role = user.role;
+
+			if (user.role == 'admin') {
+				service.role = USER_ROLES.admin;
+			}
+			if (user.role == 'user') {
+				service.role = USER_ROLES.user;
+			}
+
 	    	$cookies.put('userId', service.userId);
 	    	$cookies.put('currentUser', service.currentUser);
 	    	$cookies.put('role', service.role);

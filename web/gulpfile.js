@@ -33,6 +33,7 @@ var paths = {
 	    app_scripts:        components_path + '**/*.js',
 	    shared:				shared_path + '**/*.*',
 	    shared_templates:	shared_path + '*.html',
+	    shared_directives:	shared_path + 'directives/*.js',
 	    app_js:         	webapp_path + 'app.js',
 	    app_css:         	webapp_path + 'app.css',
 	    app: 	        	webapp_path + 'app.{js,css}',
@@ -117,6 +118,7 @@ gulp.task('watch', function() {
     gulp.watch([paths.shared_templates], ['copy-shared-templates']);
     gulp.watch([paths.app_scripts, paths.index ], ['keep-index-html', 'minify-css-js']);
     gulp.watch([paths.app], ['minify-css-js']);
+    gulp.watch([paths.shared_directives], ['minify-css-js']);
     
     // gulp-plumber
     // https://github.com/floatdrop/gulp-plumber

@@ -1,7 +1,5 @@
 package com.company.project.webservice.implementations;
 
-import java.text.ParseException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -19,7 +17,6 @@ import com.company.project.services.utils.AuthUtils;
 import com.company.project.webservice.implementations.base.BaseRestServiceImpl;
 import com.company.project.webservice.interfaces.UserRestService;
 import com.google.common.base.Optional;
-import com.nimbusds.jose.JOSEException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -44,15 +41,16 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService> 
 	}
 
 	@Override
-	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws ParseException, JOSEException, HttpAuthenticationException {
+	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException {
 		Long idUser = getAuthUser(request);
+
 		return findById(idUser);
 	}
 
 	/*
 	 * Helper methods
 	 */
-	private Long getAuthUser(HttpServletRequest request) throws ParseException, JOSEException, HttpAuthenticationException {
+	private Long getAuthUser(HttpServletRequest request) throws HttpAuthenticationException {
 		String authorizationHeader = request.getHeader(AuthUtils.AUTH_HEADER_KEY);
 		Long userId = AuthUtils.getSubject(authorizationHeader);
 		return userId;

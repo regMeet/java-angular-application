@@ -51,7 +51,7 @@ angular.module('myApp.users')
 
 	}])
 
-.controller('UserDetailCtrl', ['$scope', '$routeParams', 'UserResource', '$location', '$authService', function ($scope, $routeParams, UserResource, $location, $authService) {
+.controller('UserDetailCtrl', ['$scope', '$routeParams', 'UserResource', '$location', '$authenticationService', function ($scope, $routeParams, UserResource, $location, $authenticationService) {
 		var vm = this;
 		vm.status = {};
     	vm.user = {};
@@ -62,8 +62,8 @@ angular.module('myApp.users')
     			.success(function () {
 					vm.status = 'Updated User! Refreshing user list.';
 
-					if (vm.user.idUser == $authService.userId){
-						$authService.setCurrentUser(vm.user.username);
+					if (vm.user.idUser == $authenticationService.userId){
+						$authenticationService.setCurrentUser(vm.user.username);
 					}
 
 					$location.path('/user-list');

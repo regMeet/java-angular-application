@@ -31,8 +31,8 @@
 	  </div>
 	  <ul class="nav navbar-nav">
 	    <li><a href="/#/home">Home</a></li>
-	    <li ng-if="vm.isAuthenticated()"><a href="/#/profile">Profile</a></li>
-	    <li ng-if="vm.isAuthenticated()"><a href="/#/user-list">Users</a></li>
+	    <li ng-if="vm.isAuthenticated()" access="user,admin"><a href="/#/profile">Profile</a></li>
+	    <li ng-if="vm.isAuthenticated()" access="admin"><a href="/#/user-list">Users</a></li>
 	  </ul>
 	  <ul ng-if="!vm.isAuthenticated()" class="nav navbar-nav pull-right">
 	    <li><a href="/#/login">Login</a></li>
@@ -68,7 +68,10 @@
 	<script src="app.js"></script>
 	<script src="components/auth/authRoutes.js"></script>
 	<script src="components/auth/authController.js"></script>
-	<script src="components/auth/authService.js"></script>
+	<script src="components/auth/authenticationService.js"></script>
+	<script src="components/auth/authorizationService.js"></script>
+	<script src="components/auth/authErrorInterceptor.js"></script>
+	<script src="components/auth/authRun.js"></script>
 	<script src="components/home/homeRoutes.js"></script>
 	<script src="components/home/homeController.js"></script>
 	<script src="components/profile/profileRoutes.js"></script>
@@ -78,6 +81,8 @@
 	<script src="components/users/userServiceHttp.js"></script>
 	<script src="shared/directives/passwordMatch.js"></script>
 	<script src="shared/directives/passwordStrength.js"></script>
+	<script src="shared/directives/authorizationAccess.js"></script>
+	<script src="shared/Constants.js"></script>
 	<!-- endbuild -->
 </body>
 </html>

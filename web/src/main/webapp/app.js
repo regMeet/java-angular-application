@@ -14,6 +14,9 @@ angular.module('myApp', [
 ])
 .config(['$routeProvider', '$authProvider', '$httpProvider', 'satellizer.config', function($routeProvider, $authProvider, $httpProvider, config) {
         $routeProvider
+	        .when('/unauthorized', {
+	        	templateUrl: '/templates/403.html'
+		    })
             .otherwise({
 //                redirectTo: '/'
             	templateUrl: '/templates/404.html'

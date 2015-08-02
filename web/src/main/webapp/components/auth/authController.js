@@ -2,52 +2,63 @@
 
 angular.module('myApp.auth')
 
-.controller('HomeCtrl', [ '$scope', '$authService', '$rootScope', function($scope, $authService, $rootScope) {
+.controller('HomeCtrl', [ '$scope', '$authenticationService', '$rootScope', '$location', 'AUTH_EVENTS', function($scope, $authenticationService, $rootScope, $location, AUTH_EVENTS) {
 	var vm = this;
-	vm.currentUser = $authService.currentUser;
+	vm.currentUser = $authenticationService.currentUser;
 
 	vm.isAuthenticated = function() {
-		return $authService.isAuthenticated();
+		return $authenticationService.isAuthenticated();
 	};
 	
 	$scope.$watch(function() {
-		return $authService.currentUser;
+		return $authenticationService.currentUser;
 	},
 	function(newVal) {
 		vm.currentUser = newVal;
 	});
 
-//	$scope.$watch('$authService.currentUser', function(newVal) {
+//	$scope.$watch('$authenticationService.currentUser', function(newVal) {
 //		console.log('hey, myVar has changed!', newVal);
 //		vm.currentUser = newVal;
 //	});
 
+	$scope.$on(AUTH_EVENTS.notAuthorized, function(event) {
+		console.log("not authorized event triggered");
+		// TODO: Remove credentials ?
+		$location.path("/unauthorized").replace();
+	});
+
+	$scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
+		console.log("not Authenticated event triggered");
+		$location.path("/login").replace();
+	});
+
 } ])
 
-.controller('SignUpController', [ '$authService', function($authService) {
+.controller('SignUpController', [ '$authenticationService', function($authenticationService) {
 	var vm = this;
 	vm.user = {};
 
 	vm.signup = function() {
-		$authService.signup(vm.user);
+		$authenticationService.signup(vm.user);
 	};
 
 } ])
 
-.controller('LoginController', [ '$authService', function($authService) {
+.controller('LoginController', [ '$authenticationService', function($authenticationService) {
 	var vm = this;
 	vm.user = {};
 	
 	vm.login = function() {
-		$authService.login(vm.user);
+		$authenticationService.login(vm.user);
 	};
 	
 	vm.authenticate = function(provider) {
-		$authService.authenticate(provider);
+		$authenticationService.authenticate(provider);
 	};
 
 } ])
 
-.controller('LogoutController', [ '$authService', function($authService) {
-	$authService.logout();
+.controller('LogoutController', [ '$authenticationService', function($authenticationService) {
+	$authenticationService.logout();
 } ]);

@@ -4,7 +4,8 @@ var uglify = require('gulp-uglify');
 var rev = require('gulp-rev');
 var filesize = require('gulp-filesize');
 var usemin = require('gulp-usemin');
-var ngmin = require('gulp-ngmin');
+//var ngmin = require('gulp-ngmin');
+var ngAnnotate = require('gulp-ng-annotate');
 var csso = require('gulp-csso');
 var rename = require("gulp-rename");
 var jshint = require('gulp-jshint');
@@ -80,6 +81,7 @@ gulp.task('minify-css-js', function() {
 			         filesize()],
 			scripts: [filesize(),
 //			          ngmin(),
+			          ngAnnotate(),
 //			          uglify(),
 //			          rev(),
 			          filesize()],

@@ -12,7 +12,7 @@ angular.module('myApp', [
     'mgcrea.ngStrap',
     'ngMessages'
 ])
-.config(['$routeProvider', '$authProvider', '$httpProvider', 'satellizer.config', function($routeProvider, $authProvider, $httpProvider, config) {
+.config(['$routeProvider', '$authProvider', '$httpProvider', function($routeProvider, $authProvider, $httpProvider) {
         $routeProvider
 	        .when('/unauthorized', {
 	        	templateUrl: '/templates/403.html'

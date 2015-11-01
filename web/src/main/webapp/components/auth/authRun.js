@@ -6,7 +6,7 @@ angular.module('myApp.auth')
 	var routeChangeRequiredAfterLogin = false,
     loginRedirectUrl;
 
-	$rootScope.$on('$routeChangeStart', function (event, next) {
+	$rootScope.$on('stateChangeStart', function (event, next) {
 	    var authorised;
 //	    console.log(' ');
 //	    console.log('in ', next.originalPath);

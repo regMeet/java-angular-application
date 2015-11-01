@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "dependencies": {
     "angular": "1.4.x",
-    "angular-route": "1.4.x",
     "angular-resource": "1.4.x",
     "angular-messages": "1.4.x",
     "angular-animate": "1.4.x",
@@ -11,6 +10,7 @@
     "font-awesome": "4.0.3",
     "bootstrap": "3.1.1",
     "satellizer": "0.12.5",
-    "angular-strap": "2.2.4"
+    "angular-strap": "2.2.4",
+    "angular-ui-router": "0.2.15"
   }
 }

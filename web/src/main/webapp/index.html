@@ -27,7 +27,7 @@
 <body>
 	<div ng-controller="HomeCtrl as vm" class="navbar navbar-default navbar-static-top">
 	  <div class="navbar-header">
-	    <a class="navbar-brand" href="/"><i class="ion-ios7-pulse-strong"></i> Company</a>
+	    <a class="navbar-brand" href="/#/"><i class="ion-ios7-pulse-strong"></i> Company</a>
 	  </div>
 	  <ul class="nav navbar-nav">
 	    <li><a href="/#/home">Home</a></li>
@@ -50,11 +50,8 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
  	<![endif]-->
 
-  	<div ng-view></div>
-
 	<!-- build:vendor scripts/vendor.min.js -->
 	<script src="bower_components/angular/angular.js"></script>
-	<script src="bower_components/angular-route/angular-route.js"></script>
 	<script src="bower_components/angular-resource/angular-resource.js"></script>
 	<script src="bower_components/satellizer/satellizer.js"></script>
 	<script src="bower_components/angular-strap/dist/angular-strap.js"></script>
@@ -62,6 +59,7 @@
 	<script src="bower_components/angular-messages/angular-messages.js"></script>
 	<script src="bower_components/angular-animate/angular-animate.js"></script>
 	<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:scripts scripts/app.min.js -->

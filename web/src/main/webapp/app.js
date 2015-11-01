@@ -2,7 +2,6 @@
 
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
-    'ngRoute',
     'satellizer',
     'myApp.auth',
     'myApp.home',
@@ -10,16 +9,18 @@ angular.module('myApp', [
     'myApp.users',
     'myApp.directives',
     'mgcrea.ngStrap',
-    'ngMessages'
+    'ngMessages',
+    'ui.router'
 ])
-.config(['$routeProvider', '$authProvider', '$httpProvider', function($routeProvider, $authProvider, $httpProvider) {
-        $routeProvider
-	        .when('/unauthorized', {
-	        	templateUrl: '/templates/403.html'
-		    })
-            .otherwise({
-//                redirectTo: '/'
-            	templateUrl: '/templates/404.html'
+    .config(['$stateProvider', '$authProvider', '$httpProvider', function ($stateProvider, $authProvider, $httpProvider) {
+        $stateProvider
+            .state('unauthorized', {
+                url: '/unauthorized',
+                templateUrl: '/templates/403.html'
+            })
+            .state("otherwise", {
+                url: "*path",
+                templateUrl: "/templates/404.html"
             });
         // Parametros de configuración de satellizer
         $authProvider.authHeader = 'Authorization'; // default
@@ -32,12 +33,12 @@ angular.module('myApp', [
         $authProvider.signupUrl = '/auth/signup';
         $authProvider.tokenName = 'token';
         $authProvider.tokenPrefix = 'myApp';
-        
+
         $authProvider.facebook({
-        	clientId: '853633721397866'
+            clientId: '853633721397866'
         });
 
         $authProvider.google({
-        	clientId: '84302306491-ff8lnfb0un9j7dgcvs5iejo9fhrv9lik.apps.googleusercontent.com'
+            clientId: '84302306491-ff8lnfb0un9j7dgcvs5iejo9fhrv9lik.apps.googleusercontent.com'
         });
     }]);

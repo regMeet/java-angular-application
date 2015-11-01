@@ -51,7 +51,7 @@ angular.module('myApp.users')
 
 	}])
 
-.controller('UserDetailCtrl', ['$scope', '$routeParams', 'UserResource', '$location', '$authenticationService', function ($scope, $routeParams, UserResource, $location, $authenticationService) {
+.controller('UserDetailCtrl', ['$scope', '$stateParams', 'UserResource', '$location', '$authenticationService', function ($scope, $stateParams, UserResource, $location, $authenticationService) {
 		var vm = this;
 		vm.status = {};
     	vm.user = {};
@@ -89,5 +89,5 @@ angular.module('myApp.users')
 	          });
         };
 
-		vm.getUsers($routeParams.id);
+		vm.getUsers($stateParams.id);
 	}]);

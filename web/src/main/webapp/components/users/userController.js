@@ -2,7 +2,7 @@
 
 angular.module('myApp.users')
 
-.controller('UserListCtrl', [ '$scope', '$alert', '$location', 'UserResource', function($scope, $alert, $location, UserResource) {
+.controller('UserListCtrl', [ '$scope', '$alert', 'UserResource', function($scope, $alert, UserResource) {
 		var vm = this;
 		vm.status = {};
 	    vm.users = [];
@@ -32,7 +32,7 @@ angular.module('myApp.users')
         vm.getUsers();
 	} ])
 
-.controller('UserCreationCtrl', ['$scope', 'UserResource', '$location', function ($scope, UserResource, $location) {
+.controller('UserCreationCtrl', ['$scope', 'UserResource', '$state', function ($scope, UserResource, $state) {
 		var vm = this;
 		vm.status = {};
 		vm.user = {};
@@ -42,7 +42,7 @@ angular.module('myApp.users')
 	        UserResource.insertUser(vm.user)
 	            .success(function () {
 	                vm.status = 'Inserted User! Refreshing user list.';
-	                $location.path('/user-list');
+					$state.go("user-list");
 	            }).
 	            error(function(error) {
 	                vm.status = 'Unable to insert user: ' + error.message;
@@ -51,7 +51,7 @@ angular.module('myApp.users')
 
 	}])
 
-.controller('UserDetailCtrl', ['$scope', '$stateParams', 'UserResource', '$location', '$authenticationService', function ($scope, $stateParams, UserResource, $location, $authenticationService) {
+.controller('UserDetailCtrl', ['$scope', '$stateParams', 'UserResource', '$state', '$authenticationService', function ($scope, $stateParams, UserResource, $state, $authenticationService) {
 		var vm = this;
 		vm.status = {};
     	vm.user = {};
@@ -66,7 +66,7 @@ angular.module('myApp.users')
 						$authenticationService.setCurrentUser(vm.user.username);
 					}
 
-					$location.path('/user-list');
+					$state.go("user-list");
 				})
 				.error(function (error) {
 					vm.status = 'Unable to update user: ' + error.message;
@@ -75,7 +75,7 @@ angular.module('myApp.users')
 
 		// callback for ng-click 'cancel':
 	    vm.cancel = function () {
-		    $location.path('/user-list');
+			$state.go("user-list");
 		};
 
 		vm.getUsers = function(id) {

@@ -2,7 +2,7 @@
 
 angular.module('myApp.auth')
 
-.controller('HomeCtrl', [ '$scope', '$authenticationService', '$rootScope', '$location', 'AUTH_EVENTS', function($scope, $authenticationService, $rootScope, $location, AUTH_EVENTS) {
+.controller('HomeCtrl', [ '$scope', '$authenticationService', '$rootScope', '$state', 'AUTH_EVENTS', function($scope, $authenticationService, $rootScope, $state, AUTH_EVENTS) {
 	var vm = this;
 	vm.currentUser = $authenticationService.currentUser;
 
@@ -25,12 +25,12 @@ angular.module('myApp.auth')
 	$scope.$on(AUTH_EVENTS.notAuthorized, function(event) {
 		console.log("not authorized event triggered");
 		// TODO: Remove credentials ?
-		$location.path("/unauthorized").replace();
+		$state.go("unauthorized");
 	});
 
 	$scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
 		console.log("not Authenticated event triggered");
-		$location.path("/login").replace();
+		$state.go("login");
 	});
 
 } ])

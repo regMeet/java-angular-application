@@ -2,7 +2,7 @@
 
 angular.module('myApp.auth')
 
-.factory('$authenticationService', ['$auth', '$location', '$alert', '$rootScope', '$cookies', 'USER_ROLES', function ($auth, $location, $alert, $rootScope, $cookies, USER_ROLES) {
+.factory('$authenticationService', ['$auth', '$state', '$alert', '$rootScope', '$cookies', 'USER_ROLES', function ($auth, $state, $alert, $rootScope, $cookies, USER_ROLES) {
 		var urlBase = 'http://localhost:8089/web-services/api/users/';
 
 		var userId = $cookies.get('userId');
@@ -40,7 +40,7 @@ angular.module('myApp.auth')
 	            // Si se ha registrado correctamente,
 	            // Podemos redirigirle a otra parte
 	        	console.log("signup successful");
-	            $location.path("/home");
+				$state.go("home");
 	        })
 	        .catch(function(response) {
 	            // Si ha habido errores, llegaremos a esta función
@@ -58,7 +58,7 @@ angular.module('myApp.auth')
 
 		        // Si se ha logueado correctamente, lo tratamos aquí.
 		        // Podemos también redirigirle a una ruta
-		    	$location.path("/home");
+				$state.go("home");
 		    })
 		    .catch(function(response){
 		        // Si ha habido errores llegamos a esta parte
@@ -71,7 +71,7 @@ angular.module('myApp.auth')
 	        .then(function(response) {
 	        	updateUser(response.data.user);
 
-		    	$location.path("/home");
+				$state.go("home");
 	        })
 	        .catch(function(response) {
 	        	console.log(response.data.message);
@@ -106,7 +106,7 @@ angular.module('myApp.auth')
 	        $auth.logout()
     		.then(function() {
     			// Desconectamos al usuario y lo redirijimos
-                $location.path('/login');
+				$state.go("login");
 
     	        $alert({
     	          content: 'You have been logged out.',

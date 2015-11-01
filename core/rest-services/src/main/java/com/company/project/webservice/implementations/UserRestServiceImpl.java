@@ -1,11 +1,13 @@
 package com.company.project.webservice.implementations;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,13 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService> 
 	@Autowired
 	public UserRestServiceImpl(UserService baseService) {
 		super(baseService);
+	}
+
+	@Override
+	public void create(@RequestBody @Valid User entity) {
+		entity.setRole("user");
+		// baseService.create(entity);
+		super.create(entity);
 	}
 
 	@Override

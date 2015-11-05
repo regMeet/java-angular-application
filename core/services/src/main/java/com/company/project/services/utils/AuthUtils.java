@@ -47,7 +47,8 @@ public final class AuthUtils {
 	}
 
 	public static ReadOnlyJWTClaimsSet decodeToken(String authHeader) throws ParseException, JOSEException {
-		SignedJWT signedJWT = SignedJWT.parse(getSerializedToken(authHeader));
+//		SignedJWT signedJWT = SignedJWT.parse(getSerializedToken(authHeader));
+		SignedJWT signedJWT = SignedJWT.parse(authHeader);
 		if (signedJWT.verify(new MACVerifier(TOKEN_SECRET))) {
 			return signedJWT.getJWTClaimsSet();
 		} else {
@@ -67,7 +68,9 @@ public final class AuthUtils {
 		SignedJWT jwt = new SignedJWT(JWT_HEADER, claim);
 		jwt.sign(signer);
 
-		return new AuthEntityResponseVO(jwt.serialize(), new AuthUserVO(user));
+		String newToken = jwt.serialize();
+		// TODO: replace old token
+		return new AuthEntityResponseVO(newToken, new AuthUserVO(user));
 	}
 
 	public static String getSerializedToken(String authHeader) {

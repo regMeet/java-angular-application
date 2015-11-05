@@ -38,7 +38,8 @@
         <mockito.version>1.10.19</mockito.version>
 
 		<!-- Rest layer -->
-		<spring.version>4.1.7.RELEASE</spring.version>
+		<spring.version>4.2.2.RELEASE</spring.version>
+		<spring.security.version>4.0.3.RELEASE</spring.security.version>
 		<jackson.databind-version>2.5.4</jackson.databind-version>
 		<nimbus-jose-jwt.version>3.1.1</nimbus-jose-jwt.version>
 		<joda-time.version>2.8.1</joda-time.version>
@@ -50,6 +51,7 @@
 		<jersey-client.version>2.19</jersey-client.version>
 		<jsp-api.version>2.2</jsp-api.version>
 		<plugin.liquibase.version>3.3.5</plugin.liquibase.version>
+		<plugin.tomcat7.version>2.0</plugin.tomcat7.version>
 
 		<checkAuthorization>false</checkAuthorization>
 		<!-- End Rest layer -->
@@ -109,8 +111,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>1.7</source>
+                        <target>1.7</target>
                     </configuration>
                 </plugin>
 				<plugin>

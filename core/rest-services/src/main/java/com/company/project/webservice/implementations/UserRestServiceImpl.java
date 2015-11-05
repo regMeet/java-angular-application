@@ -1,11 +1,13 @@
 package com.company.project.webservice.implementations;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,7 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService> 
 	@Autowired
 	public UserRestServiceImpl(UserService baseService) {
 		super(baseService);
+		System.out.println("construyendo");
 	}
 
 	@Override
@@ -49,6 +52,8 @@ public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService> 
 		return handleFoundEntity(foundUser);
 	}
 
+	@RolesAllowed("ROLE_ADMIN")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@Override
 	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException {
 		Long idUser = getAuthUser(request);

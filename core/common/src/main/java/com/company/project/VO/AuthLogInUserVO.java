@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 public class AuthLogInUserVO {
 
 	@NotNull(message = "signup.emailOrUsername.null")
-	@Size(min = 5, max = 25, message = "signup.username.length")
+	@Size(min = 4, max = 25, message = "signup.username.length")
 	private String emailOrUsername;
 
 	@NotNull(message = "signup.password.null")

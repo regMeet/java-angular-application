@@ -19,6 +19,6 @@ public interface UserRestService extends BaseRestService<User> {
 	public ResponseEntity<User> findByEmail(String email);
 
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException;
+	public ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException;
 
 }

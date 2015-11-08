@@ -24,7 +24,7 @@
     what you use. Check MainRestController for examples. -->
 <!--     <global-method-security secured-annotations="enabled" pre-post-annotations="enabled" jsr250-annotations="enabled"/> -->
 
-    <http realm="Static" pattern="/*" security="none" />
+<!--     <http realm="Static" pattern="/*" security="none" /> -->
 
 	<http realm="Protected API"
 		use-expressions="true"

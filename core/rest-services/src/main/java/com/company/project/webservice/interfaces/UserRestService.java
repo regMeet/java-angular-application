@@ -21,7 +21,8 @@ public interface UserRestService extends BaseRestService<User> {
 	public ResponseEntity<User> findByEmail(String email);
 
 //	@RolesAllowed("ADMIN")
-	@PreAuthorize("hasRole('ADMIN')")
+//	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException;
 

@@ -22,9 +22,7 @@
 <!-- 	<global-method-security secured-annotations="enabled"/> -->
     <!-- Important for @Secured annotations to work. Here we enable all three of them - @Secured, @PreAuthorize and @RolesAllowed. You may choose 
     what you use. Check MainRestController for examples. -->
-<!--     <global-method-security secured-annotations="enabled" pre-post-annotations="enabled" jsr250-annotations="enabled"/> -->
-
-    <http realm="Static" pattern="/*" security="none" />
+    <global-method-security secured-annotations="enabled" pre-post-annotations="enabled" jsr250-annotations="enabled"/>
 
 	<http realm="Protected API"
 		use-expressions="true"
@@ -58,15 +56,4 @@
 		</authentication-provider>
 	</authentication-manager>
 
-<!--     <bean:bean id="unauthorizedEntryPoint" class="com.company.project.security.UnauthorizedEntryPoint" /> -->
-
-<!--     <bean:bean id="securityUserService" class="com.company.project.security.SecurityUserService" /> -->
-
-<!--     <bean:bean id="tokenManager" class="com.company.project.security.TokenManagerImpl" /> -->
-
-<!--     <bean:bean id="authenticationService" class="com.company.project.security.AuthenticationServiceImpl" -->
-<!--         c:authenticationManager-ref="authenticationManager" c:tokenManager-ref="tokenManager" /> -->
-
-<!--     <bean:bean id="tokenAuthenticationFilter" class="com.company.project.security.filter.TokenAuthenticationFilter" -->
-<!--         c:authenticationService-ref="authenticationService" /> -->
 </bean:beans>

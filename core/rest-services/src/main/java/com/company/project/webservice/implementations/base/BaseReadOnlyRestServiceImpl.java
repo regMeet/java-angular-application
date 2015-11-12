@@ -43,7 +43,7 @@ public class BaseReadOnlyRestServiceImpl<E extends Serializable, S extends BaseR
 	}
 
 	@Override
-	public String ping(@PathVariable("message") String message) {
+	public String ping(String message) {
 		return message;
 	}
 

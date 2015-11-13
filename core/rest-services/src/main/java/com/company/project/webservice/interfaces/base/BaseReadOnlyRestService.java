@@ -13,15 +13,13 @@ import com.google.common.base.Optional;
 
 public interface BaseReadOnlyRestService<E extends Serializable> {
 
-	@RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
-    public List<E> findAll();
+    @RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody List<E> findAll();
 
     public List<E> find(int maxResults, int firstResult);
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<E> findById(Long id);
+    public @ResponseBody ResponseEntity<E> findById(@PathVariable("id") Long id);
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public int getCount();

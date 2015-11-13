@@ -15,7 +15,7 @@ public class AuthSignUpUserVO {
 	private String email;
 
 	@NotNull(message = "signup.username.null")
-	@Size(min = 5, max = 15, message = "signup.username.length")
+	@Size(min = 4, max = 15, message = "signup.username.length")
 	private String username;
 
 	@NotNull(message = "signup.password.null")

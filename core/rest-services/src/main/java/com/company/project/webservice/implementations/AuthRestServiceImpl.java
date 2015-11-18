@@ -1,7 +1,5 @@
 package com.company.project.webservice.implementations;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +11,7 @@ import com.company.project.VO.UserVO;
 import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpStatusException;
 import com.company.project.services.interfaces.AuthService;
-import com.company.project.services.utils.AuthUtils;
 import com.company.project.webservice.interfaces.AuthRestService;
-import com.google.common.base.Optional;
 
 @RestController
 public class AuthRestServiceImpl implements AuthRestService {
@@ -28,40 +24,28 @@ public class AuthRestServiceImpl implements AuthRestService {
 	}
 
 	@Override
-	public AuthEntityResponseVO login(AuthLogInUserVO logInUser, HttpServletRequest request) throws HttpAuthenticationException {
+	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpAuthenticationException {
 
-		return authService.login(logInUser, request.getRemoteHost());
+		return authService.login(logInUser);
 	}
 
 	@Override
-	public AuthEntityResponseVO signup(AuthSignUpUserVO signUpUser, HttpServletRequest request) throws HttpAuthenticationException {
-
-		return authService.signup(signUpUser, request.getRemoteHost());
+	public AuthEntityResponseVO signup(AuthSignUpUserVO signUpUser) throws HttpAuthenticationException {
+		return authService.signup(signUpUser);
 	}
 
 	@Override
-	public AuthEntityResponseVO loginFacebook(SatellizerPayloadVO payload, HttpServletRequest request) throws HttpStatusException {
-
-		Long subject = AuthUtils.getSubject(request.getHeader(AuthUtils.AUTH_HEADER_KEY));
-		return authService.linkFacebook(payload, Optional.fromNullable(subject), request.getRemoteHost());
+	public AuthEntityResponseVO loginFacebook(SatellizerPayloadVO payload) throws HttpStatusException {
+		return authService.linkFacebook(payload);
 	}
 
 	@Override
-	public AuthEntityResponseVO loginGoogle(SatellizerPayloadVO payload, String authorizationHeader, HttpServletRequest request)
-			throws HttpStatusException {
-
-		// TODO: clean up this code
-		// @RequestParam("remoteHost") String remoteHost
-		String remoteHost = request.getRemoteHost();
-
-		Long subject = AuthUtils.getSubject(authorizationHeader);
-		return authService.linkGoogle(payload, Optional.fromNullable(subject), remoteHost);
+	public AuthEntityResponseVO loginGoogle(SatellizerPayloadVO payload) throws HttpStatusException {
+		return authService.linkGoogle(payload);
 	}
 
 	@Override
-	public UserVO unlink(String provider, String authorizationHeader) throws HttpStatusException {
-
-		Long userId = AuthUtils.getSubject(authorizationHeader);
-		return authService.unlink(provider, userId);
+	public UserVO unlink(String provider) throws HttpStatusException {
+		return authService.unlink(provider);
 	}
 }

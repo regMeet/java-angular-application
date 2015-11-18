@@ -31,8 +31,8 @@
 	  </div>
 	  <ul class="nav navbar-nav">
 	    <li><a href="/#/home">Home</a></li>
-	    <li ng-if="vm.isAuthenticated()" access="user,admin"><a href="/#/profile">Profile</a></li>
-	    <li ng-if="vm.isAuthenticated()" access="admin"><a href="/#/user-list">Users</a></li>
+	    <li ng-if="vm.isAuthenticated()" access="USER,ADMIN"><a href="/#/profile">Profile</a></li>
+	    <li ng-if="vm.isAuthenticated()" access="ADMIN"><a href="/#/user-list">Users</a></li>
 	  </ul>
 	  <ul ng-if="!vm.isAuthenticated()" class="nav navbar-nav pull-right">
 	    <li><a href="/#/login">Login</a></li>

@@ -40,6 +40,7 @@
 		<!--<anonymous enabled="false"/>-->
 		<custom-filter ref="tokenAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
 
+        <intercept-url pattern="/auth//unlink/*" access="isFullyAuthenticated()" />
         <intercept-url pattern="/auth/*" access="permitAll"/>
         <intercept-url pattern="/api/users/ping/*" access="permitAll"/>
 <!--         <intercept-url pattern="/api/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/> -->
@@ -49,6 +50,7 @@
 
 	<authentication-manager id="authenticationManager">
 		<authentication-provider user-service-ref="securityUserService">
+            <password-encoder ref="passwordEncoder" />
 			<!--
 			Default password encoder is PlaintextPasswordEncoder, which fits with our hardcoded users.
 			Obviously not a good choice otherwise.

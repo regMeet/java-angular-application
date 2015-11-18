@@ -49,6 +49,11 @@ angular.module('myApp.users')
 	            });
 	    };
 
+	    // callback for ng-click 'cancel':
+	    vm.cancel = function () {
+			$state.go("user-list");
+		};
+
 	}])
 
 .controller('UserDetailCtrl', ['$scope', '$stateParams', 'UserResource', '$state', '$authenticationService', function ($scope, $stateParams, UserResource, $state, $authenticationService) {

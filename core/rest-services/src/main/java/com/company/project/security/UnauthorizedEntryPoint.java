@@ -9,6 +9,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import com.company.project.security.TokenAuthenticationFilter;
+
 /**
  * {@link AuthenticationEntryPoint} that rejects all requests. Login-like function is featured
  * in {@link TokenAuthenticationFilter} and this does not perform or suggests any redirection.

@@ -24,8 +24,8 @@ public interface UserRestService extends BaseRestService<User> {
 
 //	@RolesAllowed("ADMIN")
 	// @PreAuthorize("hasRole('ADMIN')")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("isFullyAuthenticated()")
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException;
+	public @ResponseBody User getUser(HttpServletRequest request) throws HttpAuthenticationException;
 
 }

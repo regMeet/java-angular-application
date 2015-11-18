@@ -8,7 +8,7 @@ angular.module('myApp.auth')
 })
 
 .constant('USER_ROLES', {
-  admin: 'admin',
-  user: 'user',
+  ADMIN: 'ADMIN',
+  USER: 'USER',
   public: 'public_role'
 });

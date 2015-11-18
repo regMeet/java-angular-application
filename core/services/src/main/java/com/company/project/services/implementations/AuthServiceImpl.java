@@ -1,8 +1,20 @@
 package com.company.project.services.implementations;
 
+import static com.company.project.services.interfaces.UserService.DEFAULT_USER_ROLE;
+
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,101 +32,90 @@ import com.company.project.api.entities.google.GoogleAccessToken;
 import com.company.project.api.entities.google.GoogleUser;
 import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpConflictException;
-import com.company.project.api.exception.HttpContentNotFoundException;
 import com.company.project.api.exception.HttpError;
 import com.company.project.api.exception.HttpPreconditionFailedException;
 import com.company.project.api.exception.HttpStatusException;
 import com.company.project.persistence.dao.interfaces.UserDAO;
 import com.company.project.persistence.entities.User;
 import com.company.project.persistence.entities.User.Provider;
+import com.company.project.security.PasswordEncoderimpl;
+import com.company.project.security.UserContext;
+import com.company.project.security.interfaces.TokenManager;
 import com.company.project.services.interfaces.AuthService;
-import com.company.project.services.utils.AuthUtils;
 import com.company.project.transformers.UserTransformer;
 import com.company.project.transformers.UserVOTransformer;
 import com.google.common.base.Optional;
-import com.nimbusds.jose.JOSEException;
 
 @Transactional
 @Service
 public class AuthServiceImpl implements AuthService {
-	private static final String DEFAULT_USER_ROLE = "user";
+	private static final Logger log = Logger.getLogger(AuthServiceImpl.class);
 
-	final static Logger log = Logger.getLogger(AuthServiceImpl.class);
-
-	private FacebookDAO facebookDAO;
-	private GoogleDAO googleDAO;
-	private UserDAO userDAO;
+	private final FacebookDAO facebookDAO;
+	private final GoogleDAO googleDAO;
+	private final UserDAO userDAO;
+	// AuthenticationManager comes from Spring
+	private final AuthenticationManager authenticationManager;
+	private final TokenManager tokenManager;
 
 	@Autowired
-	public AuthServiceImpl(FacebookDAO facebookDAO, UserDAO userDAO, GoogleDAO googleDAO) {
+	public AuthServiceImpl(FacebookDAO facebookDAO, UserDAO userDAO, GoogleDAO googleDAO, AuthenticationManager authenticationManager,
+			TokenManager tokenManager) {
 		this.facebookDAO = facebookDAO;
 		this.userDAO = userDAO;
 		this.googleDAO = googleDAO;
+		this.authenticationManager = authenticationManager;
+		this.tokenManager = tokenManager;
 	}
 
 	@Override
-	public AuthEntityResponseVO login(AuthLogInUserVO logInUser, String remoteHost) throws HttpAuthenticationException {
-
-		String emailOrUsername = logInUser.getEmailOrUsername();
-		Optional<User> foundUser = userDAO.findByEmail(emailOrUsername);
-		if (!foundUser.isPresent()) {
-			foundUser = userDAO.findByUsername(emailOrUsername);
-		}
-
-		if (foundUser.isPresent()) {
-			String passwordFound = foundUser.get().getPassword();
-			boolean checkPassword = checkPassword(logInUser.getPassword(), passwordFound);
-			if (checkPassword) {
-				return createToken(foundUser.get(), remoteHost);
-			}
-		}
-
-		throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpAuthenticationException {
+		UserContext principal = authenticate(logInUser.getEmailOrUsername(), logInUser.getPassword());
+		User user = principal.getUser();
+		String newToken = tokenManager.createNewToken(user);
+		return new AuthEntityResponseVO(newToken, user);
 	}
 
 	@Override
-	public AuthEntityResponseVO signup(AuthSignUpUserVO signUpUser, String remoteHost) throws HttpAuthenticationException {
+	public AuthEntityResponseVO signup(AuthSignUpUserVO signUpUser) throws HttpAuthenticationException {
 		final Optional<User> existingUserWithSameEmail = userDAO.findByEmail(signUpUser.getEmail());
 		final Optional<User> existingUserWithSameUsername = userDAO.findByUsername(signUpUser.getUsername());
 
 		if (!existingUserWithSameEmail.isPresent() && !existingUserWithSameUsername.isPresent()) {
 			User userToSave = UserTransformer.transformTo(signUpUser);
-			userToSave.setPassword(hashPassword(userToSave.getPassword()));
+			userToSave.setPassword(PasswordEncoderimpl.hashPassword(userToSave.getPassword()));
 			userToSave.setRole(DEFAULT_USER_ROLE);
 			userDAO.create(userToSave);
-			return createToken(userToSave, remoteHost);
+			String newToken = tokenManager.createNewToken(userToSave);
+			return new AuthEntityResponseVO(newToken, userToSave);
 		}
 
 		throw new HttpAuthenticationException(HttpError.CONFLICT_ACCOUNT);
 	}
 
 	@Override
-	public AuthEntityResponseVO linkFacebook(SatellizerPayloadVO p, Optional<Long> userId, String remoteHost) throws HttpStatusException {
+	public AuthEntityResponseVO linkFacebook(SatellizerPayloadVO p) throws HttpStatusException {
 		FacebookAccessToken facebookAccessToken = facebookDAO.getAccessTokenFromCode(p.getCode(), p.getClientId(), p.getRedirectUri());
 		FacebookUser facebookUser = facebookDAO.getMe(facebookAccessToken.getAccessToken());
 
-		User user = processProviderUser(userId, facebookUser, Provider.FACEBOOK);
-		return createToken(user, remoteHost);
+		User user = processProviderUser(facebookUser, Provider.FACEBOOK);
+		String newToken = tokenManager.createNewToken(user);
+		return new AuthEntityResponseVO(newToken, user);
 	}
 
 	@Override
-	public AuthEntityResponseVO linkGoogle(SatellizerPayloadVO p, Optional<Long> userId, String remoteHost) throws HttpStatusException {
+	public AuthEntityResponseVO linkGoogle(SatellizerPayloadVO p) throws HttpStatusException {
 		GoogleAccessToken googleAccessToken = googleDAO.getAccessTokenFromCode(p.getCode(), p.getClientId(), p.getRedirectUri());
 		GoogleUser googleUser = googleDAO.getMe(googleAccessToken.getAccessToken());
 
-		User user = processProviderUser(userId, googleUser, Provider.GOOGLE);
-		return createToken(user, remoteHost);
+		User user = processProviderUser(googleUser, Provider.GOOGLE);
+		String newToken = tokenManager.createNewToken(user);
+		return new AuthEntityResponseVO(newToken, user);
 	}
 
 	@Override
-	public UserVO unlink(String provider, Long userId) throws HttpStatusException {
-		Optional<User> foundUser = userDAO.findById(userId);
-
-		if (!foundUser.isPresent()) {
-			throw new HttpContentNotFoundException(HttpError.ACCOUNT_NOT_FOUND_API);
-		}
-
-		final User userToUnlink = foundUser.get();
+	public UserVO unlink(String provider) throws HttpStatusException {
+		User userToUnlink = currentUser();
 
 		// check that the user is not trying to unlink the only sign-in method
 		if (!userToUnlink.allowToUnlinkAMethodAccount()) {
@@ -130,24 +131,17 @@ public class AuthServiceImpl implements AuthService {
 
 	}
 
-	private User processProviderUser(Optional<Long> userId, ProviderUser providerUser, Provider provider) throws HttpStatusException {
+	private User processProviderUser(ProviderUser providerUser, Provider provider) throws HttpStatusException {
 		Optional<User> linkedUserFound = userDAO.findByProvider(provider, providerUser.getId());
 
-		User userToSave;
 		// If user is already signed in then link accounts.
-		if (userId.isPresent()) {
-
+		User userToSave = currentUser();
+		if (userToSave != null) {
 			// If exist another account that is already linked with the FB account
 			if (linkedUserFound.isPresent()) {
 				throw new HttpConflictException(HttpError.CONFLICT_ACCOUNT);
 			}
 
-			Optional<User> foundUser = userDAO.findById(userId);
-			if (!foundUser.isPresent()) {
-				throw new HttpContentNotFoundException(HttpError.ACCOUNT_NOT_FOUND_API);
-			}
-
-			userToSave = foundUser.get();
 			userToSave.setProviderId(provider, providerUser.getId());
 
 		} else {
@@ -169,25 +163,78 @@ public class AuthServiceImpl implements AuthService {
 		return userToSave;
 	}
 
-	private AuthEntityResponseVO createToken(User user, String remoteHost) throws HttpAuthenticationException {
-		AuthEntityResponseVO authEntityVO;
-
+	@Override
+	public UserContext authenticate(String emailOrUsername, String password) throws HttpAuthenticationException {
+		Authentication authentication = new UsernamePasswordAuthenticationToken(emailOrUsername, password);
 		try {
-			authEntityVO = AuthUtils.createToken(remoteHost, user);
-		} catch (JOSEException e) {
-			log.error("There has been an error creating token " + e.getMessage());
-			throw new HttpAuthenticationException(HttpError.CONTACT_ADMIN_API);
+			authentication = authenticationManager.authenticate(authentication);
+		} catch (AuthenticationException e) {
+			throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
 		}
 
-		return authEntityVO;
+		// Here principal=UserDetails (UserContext in our case), credentials=null (security reasons)
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		UserContext principal = (UserContext) authentication.getPrincipal();
+
+		return principal;
 	}
 
-	public static String hashPassword(String plaintext) {
-		return BCrypt.hashpw(plaintext, BCrypt.gensalt());
+	@Override
+	public void checkLoadCredentials(String token) throws HttpAuthenticationException {
+		UserDetails userDetails = getUserDetails(token);
+
+		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+		UsernamePasswordAuthenticationToken securityToken = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+		SecurityContextHolder.getContext().setAuthentication(securityToken);
 	}
 
-	public static boolean checkPassword(String plaintext, String hashed) {
-		return BCrypt.checkpw(plaintext, hashed);
+	@Override
+	public UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException {
+		Long userId = Long.valueOf(tokenManager.decodeToken(accessToken));
+
+		Optional<User> foundUser = userDAO.findById(userId);
+		if (!foundUser.isPresent()) {
+			log.error("Errog getting inexistent user: " + userId);
+			throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+		} else {
+			return new UserContext(foundUser.get());
+		}
+	}
+
+	@Override
+	public void logout(String token) {
+		// TODO: set last logout date and validate then if the auth token is created after that date
+		// UserDetails logoutUser = tokenManager.removeToken(token);
+		SecurityContextHolder.clearContext();
+	}
+
+	@Override
+	public UserDetails currentUserDetails() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication instanceof AnonymousAuthenticationToken) {
+			return null;
+		}
+
+		return (UserDetails) authentication.getPrincipal();
+	}
+
+	@Override
+	public User currentUser() {
+		User user = null;
+
+		UserDetails currentUserDetails = currentUserDetails();
+		if (currentUserDetails instanceof UserContext) {
+			user = ((UserContext) currentUserDetails).getUser();
+		}
+
+		return user;
+	}
+
+	@Override
+	public boolean hasAuthority(String authority) {
+		UserDetails currentUserDetails = currentUserDetails();
+		return currentUserDetails != null ? currentUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(authority)) : false;
 	}
 
 }

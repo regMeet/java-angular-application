@@ -36,6 +36,14 @@ public class ExceptionController {
 		return createErrorVO(e);
 	}
 
+	@ExceptionHandler(value = AccessDeniedException.class)
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	public @ResponseBody ErrorVO accessDenied() {
+		ErrorVO error = new ErrorVO();
+		error.setMessage(HttpError.UNAUTHORIZED_API.getMessageKey());
+		return error;
+	}
+
 	@ExceptionHandler({ HttpConflictException.class })
 	@ResponseStatus(value = HttpStatus.CONFLICT)
 	public @ResponseBody ErrorVO conflictExistentAccount(HttpStatusException e) {
@@ -80,14 +88,6 @@ public class ExceptionController {
 	public @ResponseBody ErrorVO requestBinding(ServletRequestBindingException e) {
 		ErrorVO error = new ErrorVO();
 		error.setMessage(HttpError.BAD_REQUEST_HEADER.getMessageKey());
-		return error;
-	}
-
-	@ExceptionHandler(value = AccessDeniedException.class)
-	@ResponseStatus(value = HttpStatus.FORBIDDEN)
-	public @ResponseBody ErrorVO accessDenied() {
-		ErrorVO error = new ErrorVO();
-		error.setMessage(HttpError.UNAUTHORIZED_API.getMessageKey());
 		return error;
 	}
 

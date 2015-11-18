@@ -1,4 +1,4 @@
-package com.company.project.security.util;
+package com.company.project.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,12 +12,16 @@ import com.company.project.persistence.entities.User;
 
 /** This object wraps {@link User} and makes it {@link UserDetails} so that Spring Security can use it. */
 public class UserContext implements UserDetails {
-	private static final long serialVersionUID = -1428352774613435765L;
+	private static final long serialVersionUID = 8164544376697651692L;
 
 	private User user;
 
 	public UserContext(User user) {
 		this.user = user;
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 	@Override
@@ -30,6 +34,7 @@ public class UserContext implements UserDetails {
 		// for (String role : user.getRoles()) {
 		// authorities.add(new SimpleGrantedAuthority(role));
 		// }
+
 		return authorities;
 	}
 
@@ -55,6 +60,7 @@ public class UserContext implements UserDetails {
 
 	@Override
 	public boolean isCredentialsNonExpired() {
+		// TODO: make credentials expire
 		return true;
 	}
 
@@ -77,4 +83,13 @@ public class UserContext implements UserDetails {
 	public String toString() {
 		return "UserContext{" + "user=" + user + '}';
 	}
+
+	public Long getId() {
+		return user.getIdUser();
+	}
+
+	public String getRole() {
+		return user.getRole();
+	}
+
 }

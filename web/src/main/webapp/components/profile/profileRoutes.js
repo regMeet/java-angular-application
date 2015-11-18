@@ -9,7 +9,7 @@ angular.module('myApp.profile', ['ui.router'])
                 controller: 'ProfileCtrl',
                 controllerAs: 'vm',
                 access: {
-                    authorizedRoles: [USER_ROLES.user, USER_ROLES.admin]
+                    authorizedRoles: [USER_ROLES.USER, USER_ROLES.ADMIN]
                 }
             });
     }]);

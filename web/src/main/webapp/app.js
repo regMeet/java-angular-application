@@ -24,6 +24,7 @@ angular.module('myApp', [
             });
         // Parametros de configuración de satellizer
         $authProvider.authHeader = 'Authorization'; // default
+        $authProvider.authToken = '';
         $authProvider.httpInterceptor = true; // Add Authorization header to HTTP request
         // https://github.com/sahat/satellizer/issues/261
         //$authProvider.tokenRoot = 'entity'; // set the token parent element if the token is not the JSON root

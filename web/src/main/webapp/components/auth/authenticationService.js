@@ -82,11 +82,11 @@ angular.module('myApp.auth')
 	    	service.userId = user.userId;
 	    	service.currentUser = user.currentUser;
 
-			if (user.role == 'admin') {
-				service.role = USER_ROLES.admin;
+			if (user.role == 'ADMIN') {
+				service.role = USER_ROLES.ADMIN;
 			}
-			if (user.role == 'user') {
-				service.role = USER_ROLES.user;
+			if (user.role == 'USER') {
+				service.role = USER_ROLES.USER;
 			}
 
 	    	$cookies.put('userId', service.userId);

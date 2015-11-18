@@ -71,7 +71,6 @@ public class AuthFilter implements Filter {
 		String authorizationParam = filterConfig.getInitParameter("checkAuthorization");
 		checkAuthorization = Boolean.parseBoolean(authorizationParam);
 		log.debug("authorizationParam --- " + authorizationParam);
-		System.out.println("authorizationParam *** " + authorizationParam);
 	}
 
 	@Override

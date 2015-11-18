@@ -59,7 +59,6 @@ public class TokenManagerImpl implements TokenManager {
 		removeUserDetails(userDetails);
 		UserDetails previous = validUsers.put(token, userDetails);
 		if (previous != null) {
-			System.out.println(" *** SERIOUS PROBLEM HERE - we generated the same token (randomly?)!");
 			return null;
 		}
 		tokens.put(userDetails, tokenInfo);

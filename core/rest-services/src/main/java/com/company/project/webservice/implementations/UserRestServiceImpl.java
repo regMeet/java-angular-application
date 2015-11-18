@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.company.project.api.exception.HttpAuthenticationException;
@@ -17,14 +16,12 @@ import com.company.project.webservice.interfaces.UserRestService;
 import com.google.common.base.Optional;
 
 @RestController
-@RequestMapping("/api/users")
 public class UserRestServiceImpl extends BaseRestServiceImpl<User, UserService>implements UserRestService {
     final static Logger log = Logger.getLogger(UserRestServiceImpl.class);
 
     @Autowired
     public UserRestServiceImpl(UserService baseService) {
         super(baseService);
-        System.out.println("construyendo");
     }
 
     @Override

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -38,22 +37,12 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println(" *** MyAuthenticationFilter.doFilter");
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		boolean authenticated = checkToken(httpRequest, httpResponse);
 
-//		if (authenticated){
-//			chain.doFilter(request, response);
-//		}else {
-//			httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//		}
 		chain.doFilter(request, response);
-		System.out.println(" === AUTHENTICATION: " + SecurityContextHolder.getContext().getAuthentication());
-		
-//		UserDetails currentUser = authenticationService.currentUser();
-//		System.out.println(currentUser);
 	}
 
 	/** Returns true, if request contains valid authentication token. */
@@ -63,12 +52,6 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 			return false;
 		}
 
-		if (authenticationService.checkToken(token)) {
-			System.out.println(" *** " + HEADER_TOKEN + " valid for: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-			return true;
-		} else {
-			System.out.println(" *** Invalid " + HEADER_TOKEN + ' ' + token);
-		}
-		return false;
+		return authenticationService.checkToken(token);
 	}
 }

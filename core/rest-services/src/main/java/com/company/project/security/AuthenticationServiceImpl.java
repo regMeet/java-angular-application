@@ -41,13 +41,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@PostConstruct
 	public void init() {
-		System.out.println(" *** AuthenticationServiceImpl.init with: " + applicationContext);
 	}
 
 	@Override
 	public TokenInfo authenticate(String login, String password) {
-		System.out.println(" *** AuthenticationServiceImpl.authenticate");
-
 		// Here principal=username, credentials=password
 		Authentication authentication = new UsernamePasswordAuthenticationToken(login, password);
 		try {
@@ -64,14 +61,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 				return newToken;
 			}
 		} catch (AuthenticationException e) {
-			System.out.println(" *** AuthenticationServiceImpl.authenticate - FAILED: " + e.toString());
 		}
 		return null;
 	}
 
 	@Override
 	public boolean checkToken(String token) {
-		System.out.println(" *** AuthenticationServiceImpl.checkToken");
 
 		UserDetails userDetails = tokenManager.getUserDetails(token);
 		if (userDetails == null) {
@@ -88,7 +83,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	public void logout(String token) {
 		UserDetails logoutUser = tokenManager.removeToken(token);
-		System.out.println(" *** AuthenticationServiceImpl.logout: " + logoutUser);
 		SecurityContextHolder.clearContext();
 	}
 

@@ -16,16 +16,16 @@ import com.company.project.webservice.interfaces.base.BaseRestService;
 @RequestMapping("/api/users")
 public interface UserRestService extends BaseRestService<User> {
 
-    @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
-    public ResponseEntity<User> findByUserName(@PathVariable("name") String name);
+	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
+	public ResponseEntity<User> findByUserName(@PathVariable("name") String name);
 
-    @RequestMapping(value = "/email/{email}", method = RequestMethod.GET)
-    public ResponseEntity<User> findByEmail(@PathVariable("email") String email);
+	@RequestMapping(value = "/email/{email}", method = RequestMethod.GET)
+	public ResponseEntity<User> findByEmail(@PathVariable("email") String email);
 
-    // @RolesAllowed("ADMIN")
-    // @PreAuthorize("hasRole('ADMIN')")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException;
+//	@RolesAllowed("ADMIN")
+	// @PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<User> getUser(HttpServletRequest request) throws HttpAuthenticationException;
 
 }

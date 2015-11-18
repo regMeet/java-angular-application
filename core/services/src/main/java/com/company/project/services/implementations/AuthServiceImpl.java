@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
 		if (foundUser.isPresent()) {
 			String passwordFound = foundUser.get().getPassword();
-			boolean checkPassword = PasswordService.checkPassword(logInUser.getPassword(), passwordFound);
+			boolean checkPassword = checkPassword(logInUser.getPassword(), passwordFound);
 			if (checkPassword) {
 				return createToken(foundUser.get(), remoteHost);
 			}
@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
 		if (!existingUserWithSameEmail.isPresent() && !existingUserWithSameUsername.isPresent()) {
 			User userToSave = UserTransformer.transformTo(signUpUser);
-			userToSave.setPassword(PasswordService.hashPassword(userToSave.getPassword()));
+			userToSave.setPassword(hashPassword(userToSave.getPassword()));
 			userToSave.setRole(DEFAULT_USER_ROLE);
 			userDAO.create(userToSave);
 			return createToken(userToSave, remoteHost);
@@ -182,21 +182,12 @@ public class AuthServiceImpl implements AuthService {
 		return authEntityVO;
 	}
 
-	public static class PasswordService {
-		public static String hashPassword(String plaintext) {
-			return BCrypt.hashpw(plaintext, BCrypt.gensalt());
-		}
-
-		/**
-		 * 
-		 * @param plaintext
-		 *            from webservices
-		 * @param hashed
-		 *            from database
-		 * @return
-		 */
-		public static boolean checkPassword(String plaintext, String hashed) {
-			return BCrypt.checkpw(plaintext, hashed);
-		}
+	public static String hashPassword(String plaintext) {
+		return BCrypt.hashpw(plaintext, BCrypt.gensalt());
 	}
+
+	public static boolean checkPassword(String plaintext, String hashed) {
+		return BCrypt.checkpw(plaintext, hashed);
+	}
+
 }

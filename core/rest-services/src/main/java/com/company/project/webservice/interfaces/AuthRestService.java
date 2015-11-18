@@ -1,5 +1,6 @@
 package com.company.project.webservice.interfaces;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -19,27 +20,29 @@ import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpStatusException;
 import com.company.project.services.utils.AuthUtils;
 
+@PermitAll
 @RequestMapping("/auth")
 public interface AuthRestService {
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser, HttpServletRequest request)
-            throws HttpAuthenticationException;
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser, HttpServletRequest request)
+			throws HttpAuthenticationException;
 
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO signup(@RequestBody @Valid AuthSignUpUserVO signupUser, HttpServletRequest request)
-            throws HttpAuthenticationException;
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO signup(@RequestBody @Valid AuthSignUpUserVO signupUser, HttpServletRequest request)
+			throws HttpAuthenticationException;
 
-    @RequestMapping(value = "/facebook", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO loginFacebook(@RequestBody @Valid SatellizerPayloadVO payload, HttpServletRequest request)
-            throws HttpStatusException;
+	@RequestMapping(value = "/facebook", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO loginFacebook(@RequestBody @Valid SatellizerPayloadVO payload, HttpServletRequest request)
+			throws HttpStatusException;
 
-    @RequestMapping(value = "/google", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO loginGoogle(@RequestBody @Valid SatellizerPayloadVO payload, String authorizationHeader,
-            HttpServletRequest request) throws HttpStatusException;
+	@RequestMapping(value = "/google", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO loginGoogle(@RequestBody @Valid SatellizerPayloadVO payload,
+			@RequestHeader(value = AuthUtils.AUTH_HEADER_KEY, required = false) String authorizationHeader, HttpServletRequest request)
+			throws HttpStatusException;
 
-    @RequestMapping(value = "/unlink/{provider}", method = RequestMethod.GET)
-    public @ResponseBody UserVO unlink(@PathVariable("provider") String provider,
-            @RequestHeader(value = AuthUtils.AUTH_HEADER_KEY, required = true) String authorizationHeader) throws HttpStatusException;
+	@RequestMapping(value = "/unlink/{provider}", method = RequestMethod.GET)
+	public @ResponseBody UserVO unlink(@PathVariable("provider") String provider,
+			@RequestHeader(value = AuthUtils.AUTH_HEADER_KEY, required = true) String authorizationHeader) throws HttpStatusException;
 
 }

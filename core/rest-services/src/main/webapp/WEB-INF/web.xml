@@ -7,7 +7,6 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath:/spring/applicationContext.xml
-<!--                 classpath:/WEB-INF/rest-servlet.xml -->
         </param-value>
     </context-param>
 
@@ -35,7 +34,7 @@
     
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/api/*</url-pattern>
+        <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>

@@ -18,6 +18,7 @@ angular.module('myApp.auth', ['ui.router', 'ngCookies'])
             .state('logout', {
                 url: '/logout',
                 template: ' ',
-                controller: 'LogoutController'
+                controller: 'LogoutController',
+                controllerAs: 'vm'
             });
     }]);

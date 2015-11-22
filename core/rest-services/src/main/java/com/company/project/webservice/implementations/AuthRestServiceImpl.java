@@ -25,7 +25,6 @@ public class AuthRestServiceImpl implements AuthRestService {
 
 	@Override
 	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpAuthenticationException {
-
 		return authService.login(logInUser);
 	}
 
@@ -48,4 +47,9 @@ public class AuthRestServiceImpl implements AuthRestService {
 	public UserVO unlink(String provider) throws HttpStatusException {
 		return authService.unlink(provider);
 	}
+
+    @Override
+    public void logout() throws HttpAuthenticationException {
+        authService.logout();
+    }
 }

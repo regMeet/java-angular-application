@@ -11,12 +11,12 @@
         <insert tableName="_user">
             <column name="firstname" value="Alan"/>
             <column name="lastname" value="Albertengo"/>
-            <column name="email" value="alan.albertengo@albertengo.com"/>
+            <column name="email" value="alan.albertengo@gmail.com"/>
             <column name="facebook" value="12345"/>
             <column name="google" value="54321"/>
             <column name="role" value="ADMIN"/>
             <column name="username" value="Admin"/>
-            <column name="password" value="$2a$10$hDFIpsZlx6vCeccnVlIZyeG2fnQdvjoTMzblWYWfnH5BtuDgOnM"/>
+            <column name="password" value="$2a$10$IcD/FUPJwkKP892xrYhF0OlneieTu3dtRssGOk8/qge1dYGD5FwHi"/>
             <column name="telephone" value="011-123456"/>
             <column name="mobile" value="11-1234-4567"/>
         </insert>
@@ -24,15 +24,29 @@
         <insert tableName="_user">
             <column name="firstname" value="user"/>
             <column name="lastname" value="user"/>
-            <column name="email" value="alan.albertengo@albertengo.com"/>
+            <column name="email" value="alan.albertengo@gmail.com"/>
             <column name="facebook" value="12345"/>
             <column name="google" value="54321"/>
             <column name="role" value="USER"/>
-            <column name="username" value="User"/>
+            <column name="username" value="alan"/>
+            <column name="password" value="$2a$10$IcD/FUPJwkKP892xrYhF0OlneieTu3dtRssGOk8/qge1dYGD5FwHi"/>
+            <column name="telephone" value="011-123456"/>
+            <column name="mobile" value="11-1234-4567"/>
+        </insert>
+
+        <insert tableName="_user">
+            <column name="firstname" value="user"/>
+            <column name="lastname" value="user"/>
+            <column name="email" value="alan@gmail.com"/>
+            <column name="facebook" value="12345"/>
+            <column name="google" value="54321"/>
+            <column name="role" value="USER"/>
+            <column name="username" value="test"/>
             <column name="password" value="$2a$10$hDFIpsZlx6vCeccnVlIZyeG2fnQdvjoTMzblWYWfnH5BtuDgOnM"/>
             <column name="telephone" value="011-123456"/>
             <column name="mobile" value="11-1234-4567"/>
         </insert>
+
     </changeSet>
 
 </databaseChangeLog>

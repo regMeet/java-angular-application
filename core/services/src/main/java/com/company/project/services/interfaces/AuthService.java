@@ -30,7 +30,7 @@ public interface AuthService {
 
 	public 	UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException;
 
-	public void logout(String token);
+	public void logout();
 
 	public UserDetails currentUserDetails();
 

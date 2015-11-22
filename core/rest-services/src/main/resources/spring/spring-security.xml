@@ -40,7 +40,8 @@
 		<!--<anonymous enabled="false"/>-->
 		<custom-filter ref="tokenAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
 
-        <intercept-url pattern="/auth//unlink/*" access="isFullyAuthenticated()" />
+        <intercept-url pattern="/auth/logout" access="isFullyAuthenticated()" />
+        <intercept-url pattern="/auth/unlink/*" access="isFullyAuthenticated()" />
         <intercept-url pattern="/auth/*" access="permitAll"/>
         <intercept-url pattern="/api/users/ping/*" access="permitAll"/>
 <!--         <intercept-url pattern="/api/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/> -->

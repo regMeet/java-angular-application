@@ -1,5 +1,6 @@
 package com.company.project.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,11 @@ public class PasswordEncoderimpl implements PasswordEncoder {
 	 */
 	@Override
 	public boolean matches(CharSequence rawPassword, String encodedPassword) {
-		return checkPassword(rawPassword.toString(), encodedPassword);
+	    if (StringUtils.isNotBlank(encodedPassword)) {
+	        return checkPassword(rawPassword.toString(), encodedPassword);
+	    } else {
+	        return false;
+	    }
 	}
 
 	public static String hashPassword(String plaintext) {

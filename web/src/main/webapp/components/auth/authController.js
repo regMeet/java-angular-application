@@ -60,5 +60,18 @@ angular.module('myApp.auth')
 } ])
 
 .controller('LogoutController', [ '$authenticationService', function($authenticationService) {
-	$authenticationService.logout();
+    var vm = this;
+
+    vm.logout = function() {
+        $authenticationService.logoutBackend()
+        .success(function(user) {
+            $authenticationService.logout();
+        })
+        .error(function(error) {
+
+        });
+    };
+
+    vm.logout();
+
 } ]);

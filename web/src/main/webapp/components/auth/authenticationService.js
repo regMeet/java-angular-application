@@ -2,8 +2,8 @@
 
 angular.module('myApp.auth')
 
-.factory('$authenticationService', ['$auth', '$state', '$alert', '$rootScope', '$cookies', 'USER_ROLES', function ($auth, $state, $alert, $rootScope, $cookies, USER_ROLES) {
-		var urlBase = 'http://localhost:8089/web-services/api/users/';
+.factory('$authenticationService', ['$auth', '$state', '$alert', '$cookies', 'USER_ROLES', '$http', function ($auth, $state, $alert, $cookies, USER_ROLES, $http) {
+		var logoutURL = 'http://localhost:8089/web-services/auth/logout';
 
 		var userId = $cookies.get('userId');
 		var currentUser = $cookies.get('currentUser');
@@ -19,7 +19,8 @@ angular.module('myApp.auth')
 	        login: login,
 	        signup: signup,
 	        authenticate: authenticate,
-	        logout: logout
+	        logout: logout,
+	        logoutBackend: logoutBackend
 	    };
 	    return service;
 
@@ -82,11 +83,11 @@ angular.module('myApp.auth')
 	    	service.userId = user.userId;
 	    	service.currentUser = user.currentUser;
 
-			if (user.role == 'admin') {
-				service.role = USER_ROLES.admin;
+			if (user.role == 'ADMIN') {
+				service.role = USER_ROLES.ADMIN;
 			}
-			if (user.role == 'user') {
-				service.role = USER_ROLES.user;
+			if (user.role == 'USER') {
+				service.role = USER_ROLES.USER;
 			}
 
 	    	$cookies.put('userId', service.userId);
@@ -103,6 +104,7 @@ angular.module('myApp.auth')
 	    	if (!$auth.isAuthenticated()) {
 	            return;
 	        }
+
 	        $auth.logout()
     		.then(function() {
     			// Desconectamos al usuario y lo redirijimos
@@ -116,4 +118,12 @@ angular.module('myApp.auth')
     	        });
     		});
 	    }
+
+       function logoutBackend() {
+            if (!$auth.isAuthenticated()) {
+                return;
+            }
+
+            return $http.post(logoutURL);
+        }
 }]);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
@@ -33,6 +34,14 @@ public class ExceptionController {
 	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 	public @ResponseBody ErrorVO authenticateAccessToken(HttpStatusException e) {
 		return createErrorVO(e);
+	}
+
+	@ExceptionHandler(value = AccessDeniedException.class)
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	public @ResponseBody ErrorVO accessDenied() {
+		ErrorVO error = new ErrorVO();
+		error.setMessage(HttpError.UNAUTHORIZED_API.getMessageKey());
+		return error;
 	}
 
 	@ExceptionHandler({ HttpConflictException.class })

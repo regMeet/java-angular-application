@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.company.project.services.interfaces.base.BaseReadOnlyService;
 import com.company.project.webservice.interfaces.base.BaseReadOnlyRestService;
@@ -32,7 +31,7 @@ public class BaseReadOnlyRestServiceImpl<E extends Serializable, S extends BaseR
 	}
 
 	@Override
-	public ResponseEntity<E> findById(@PathVariable("id") Long id) {
+	public ResponseEntity<E> findById(Long id) {
 		Optional<E> foundEntity = baseService.findById(id);
 		return handleFoundEntity(foundEntity);
 	}
@@ -43,7 +42,7 @@ public class BaseReadOnlyRestServiceImpl<E extends Serializable, S extends BaseR
 	}
 
 	@Override
-	public String ping(@PathVariable("message") String message) {
+	public String ping(String message) {
 		return message;
 	}
 

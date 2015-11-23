@@ -8,16 +8,25 @@ import com.company.project.persistence.dao.interfaces.UserDAO;
 import com.company.project.persistence.entities.User;
 import com.company.project.persistence.entities.User.Provider;
 import com.company.project.services.implementations.base.BaseServiceImpl;
+import com.company.project.services.interfaces.AuthService;
 import com.company.project.services.interfaces.UserService;
 import com.google.common.base.Optional;
 
 @Transactional
 @Service("userService")
 public class UserServiceImpl extends BaseServiceImpl<User, UserDAO> implements UserService {
+	private final AuthService authService;
 
 	@Autowired
-	public UserServiceImpl(UserDAO baseDao) {
+	public UserServiceImpl(UserDAO baseDao, AuthService authService) {
 		super(baseDao);
+		this.authService = authService;
+	}
+
+	@Override
+	public void create(User entity) {
+		entity.setRole(DEFAULT_USER_ROLE);
+		super.create(entity);
 	}
 
 	@Override
@@ -33,6 +42,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDAO> implements U
 	@Override
 	public Optional<User> findByProvider(Provider provider, String providerId) {
 		return baseDao.findByProvider(provider, providerId);
+	}
+
+	@Override
+	public User getCurrentUser() {
+		return authService.currentUser();
 	}
 
 }

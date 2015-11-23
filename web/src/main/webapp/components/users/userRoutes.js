@@ -9,7 +9,7 @@ angular.module('myApp.users', ['ui.router', 'ngResource'])
                 controller: 'UserListCtrl',
                 controllerAs: 'vm',
                 access: {
-                    authorizedRoles: [USER_ROLES.admin]
+                    authorizedRoles: [USER_ROLES.ADMIN]
                 }
             })
             .state('user-detail', {
@@ -18,7 +18,7 @@ angular.module('myApp.users', ['ui.router', 'ngResource'])
                 controller: 'UserDetailCtrl',
                 controllerAs: 'vm',
                 access: {
-                    authorizedRoles: [USER_ROLES.admin]
+                    authorizedRoles: [USER_ROLES.ADMIN]
                 }
             })
             .state('user-creation', {
@@ -27,7 +27,7 @@ angular.module('myApp.users', ['ui.router', 'ngResource'])
                 controller: 'UserCreationCtrl',
                 controllerAs: 'vm',
                 access: {
-                    authorizedRoles: [USER_ROLES.admin]
+                    authorizedRoles: [USER_ROLES.ADMIN]
                 }
             });
     }]);

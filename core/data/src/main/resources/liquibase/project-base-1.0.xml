@@ -42,6 +42,9 @@
             <column name="mobile" type="VARCHAR(100)">
                 <constraints nullable="true"/>
             </column>
+            <column name="last_logout" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
 
         <addAutoIncrement tableName="_user" columnName="idUser" columnDataType="INT" incrementBy="1" startWith="0"/>

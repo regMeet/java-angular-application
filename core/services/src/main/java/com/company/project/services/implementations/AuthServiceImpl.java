@@ -3,7 +3,6 @@ package com.company.project.services.implementations;
 import static com.company.project.services.interfaces.UserService.DEFAULT_USER_ROLE;
 
 import java.util.Collection;
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;

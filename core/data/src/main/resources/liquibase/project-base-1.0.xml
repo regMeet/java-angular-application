@@ -13,37 +13,49 @@
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="firstname" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="lastname" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="email" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="facebook" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="google" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="role" type="VARCHAR(100)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" />
             </column>
             <column name="username" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="password" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="telephone" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="mobile" type="VARCHAR(100)">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
             </column>
             <column name="last_logout" type="BIGINT">
-                <constraints nullable="true"/>
+                <constraints nullable="true" />
+            </column>
+            <column name="account_status" type="VARCHAR(15)">
+                <constraints nullable="false" />
+            </column>
+            <column name="language" type="VARCHAR(2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created" type="TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated" type="TIMESTAMP">
+                <constraints nullable="false" />
             </column>
         </createTable>
 

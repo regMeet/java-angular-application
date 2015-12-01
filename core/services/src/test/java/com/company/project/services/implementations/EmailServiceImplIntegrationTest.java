@@ -1,5 +1,7 @@
 package com.company.project.services.implementations;
 
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import com.company.project.services.interfaces.EmailService;
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class EmailServiceImplIntegrationTest {
 
+	private static final Locale SPANISH = new Locale("es");
 	@Autowired
 	private EmailService emailService;
 
@@ -21,7 +24,7 @@ public class EmailServiceImplIntegrationTest {
 	public void setUp() {
 	}
 
-//	@Ignore
+	@Ignore
 	@Test
 	public void testSendSimpleEmail() {
 		String to = "alan.albertengo@gmail.com";
@@ -35,7 +38,7 @@ public class EmailServiceImplIntegrationTest {
 	public void testSendHTMLEmail() {
 		String to = "alan.albertengo@gmail.com";
 		String subject = "subject";
-		emailService.sendConfirmationMessage(to, subject, EmailServiceImpl.SPANISH, "Alan", "linkValue");
+		emailService.sendConfirmationMessage(to, subject, SPANISH, "Alan", "linkValue");
 	}
 
 }

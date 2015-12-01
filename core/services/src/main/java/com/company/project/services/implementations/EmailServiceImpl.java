@@ -28,8 +28,6 @@ import freemarker.template.TemplateException;
 @Service
 public class EmailServiceImpl implements EmailService {
 	private static final String CONFIRMATION_TEMPLATE = "confirmation.ftl";
-	public static final Locale SPANISH = new Locale("es");
-	public static final Locale ENGLISH = Locale.ENGLISH;
 
 	private JavaMailSender mailSender;
 	private Configuration config;
@@ -50,16 +48,14 @@ public class EmailServiceImpl implements EmailService {
 		return config.getTemplate(templateName, locale);
 	}
 
-	@Async(value="executorService")
+	@Async
 	@Override
 	public void sendMail(String to, String subject, String body) {
 		SimpleMailMessage message = new SimpleMailMessage();
-		// message.setFrom("Simple Application <clasificados2d@gmail.com>");
 		message.setTo(to);
 		message.setSubject(subject);
 		message.setText(body);
 		mailSender.send(message);
-		System.out.println("aaa");
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDAO> implements U
 
 	@Override
 	public void create(User entity) {
-		entity.setRole(DEFAULT_USER_ROLE);
+		entity.setDefaultValues();
 		super.create(entity);
 	}
 

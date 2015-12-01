@@ -55,12 +55,12 @@ public class UserContext implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !user.getStatus().equals(User.AccountStatus.SUSPENDED);
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO: make credentials expire
+		// TODO: implement credentials expire, having some rule after 6 months ?
 		return true;
 	}
 

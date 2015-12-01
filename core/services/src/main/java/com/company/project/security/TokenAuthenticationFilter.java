@@ -36,7 +36,6 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 	@Autowired
 	public TokenAuthenticationFilter(AuthService authService) {
 		this.authService = authService;
-		System.out.println("asas");
 	}
 
 	@Override

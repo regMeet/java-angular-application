@@ -12,8 +12,8 @@
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
-<!--     <task:executor id="executorService" pool-size="50" /> -->
-<!--     <task:annotation-driven executor="executorService" /> -->
+    <task:executor id="executorService" pool-size="50" />
+    <task:annotation-driven executor="executorService" />
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <!-- SMTP settings -->
@@ -28,7 +28,6 @@
                 <prop key="mail.transport.protocol">smtps</prop>
                 <prop key="mail.smtp.auth">true</prop>
                 <prop key="mail.smtp.starttls.enable">true</prop>
-<!--                 <prop key="mail.smtp.from"><![CDATA[Test <clasificados2d@gmail.com>]]></prop> -->
             </props>
         </property>
     </bean>

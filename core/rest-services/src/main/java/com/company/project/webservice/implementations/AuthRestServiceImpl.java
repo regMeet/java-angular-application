@@ -52,4 +52,10 @@ public class AuthRestServiceImpl implements AuthRestService {
 	public void logout() throws HttpAuthenticationException {
 		authService.logout();
 	}
+
+	@Override
+	public void verify(String token) throws HttpAuthenticationException {
+		// TODO: make token go throught header
+		authService.verify(token);
+	}
 }

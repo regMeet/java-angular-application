@@ -28,7 +28,7 @@ public interface AuthService {
 
 	public void checkLoadCredentials(String token) throws HttpAuthenticationException;
 
-	public 	UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException;
+	public UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException;
 
 	public void logout();
 
@@ -37,5 +37,7 @@ public interface AuthService {
 	public User currentUser();
 
 	public boolean hasAuthority(String authority);
+
+	public void verify(String token) throws HttpAuthenticationException;
 
 }

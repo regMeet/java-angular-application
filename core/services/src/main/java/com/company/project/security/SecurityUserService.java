@@ -1,5 +1,6 @@
 package com.company.project.security;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.company.project.persistence.dao.interfaces.UserDAO;
 import com.company.project.persistence.entities.User;
+import com.company.project.persistence.entities.User.AccountStatus;
+import com.company.project.services.implementations.AuthServiceImpl;
 import com.google.common.base.Optional;
 
 /**
@@ -17,6 +20,7 @@ import com.google.common.base.Optional;
  */
 @Service("securityUserService")
 public class SecurityUserService implements UserDetailsService {
+	private static final Logger log = Logger.getLogger(SecurityUserService.class);
 
 	private UserDAO userDAO;
 
@@ -39,10 +43,16 @@ public class SecurityUserService implements UserDetailsService {
 		}
 
 		if (foundUser.isPresent()) {
-			return new UserContext(foundUser.get());
-		} else {
-			throw new UsernameNotFoundException("User " + username + " not found");
+			User user = foundUser.get();
+			AccountStatus status = user.getStatus();
+			if (!status.equals(User.AccountStatus.TO_BE_VERIFIED) && !status.equals(User.AccountStatus.SUSPENDED)) {
+				return new UserContext(user);
+			} else {
+				log.error("Error trying to log in the user " + user);
+			}
 		}
+
+		throw new UsernameNotFoundException("User " + username + " not found");
 	}
 
 }

@@ -239,6 +239,7 @@ public class AuthServiceImpl implements AuthService {
 
 			if (tokenType.equals(TokenType.LOGIN)) {
 
+				// the app should not give a token in first time
 				if (!user.getStatus().equals(User.AccountStatus.VERIFIED)) {
 					log.warn("The account is not verified yet");
 					throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
@@ -302,6 +303,14 @@ public class AuthServiceImpl implements AuthService {
 	public boolean hasAuthority(String authority) {
 		UserDetails currentUserDetails = currentUserDetails();
 		return currentUserDetails != null ? currentUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(authority)) : false;
+	}
+
+	@Override
+	public void verify(String token) throws HttpAuthenticationException {
+		UserContext userContext = (UserContext) getUserDetails(token);
+		User user = userContext.getUser();
+		user.setStatus(User.AccountStatus.VERIFIED);
+		userDAO.update(user);
 	}
 
 }

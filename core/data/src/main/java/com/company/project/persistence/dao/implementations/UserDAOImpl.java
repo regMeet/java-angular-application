@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +34,9 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
 	private static final long serialVersionUID = 5519893069484786026L;
 	private final static Logger log = Logger.getLogger(UserDAOImpl.class);
 	private static final int FIRST_ATTEMPT = 1;
-	// TODO: take this to a property
-	private static final int MAX_ATTEMPTS = 3;
+
+	@Value("${application.max.attempts}")
+	private int maxAttempts;
 
 	private Map<Long, UserAttempt> loginAttempts = new HashMap<>();
 
@@ -107,7 +109,7 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
 			boolean isWithin3Hours = LocalDateUtils.isWithin3Hours(lastAttempt);
 			if (isWithin3Hours) {
 				int times = userAttempt.getTimes() + 1;
-				if (times >= MAX_ATTEMPTS) {
+				if (times >= maxAttempts) {
 					user.setStatus(AccountStatus.SUSPENDED);
 				}
 				userAttempt.setTimes(times);

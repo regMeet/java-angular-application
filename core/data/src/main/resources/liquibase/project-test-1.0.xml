@@ -11,7 +11,7 @@
         <insert tableName="_user">
             <column name="firstname" value="Alan"/>
             <column name="lastname" value="Albertengo"/>
-            <column name="email" value="alan.albertengo@gmail.com"/>
+            <column name="email" value="alan.albertengo2@gmail.com"/>
             <column name="facebook" value="12345"/>
             <column name="google" value="54321"/>
             <column name="role" value="ADMIN"/>
@@ -19,12 +19,16 @@
             <column name="password" value="$2a$10$IcD/FUPJwkKP892xrYhF0OlneieTu3dtRssGOk8/qge1dYGD5FwHi"/>
             <column name="telephone" value="011-123456"/>
             <column name="mobile" value="11-1234-4567"/>
+            <column name="account_status" value="VERIFIED"/>
+            <column name="language" value="EN"/>
+            <column name="created" valueComputed="CURRENT_TIMESTAMP" />
+            <column name="updated" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
 
         <insert tableName="_user">
             <column name="firstname" value="user"/>
             <column name="lastname" value="user"/>
-            <column name="email" value="alan.albertengo@gmail.com"/>
+            <column name="email" value="alan.albertengo3@gmail.com"/>
             <column name="facebook" value="12345"/>
             <column name="google" value="54321"/>
             <column name="role" value="USER"/>
@@ -32,6 +36,10 @@
             <column name="password" value="$2a$10$IcD/FUPJwkKP892xrYhF0OlneieTu3dtRssGOk8/qge1dYGD5FwHi"/>
             <column name="telephone" value="011-123456"/>
             <column name="mobile" value="11-1234-4567"/>
+            <column name="account_status" value="VERIFIED"/>
+            <column name="language" value="EN"/>
+            <column name="created" valueComputed="CURRENT_TIMESTAMP" />
+            <column name="updated" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
 
         <insert tableName="_user">
@@ -45,6 +53,10 @@
             <column name="password" value="$2a$10$hDFIpsZlx6vCeccnVlIZyeG2fnQdvjoTMzblWYWfnH5BtuDgOnM"/>
             <column name="telephone" value="011-123456"/>
             <column name="mobile" value="11-1234-4567"/>
+            <column name="account_status" value="VERIFIED"/>
+            <column name="language" value="EN"/>
+            <column name="created" valueComputed="CURRENT_TIMESTAMP" />
+            <column name="updated" valueComputed="CURRENT_TIMESTAMP" />
         </insert>
 
     </changeSet>

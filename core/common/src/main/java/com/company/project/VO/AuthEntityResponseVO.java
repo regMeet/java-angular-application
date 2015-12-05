@@ -3,12 +3,12 @@ package com.company.project.VO;
 import com.company.project.persistence.entities.User;
 
 public class AuthEntityResponseVO {
-	String token;
-	AuthUserVO user;
+	private final AuthUserVO user;
+	private final String token;
 
-	public AuthEntityResponseVO(String token, User user) {
-		this.token = token;
+	public AuthEntityResponseVO(User user, String token) {
 		this.user = new AuthUserVO(user);
+		this.token = token;
 	}
 
 	public String getToken() {

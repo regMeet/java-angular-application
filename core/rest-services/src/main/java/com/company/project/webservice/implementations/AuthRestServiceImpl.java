@@ -48,8 +48,8 @@ public class AuthRestServiceImpl implements AuthRestService {
 		return authService.unlink(provider);
 	}
 
-    @Override
-    public void logout() throws HttpAuthenticationException {
-        authService.logout();
-    }
+	@Override
+	public void logout() throws HttpAuthenticationException {
+		authService.logout();
+	}
 }

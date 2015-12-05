@@ -22,24 +22,24 @@ import com.company.project.api.exception.HttpStatusException;
 @RequestMapping("/auth")
 public interface AuthRestService {
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser) throws HttpAuthenticationException;
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser) throws HttpAuthenticationException;
 
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO signup(@RequestBody @Valid AuthSignUpUserVO signupUser) throws HttpAuthenticationException;
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO signup(@RequestBody @Valid AuthSignUpUserVO signupUser) throws HttpAuthenticationException;
 
-    @RequestMapping(value = "/facebook", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO loginFacebook(@RequestBody @Valid SatellizerPayloadVO payload) throws HttpStatusException;
+	@RequestMapping(value = "/facebook", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO loginFacebook(@RequestBody @Valid SatellizerPayloadVO payload) throws HttpStatusException;
 
-    @RequestMapping(value = "/google", method = RequestMethod.POST)
-    public @ResponseBody AuthEntityResponseVO loginGoogle(@RequestBody @Valid SatellizerPayloadVO payload) throws HttpStatusException;
+	@RequestMapping(value = "/google", method = RequestMethod.POST)
+	public @ResponseBody AuthEntityResponseVO loginGoogle(@RequestBody @Valid SatellizerPayloadVO payload) throws HttpStatusException;
 
-    @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/unlink/{provider}", method = RequestMethod.GET)
-    public @ResponseBody UserVO unlink(@PathVariable("provider") String provider) throws HttpStatusException;
+	@PreAuthorize("isFullyAuthenticated()")
+	@RequestMapping(value = "/unlink/{provider}", method = RequestMethod.GET)
+	public @ResponseBody UserVO unlink(@PathVariable("provider") String provider) throws HttpStatusException;
 
-    @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public @ResponseBody void logout() throws HttpAuthenticationException;
+	@PreAuthorize("isFullyAuthenticated()")
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public @ResponseBody void logout() throws HttpAuthenticationException;
 
 }

@@ -10,8 +10,9 @@
 
     <!-- Scans within the base package of the application for @Components to configure as beans -->
     <!-- @Controller, @Service, @Configuration, etc. -->
-<!--     <context:component-scan base-package="com.company.project" /> -->
-<!--     <context:annotation-config /> -->
+    <context:component-scan base-package="com.company.project.persistence" />
+    <context:component-scan base-package="com.company.project.api.dao" />
+    <context:annotation-config />
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">

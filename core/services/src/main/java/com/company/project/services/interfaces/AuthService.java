@@ -27,9 +27,9 @@ public interface AuthService {
 
 	public UserContext authenticate(String username, String password) throws HttpStatusException;
 
-	public void checkLoadCredentials(String token) throws HttpAuthenticationException;
+	public void checkLoadCredentials(String token) throws HttpStatusException;
 
-	public UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException;
+	public UserDetails getUserDetails(String accessToken) throws HttpStatusException;
 
 	public void logout();
 
@@ -39,8 +39,10 @@ public interface AuthService {
 
 	public boolean hasAuthority(String authority);
 
-	public void verify(String token) throws HttpAuthenticationException;
+	public void verify(String token) throws HttpStatusException;
 
 	public void forgotPassword(String emailOrUsername) throws HttpContentNotFoundException;
+
+	public void passwordForgotten(String token, String newPassword) throws HttpStatusException;
 
 }

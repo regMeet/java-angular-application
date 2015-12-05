@@ -8,6 +8,7 @@ angular.module('myApp.auth')
 		var logoutURL = authURL + '/logout';
 		var verifyURL = authURL + '/verify?token=';
 		var forgotPasswordURL = authURL + '/forgot-password';
+		var passwordForgottenURL = authURL + '/password-forgotten?token=';
 
 		var userId = $cookies.get('userId');
 		var currentUser = $cookies.get('currentUser');
@@ -26,7 +27,8 @@ angular.module('myApp.auth')
 	        logout: logout,
 	        logoutBackend: logoutBackend,
 	        verify: verify,
-	        forgotPassword: forgotPassword
+	        forgotPassword: forgotPassword,
+	        passwordForgotten: passwordForgotten
 	    };
 	    return service;
 
@@ -142,4 +144,10 @@ angular.module('myApp.auth')
         	var parameters = JSON.stringify({emailOrUsername:emailOrUsername});
             return $http.post(forgotPasswordURL, parameters);
         }
+
+        function passwordForgotten(token, password) {
+        	var parameters = JSON.stringify({newPassword: password});
+            return $http.post(passwordForgottenURL + token, parameters);
+        }
+
 }]);

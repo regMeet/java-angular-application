@@ -250,7 +250,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public void checkLoadCredentials(String token) throws HttpAuthenticationException {
+	public void checkLoadCredentials(String token) throws HttpStatusException {
 		UserDetails userDetails = getUserDetails(token);
 
 		Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
@@ -259,7 +259,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException {
+	public UserDetails getUserDetails(String accessToken) throws HttpStatusException {
 		Claims claimsBody = tokenManager.decodeToken(accessToken);
 		Long userId = Long.valueOf(claimsBody.getSubject());
 
@@ -276,6 +276,19 @@ public class AuthServiceImpl implements AuthService {
 					log.warn("The account has been suspended");
 					throw new HttpAuthenticationException(HttpError.UNAUTHORIZED);
 				}
+			}
+
+			if (tokenType.equals(TokenType.FORGOT_PASS)) {
+				if (user.getLastPasswordChanged() != null) {
+					DateTime lastPasswordChanged = LocalDateUtils.getDateTimeFromDate(user.getLastPasswordChanged());
+					DateTime issuedAt = LocalDateUtils.getDateTimeFromDate(claimsBody.getIssuedAt());
+					if (issuedAt.isAfter(lastPasswordChanged)) {
+						return new UserContext(user);
+					} else {
+						throw new HttpFailedDependencyException(HttpError.FORGET_PASSWORD_LINK_EXPIRED);
+					}
+				}
+
 			}
 
 			if (user.getLastLogout() != null) {
@@ -332,7 +345,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public void verify(String token) throws HttpAuthenticationException {
+	public void verify(String token) throws HttpStatusException {
 		UserContext userContext = (UserContext) getUserDetails(token);
 		User user = userContext.getUser();
 		user.setStatus(User.AccountStatus.VERIFIED);
@@ -351,6 +364,15 @@ public class AuthServiceImpl implements AuthService {
 			throw new HttpContentNotFoundException(HttpError.ACCOUNT_NOT_FOUND);
 		}
 
+	}
+
+	@Override
+	public void passwordForgotten(String token, String newPassword) throws HttpStatusException {
+		UserContext userContext = (UserContext) getUserDetails(token);
+		User user = userContext.getUser();
+		user.setPassword(PasswordEncoderimpl.hashPassword(newPassword));
+		user.setLastPasswordChanged(LocalDateUtils.getTodayDate());
+		userDAO.update(user);
 	}
 
 }

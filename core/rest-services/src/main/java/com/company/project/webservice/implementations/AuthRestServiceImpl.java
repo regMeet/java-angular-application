@@ -7,6 +7,7 @@ import com.company.project.VO.AuthEntityResponseVO;
 import com.company.project.VO.AuthLogInUserVO;
 import com.company.project.VO.AuthSignUpUserVO;
 import com.company.project.VO.ForgotPasswordVO;
+import com.company.project.VO.PasswordForgottenVO;
 import com.company.project.VO.SatellizerPayloadVO;
 import com.company.project.VO.UserVO;
 import com.company.project.api.exception.HttpAuthenticationException;
@@ -56,7 +57,7 @@ public class AuthRestServiceImpl implements AuthRestService {
 	}
 
 	@Override
-	public void verify(String token) throws HttpAuthenticationException {
+	public void verify(String token) throws HttpStatusException {
 		// TODO: make token go throught header
 		authService.verify(token);
 	}
@@ -64,5 +65,10 @@ public class AuthRestServiceImpl implements AuthRestService {
 	@Override
 	public void forgotPassword(ForgotPasswordVO forgotPasswordVO) throws HttpContentNotFoundException {
 		authService.forgotPassword(forgotPasswordVO.getEmailOrUsername());
+	}
+
+	@Override
+	public void passwordForgotten(String token, PasswordForgottenVO forgotPasswordVO) throws HttpStatusException {
+		authService.passwordForgotten(token, forgotPasswordVO.getNewPassword());
 	}
 }

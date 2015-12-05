@@ -105,22 +105,21 @@ angular.module('myApp.auth')
 
 } ])
 
-.controller('PasswordForgottenController', [ '$authenticationService', '$stateParams', function($authenticationService, $stateParams) {
+.controller('PasswordForgottenController', [ '$authenticationService', '$stateParams', '$state', function($authenticationService, $stateParams, $state) {
 	var vm = this;
-	vm.user = '';
+	vm.user = {};
 	vm.tokenValidated = false;
+	vm.error = '';
 
 	vm.passwordForgotten = function() {
-		$authenticationService.passwordForgotten($stateParams.token)
+		$authenticationService.passwordForgotten($stateParams.token, vm.user.password)
 		.success(function(status) {
 			vm.tokenValidated = true;
-			vm.status = "successfully";
+			$state.go("login");
         })
         .error(function(error) {
-			vm.status = "There was an error";
+			vm.error = error.message;
         });
 	};
-
-	vm.passwordForgotten();
 
 } ]);

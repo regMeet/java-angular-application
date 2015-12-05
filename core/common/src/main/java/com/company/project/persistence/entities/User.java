@@ -97,6 +97,10 @@ public class User extends BaseEntity implements Serializable {
 	@Column(name = "language")
 	private String language;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "last_password_changed")
+	private Date lastPasswordChanged;
+
 	public enum AccountStatus {
 		VERIFIED,
 		TO_BE_VERIFIED,

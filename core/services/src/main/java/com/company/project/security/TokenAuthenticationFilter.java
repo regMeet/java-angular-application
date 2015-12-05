@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.company.project.api.exception.HttpAuthenticationException;
+import com.company.project.api.exception.HttpStatusException;
 import com.company.project.services.interfaces.AuthService;
 
 /**
@@ -47,7 +47,7 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 		if (StringUtils.isNotBlank(authToken)) {
 			try {
 				authService.checkLoadCredentials(authToken);
-			} catch (HttpAuthenticationException e) {
+			} catch (HttpStatusException e) {
 				log.info("There was an error with the token specified in the request");
 			}
 		}

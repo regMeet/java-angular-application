@@ -51,6 +51,9 @@
             <column name="language" type="VARCHAR(2)">
                 <constraints nullable="false" />
             </column>
+            <column name="last_password_changed" type="TIMESTAMP">
+                <constraints nullable="true" />
+            </column>
             <column name="created" type="TIMESTAMP">
                 <constraints nullable="false" />
             </column>

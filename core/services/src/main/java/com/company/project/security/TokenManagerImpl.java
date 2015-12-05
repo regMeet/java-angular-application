@@ -18,7 +18,7 @@ import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpError;
 import com.company.project.persistence.entities.User;
 import com.company.project.security.interfaces.TokenManager;
-import com.company.project.services.utils.LocalDateUtils;
+import com.company.project.utils.LocalDateUtils;
 
 /**
  * Implements simple token manager, that keeps a single token for each user. If user logs in again, older token is invalidated.
@@ -69,7 +69,7 @@ public class TokenManagerImpl implements TokenManager {
 			claimsBody = claimsJws.getBody();
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
 			log.info("There was an error decoding the access token " + e.getMessage());
-			throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+			throw new HttpAuthenticationException(HttpError.UNAUTHORIZED);
 		}
 
 		return claimsBody;

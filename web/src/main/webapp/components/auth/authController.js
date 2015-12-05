@@ -24,12 +24,13 @@ angular.module('myApp.auth')
 
 	$scope.$on(AUTH_EVENTS.notAuthorized, function(event) {
 		console.log("not authorized event triggered");
-		// TODO: Remove credentials ?
+		$authenticationService.logout();
 		$state.go("unauthorized");
 	});
 
 	$scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
 		console.log("not Authenticated event triggered");
+		$authenticationService.logout();
 		$state.go("login");
 	});
 
@@ -73,5 +74,23 @@ angular.module('myApp.auth')
     };
 
     vm.logout();
+
+} ])
+
+.controller('VerifyController', [ '$authenticationService', '$stateParams', function($authenticationService, $stateParams) {
+	var vm = this;
+	vm.status = '';
+
+	vm.verify = function() {
+		$authenticationService.verify($stateParams.token)
+		.success(function(status) {
+			vm.status = "successfully";
+        })
+        .error(function(error) {
+			vm.status = "There was an error";
+        });
+	};
+
+	vm.verify();
 
 } ]);

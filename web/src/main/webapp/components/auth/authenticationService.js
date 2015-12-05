@@ -4,6 +4,7 @@ angular.module('myApp.auth')
 
 .factory('$authenticationService', ['$auth', '$state', '$alert', '$cookies', 'USER_ROLES', '$http', function ($auth, $state, $alert, $cookies, USER_ROLES, $http) {
 		var logoutURL = 'http://localhost:8089/web-services/auth/logout';
+		var verifyURL = 'http://localhost:8089/web-services/auth/verify?token=';
 
 		var userId = $cookies.get('userId');
 		var currentUser = $cookies.get('currentUser');
@@ -20,7 +21,8 @@ angular.module('myApp.auth')
 	        signup: signup,
 	        authenticate: authenticate,
 	        logout: logout,
-	        logoutBackend: logoutBackend
+	        logoutBackend: logoutBackend,
+	        verify: verify
 	    };
 	    return service;
 
@@ -119,11 +121,15 @@ angular.module('myApp.auth')
     		});
 	    }
 
-       function logoutBackend() {
+        function logoutBackend() {
             if (!$auth.isAuthenticated()) {
                 return;
             }
 
             return $http.post(logoutURL);
+        }
+
+        function verify(token) {
+            return $http.post(verifyURL + token);
         }
 }]);

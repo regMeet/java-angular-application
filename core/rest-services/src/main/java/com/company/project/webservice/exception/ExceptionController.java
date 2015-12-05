@@ -20,6 +20,7 @@ import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpConflictException;
 import com.company.project.api.exception.HttpContentNotFoundException;
 import com.company.project.api.exception.HttpError;
+import com.company.project.api.exception.HttpFailedDependencyException;
 import com.company.project.api.exception.HttpPreconditionFailedException;
 import com.company.project.api.exception.HttpStatusException;
 
@@ -40,7 +41,7 @@ public class ExceptionController {
 	@ResponseStatus(value = HttpStatus.FORBIDDEN)
 	public @ResponseBody ErrorVO accessDenied() {
 		ErrorVO error = new ErrorVO();
-		error.setMessage(HttpError.UNAUTHORIZED_API.getMessageKey());
+		error.setMessage(HttpError.UNAUTHORIZED.getMessageKey());
 		return error;
 	}
 
@@ -59,6 +60,12 @@ public class ExceptionController {
 	@ExceptionHandler({ HttpPreconditionFailedException.class })
 	@ResponseStatus(value = HttpStatus.PRECONDITION_FAILED)
 	public @ResponseBody ErrorVO preconditionFailed(HttpStatusException e) {
+		return createErrorVO(e);
+	}
+
+	@ExceptionHandler({ HttpFailedDependencyException.class })
+	@ResponseStatus(value = HttpStatus.FAILED_DEPENDENCY)
+	public @ResponseBody ErrorVO failedDependency(HttpStatusException e) {
 		return createErrorVO(e);
 	}
 

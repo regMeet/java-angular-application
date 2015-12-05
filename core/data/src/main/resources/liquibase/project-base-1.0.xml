@@ -42,7 +42,7 @@
             <column name="mobile" type="VARCHAR(100)">
                 <constraints nullable="true" />
             </column>
-            <column name="last_logout" type="BIGINT">
+            <column name="last_logout" type="TIMESTAMP">
                 <constraints nullable="true" />
             </column>
             <column name="account_status" type="VARCHAR(15)">

@@ -66,7 +66,7 @@ public class UserContext implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return !user.getStatus().equals(User.AccountStatus.TO_BE_VERIFIED);
 	}
 
 	@Override

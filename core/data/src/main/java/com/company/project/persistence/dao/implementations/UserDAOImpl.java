@@ -5,7 +5,14 @@
 
 package com.company.project.persistence.dao.implementations;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.NoResultException;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -15,15 +22,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.company.project.persistence.dao.implementations.base.BaseDAOImpl;
 import com.company.project.persistence.dao.interfaces.UserDAO;
 import com.company.project.persistence.entities.User;
+import com.company.project.persistence.entities.User.AccountStatus;
 import com.company.project.persistence.entities.User.Provider;
+import com.company.project.utils.LocalDateUtils;
 import com.google.common.base.Optional;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
-	final static Logger log = Logger.getLogger(UserDAOImpl.class);
+	private static final long serialVersionUID = 5519893069484786026L;
+	private final static Logger log = Logger.getLogger(UserDAOImpl.class);
+	private static final int FIRST_ATTEMPT = 1;
+	// TODO: take this to a property
+	private static final int MAX_ATTEMPTS = 3;
 
-	private static final long serialVersionUID = 1L;
+	private Map<Long, UserAttempt> loginAttempts = new HashMap<>();
 
 	public Optional<User> findByUsername(String username) {
 		User foundUser = null;
@@ -57,6 +70,60 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
 			log.info(String.format("The %s user: %s has not been found", provider, providerId));
 		}
 		return Optional.fromNullable(foundUser);
+	}
+
+	@Override
+	public Optional<User> findByEmailOrUsername(String emailOrUsername) {
+		Optional<User> foundUser = findByEmail(emailOrUsername);
+		if (!foundUser.isPresent()) {
+			foundUser = findByUsername(emailOrUsername);
+		}
+
+		return foundUser;
+	}
+
+	@Data
+	@AllArgsConstructor
+	public static class UserAttempt {
+		int times;
+		Date lastAttempt;
+	}
+
+	@Override
+	public UserAttempt getUserAttempts(User user) {
+		return loginAttempts.get(user.getIdUser());
+	}
+
+	@Override
+	public void updateFailAttempts(User user) {
+		Long userId = user.getIdUser();
+		UserAttempt userAttempt = loginAttempts.get(userId);
+
+		if (userAttempt == null) {
+			userAttempt = new UserAttempt(FIRST_ATTEMPT, LocalDateUtils.getTodayDate());
+			loginAttempts.put(userId, userAttempt);
+		} else {
+			Date lastAttempt = userAttempt.getLastAttempt();
+			boolean isWithin3Hours = LocalDateUtils.isWithin3Hours(lastAttempt);
+			if (isWithin3Hours) {
+				int times = userAttempt.getTimes() + 1;
+				if (times >= MAX_ATTEMPTS) {
+					user.setStatus(AccountStatus.SUSPENDED);
+				}
+				userAttempt.setTimes(times);
+				userAttempt.setLastAttempt(LocalDateUtils.getTodayDate());
+
+			} else {
+				// Reset number of attempts
+				userAttempt.setTimes(FIRST_ATTEMPT);
+				userAttempt.setLastAttempt(LocalDateUtils.getTodayDate());
+			}
+		}
+	}
+
+	@Override
+	public void resetFailAttempts(User user) {
+		loginAttempts.remove(user.getIdUser());
 	}
 
 }

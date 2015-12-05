@@ -1,5 +1,6 @@
 package com.company.project.security;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,6 @@ import com.google.common.base.Optional;
  */
 @Service("securityUserService")
 public class SecurityUserService implements UserDetailsService {
-
 	private UserDAO userDAO;
 
 	@Autowired
@@ -32,17 +32,14 @@ public class SecurityUserService implements UserDetailsService {
 	 * {@link AuthenticationManager#authenticate(org.springframework.security.core.Authentication)}. Easy.
 	 */
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> foundUser = userDAO.findByEmail(username);
-		if (!foundUser.isPresent()) {
-			foundUser = userDAO.findByUsername(username);
-		}
+	public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
+		Optional<User> foundUser = userDAO.findByEmailOrUsername(emailOrUsername);
 
 		if (foundUser.isPresent()) {
 			return new UserContext(foundUser.get());
-		} else {
-			throw new UsernameNotFoundException("User " + username + " not found");
 		}
+
+		throw new UsernameNotFoundException("User " + emailOrUsername + " not found");
 	}
 
 }

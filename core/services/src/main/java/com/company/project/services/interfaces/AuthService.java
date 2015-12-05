@@ -14,7 +14,7 @@ import com.company.project.security.UserContext;
 
 public interface AuthService {
 
-	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpAuthenticationException;
+	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpStatusException;
 
 	public AuthEntityResponseVO signup(AuthSignUpUserVO signUpUser) throws HttpAuthenticationException;
 
@@ -24,11 +24,11 @@ public interface AuthService {
 
 	public UserVO unlink(String provider) throws HttpStatusException;
 
-	public UserContext authenticate(String username, String password) throws HttpAuthenticationException;
+	public UserContext authenticate(String username, String password) throws HttpStatusException;
 
 	public void checkLoadCredentials(String token) throws HttpAuthenticationException;
 
-	public 	UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException;
+	public UserDetails getUserDetails(String accessToken) throws HttpAuthenticationException;
 
 	public void logout();
 
@@ -37,5 +37,7 @@ public interface AuthService {
 	public User currentUser();
 
 	public boolean hasAuthority(String authority);
+
+	public void verify(String token) throws HttpAuthenticationException;
 
 }

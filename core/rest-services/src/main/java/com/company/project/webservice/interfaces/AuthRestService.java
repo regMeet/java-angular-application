@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.company.project.VO.AuthEntityResponseVO;
@@ -23,7 +24,7 @@ import com.company.project.api.exception.HttpStatusException;
 public interface AuthRestService {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser) throws HttpAuthenticationException;
+	public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser) throws HttpStatusException;
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public @ResponseBody AuthEntityResponseVO signup(@RequestBody @Valid AuthSignUpUserVO signupUser) throws HttpAuthenticationException;
@@ -41,5 +42,8 @@ public interface AuthRestService {
 	@PreAuthorize("isFullyAuthenticated()")
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	public @ResponseBody void logout() throws HttpAuthenticationException;
+
+	@RequestMapping(value = "/verify", method = RequestMethod.POST)
+	public @ResponseBody void verify(@RequestParam(value = "token") String token) throws HttpAuthenticationException;
 
 }

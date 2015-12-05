@@ -15,6 +15,12 @@ angular.module('myApp.auth', ['ui.router', 'ngCookies'])
                 controller: 'SignUpController',
                 controllerAs: 'vm'
             })
+            .state('verifyAccount', {
+                url: '/verify?token',
+                templateUrl: 'templates/auth/verify.html',
+                controller: 'VerifyController',
+                controllerAs: 'vm'
+            })
             .state('logout', {
                 url: '/logout',
                 template: ' ',

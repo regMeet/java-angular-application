@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.company.project.VO.AuthEntityResponseVO;
 import com.company.project.VO.AuthLogInUserVO;
 import com.company.project.VO.AuthSignUpUserVO;
+import com.company.project.VO.ForgotPasswordVO;
 import com.company.project.VO.SatellizerPayloadVO;
 import com.company.project.VO.UserVO;
 import com.company.project.api.exception.HttpAuthenticationException;
+import com.company.project.api.exception.HttpContentNotFoundException;
 import com.company.project.api.exception.HttpStatusException;
 
 @PermitAll
@@ -45,5 +47,8 @@ public interface AuthRestService {
 
 	@RequestMapping(value = "/verify", method = RequestMethod.POST)
 	public @ResponseBody void verify(@RequestParam(value = "token") String token) throws HttpAuthenticationException;
+
+	@RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
+	public @ResponseBody void forgotPassword(@RequestBody @Valid ForgotPasswordVO forgotPasswordVO) throws HttpContentNotFoundException;
 
 }

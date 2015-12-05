@@ -30,7 +30,8 @@ public class TokenManagerImpl implements TokenManager {
 
 	private static final int DAY_EXPIRATION = 24; // 24 hours = 1 day
 	private static final int LOGIN_EXPIRATION = 14; // hours
-	private static final int PASSWORD_EXPIRATION = 1; // hours
+	// TODO: make it last no more than 3 hours
+	private static final int VERIFY_PASSWORD_EXPIRATION = 3; // hours
 
 	@Override
 	public String createNewToken(User user, TokenType tokenType, int duration) {
@@ -53,12 +54,12 @@ public class TokenManagerImpl implements TokenManager {
 
 	@Override
 	public String createVerifyToken(User user) {
-		return createNewToken(user, TokenType.VERIFY, DAY_EXPIRATION * PASSWORD_EXPIRATION);
+		return createNewToken(user, TokenType.VERIFY, -1);
 	}
 
 	@Override
 	public String createForgotPasswordToken(User user) {
-		return createNewToken(user, TokenType.FORGOT_PASS, -1);
+		return createNewToken(user, TokenType.FORGOT_PASS, VERIFY_PASSWORD_EXPIRATION);
 	}
 
 	@Override
@@ -76,7 +77,9 @@ public class TokenManagerImpl implements TokenManager {
 	}
 
 	public static enum TokenType {
-		LOGIN("lo"), FORGOT_PASS("fo"), VERIFY("ve");
+		LOGIN("lo"),
+		FORGOT_PASS("fo"),
+		VERIFY("ve");
 
 		private String payload;
 

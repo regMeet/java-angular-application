@@ -11,4 +11,6 @@ public interface EmailService {
 
 	void sendConfirmationMessage(String to, String subject, Locale locale, String name, String link);
 
+	void sendForgotPasswordMessage(String to, String subject, Locale locale, String name, String link);
+
 }

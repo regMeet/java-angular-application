@@ -37,6 +37,7 @@ import com.company.project.api.entities.google.GoogleAccessToken;
 import com.company.project.api.entities.google.GoogleUser;
 import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpConflictException;
+import com.company.project.api.exception.HttpContentNotFoundException;
 import com.company.project.api.exception.HttpError;
 import com.company.project.api.exception.HttpFailedDependencyException;
 import com.company.project.api.exception.HttpPreconditionFailedException;
@@ -113,11 +114,19 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private void sendConfirmationEmail(User userToSave, String newToken) {
+		Locale locale = new Locale(userToSave.getLanguage());
+		String name = getUserName(userToSave, locale);
+
+		String subject = i18nService.getMessage("email.confirmation.subject", userToSave.getLanguage());
+		String verifyUrl = urlFactory.getVerifyUrl() + newToken;
+		emailService.sendConfirmationMessage(userToSave.getEmail(), subject, locale, name, verifyUrl);
+	}
+
+	private String getUserName(User userToSave, Locale locale) {
 		String firstname = userToSave.getFirstname();
 		String lastname = userToSave.getLastname();
 		String username = userToSave.getUsername();
 
-		Locale locale = new Locale(userToSave.getLanguage());
 		String name = i18nService.getMessage("email.default.name", locale);
 		if (StringUtils.isNotBlank(firstname)) {
 			name = firstname;
@@ -128,10 +137,16 @@ public class AuthServiceImpl implements AuthService {
 		} else {
 			name = i18nService.getMessage("email.default.name", userToSave.getLanguage());
 		}
+		return name;
+	}
 
-		String subject = i18nService.getMessage("email.confirmation.subject", userToSave.getLanguage());
-		String verifyUrl = urlFactory.getVerifyUrl() + newToken;
-		emailService.sendConfirmationMessage(userToSave.getEmail(), subject, locale, name, verifyUrl);
+	private void sendForgotPasswordEmail(User user, String newToken) {
+		Locale locale = new Locale(user.getLanguage());
+		String name = getUserName(user, locale);
+
+		String subject = i18nService.getMessage("email.forgot.password.subject", user.getLanguage());
+		String verifyUrl = urlFactory.getForgotPassUrl() + newToken;
+		emailService.sendForgotPasswordMessage(user.getEmail(), subject, locale, name, verifyUrl);
 	}
 
 	@Override
@@ -322,6 +337,20 @@ public class AuthServiceImpl implements AuthService {
 		User user = userContext.getUser();
 		user.setStatus(User.AccountStatus.VERIFIED);
 		userDAO.update(user);
+	}
+
+	@Override
+	public void forgotPassword(String emailOrUsername) throws HttpContentNotFoundException {
+		Optional<User> foundUser = userDAO.findByEmailOrUsername(emailOrUsername);
+		if (foundUser.isPresent()) {
+			// create forgot password token
+			User user = foundUser.get();
+			String newToken = tokenManager.createForgotPasswordToken(user);
+			sendForgotPasswordEmail(user, newToken);
+		} else {
+			throw new HttpContentNotFoundException(HttpError.ACCOUNT_NOT_FOUND);
+		}
+
 	}
 
 }

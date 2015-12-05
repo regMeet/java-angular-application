@@ -3,8 +3,11 @@
 angular.module('myApp.auth')
 
 .factory('$authenticationService', ['$auth', '$state', '$alert', '$cookies', 'USER_ROLES', '$http', function ($auth, $state, $alert, $cookies, USER_ROLES, $http) {
-		var logoutURL = 'http://localhost:8089/web-services/auth/logout';
-		var verifyURL = 'http://localhost:8089/web-services/auth/verify?token=';
+		var backendURL = 'http://localhost:8089/web-services';
+		var authURL = backendURL + '/auth';
+		var logoutURL = authURL + '/logout';
+		var verifyURL = authURL + '/verify?token=';
+		var forgotPasswordURL = authURL + '/forgot-password';
 
 		var userId = $cookies.get('userId');
 		var currentUser = $cookies.get('currentUser');
@@ -22,7 +25,8 @@ angular.module('myApp.auth')
 	        authenticate: authenticate,
 	        logout: logout,
 	        logoutBackend: logoutBackend,
-	        verify: verify
+	        verify: verify,
+	        forgotPassword: forgotPassword
 	    };
 	    return service;
 
@@ -131,5 +135,11 @@ angular.module('myApp.auth')
 
         function verify(token) {
             return $http.post(verifyURL + token);
+        }
+
+        function forgotPassword(emailOrUsername) {
+        	// http://stackoverflow.com/questions/24545072/angularjs-http-post-send-data-as-json
+        	var parameters = JSON.stringify({emailOrUsername:emailOrUsername});
+            return $http.post(forgotPasswordURL, parameters);
         }
 }]);

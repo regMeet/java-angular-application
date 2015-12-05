@@ -10,7 +10,7 @@ public class URLFactory {
 	private String urlApp;
 
 	private final String VERIFY_URL = "/#/verify?token=";
-	private final String FORGOT_PASS_URL = "/#/forgot-password?token=";
+	private final String FORGOT_PASS_URL = "/#/password-forgotten?token=";
 
 	public String getVerifyUrl() {
 		return urlApp + VERIFY_URL;

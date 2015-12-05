@@ -15,10 +15,22 @@ angular.module('myApp.auth', ['ui.router', 'ngCookies'])
                 controller: 'SignUpController',
                 controllerAs: 'vm'
             })
-            .state('verifyAccount', {
+            .state('verifyA-account', {
                 url: '/verify?token',
                 templateUrl: 'templates/auth/verify.html',
                 controller: 'VerifyController',
+                controllerAs: 'vm'
+            })
+            .state('forgot-password', {
+                url: '/forgot-password',
+                templateUrl: 'templates/auth/forgotPassword.html',
+                controller: 'ForgotPasswordController',
+                controllerAs: 'vm'
+            })
+            .state('password-forgotten', {
+                url: '/password-forgotten?token',
+                templateUrl: 'templates/auth/password-forgotten.html',
+                controller: 'PasswordForgottenController',
                 controllerAs: 'vm'
             })
             .state('logout', {

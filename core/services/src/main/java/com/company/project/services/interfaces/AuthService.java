@@ -8,6 +8,7 @@ import com.company.project.VO.AuthSignUpUserVO;
 import com.company.project.VO.SatellizerPayloadVO;
 import com.company.project.VO.UserVO;
 import com.company.project.api.exception.HttpAuthenticationException;
+import com.company.project.api.exception.HttpContentNotFoundException;
 import com.company.project.api.exception.HttpStatusException;
 import com.company.project.persistence.entities.User;
 import com.company.project.security.UserContext;
@@ -39,5 +40,7 @@ public interface AuthService {
 	public boolean hasAuthority(String authority);
 
 	public void verify(String token) throws HttpAuthenticationException;
+
+	public void forgotPassword(String emailOrUsername) throws HttpContentNotFoundException;
 
 }

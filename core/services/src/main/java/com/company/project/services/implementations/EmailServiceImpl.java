@@ -28,6 +28,7 @@ import freemarker.template.TemplateException;
 @Service
 public class EmailServiceImpl implements EmailService {
 	private static final String CONFIRMATION_TEMPLATE = "confirmation.ftl";
+	private static final String FORGOT_PASSWORD_TEMPLATE = "forgotPassword.ftl";
 
 	private JavaMailSender mailSender;
 	private Configuration config;
@@ -88,6 +89,18 @@ public class EmailServiceImpl implements EmailService {
 		templateVars.put("confirmationLink", link);
 
 		sendHTMLMessage(to, subject, locale, CONFIRMATION_TEMPLATE, templateVars);
+	}
+
+	@Async
+	@Override
+	public void sendForgotPasswordMessage(String to, String subject, Locale locale, String name, String link) {
+		Map<String, String> templateVars = new HashMap<String, String>();
+		templateVars.put("name", name);
+		templateVars.put("forgotPasswordLink", link);
+		// TODO: create new link
+		templateVars.put("forgotPasswordNotRequestedLink", "create new link");
+
+		sendHTMLMessage(to, subject, locale, FORGOT_PASSWORD_TEMPLATE, templateVars);
 	}
 
 }

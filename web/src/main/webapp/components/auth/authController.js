@@ -93,4 +93,34 @@ angular.module('myApp.auth')
 
 	vm.verify();
 
+} ])
+
+.controller('ForgotPasswordController', [ '$authenticationService', function($authenticationService) {
+	var vm = this;
+	vm.emailOrUsername = '';
+
+	vm.forgotPassword = function() {
+		$authenticationService.forgotPassword(vm.emailOrUsername);
+	};
+
+} ])
+
+.controller('PasswordForgottenController', [ '$authenticationService', '$stateParams', function($authenticationService, $stateParams) {
+	var vm = this;
+	vm.user = '';
+	vm.tokenValidated = false;
+
+	vm.passwordForgotten = function() {
+		$authenticationService.passwordForgotten($stateParams.token)
+		.success(function(status) {
+			vm.tokenValidated = true;
+			vm.status = "successfully";
+        })
+        .error(function(error) {
+			vm.status = "There was an error";
+        });
+	};
+
+	vm.passwordForgotten();
+
 } ]);

@@ -2,6 +2,7 @@
 
 angular.module('myApp.home', ['ui.router'])
     .config(['$stateProvider', function ($stateProvider) {
+    	// TODO: fix / home, now it's working as /#/
         $stateProvider
             .state('base', {
                 url: '/',

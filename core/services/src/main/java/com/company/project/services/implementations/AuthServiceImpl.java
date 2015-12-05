@@ -11,6 +11,9 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +40,7 @@ import com.company.project.api.entities.google.GoogleUser;
 import com.company.project.api.exception.HttpAuthenticationException;
 import com.company.project.api.exception.HttpConflictException;
 import com.company.project.api.exception.HttpError;
+import com.company.project.api.exception.HttpFailedDependencyException;
 import com.company.project.api.exception.HttpPreconditionFailedException;
 import com.company.project.api.exception.HttpStatusException;
 import com.company.project.persistence.dao.interfaces.UserDAO;
@@ -48,10 +53,10 @@ import com.company.project.security.interfaces.TokenManager;
 import com.company.project.services.interfaces.AuthService;
 import com.company.project.services.interfaces.EmailService;
 import com.company.project.services.utils.InternationalizationService;
-import com.company.project.services.utils.LocalDateUtils;
 import com.company.project.services.utils.URLFactory;
 import com.company.project.transformers.UserTransformer;
 import com.company.project.transformers.UserVOTransformer;
+import com.company.project.utils.LocalDateUtils;
 import com.google.common.base.Optional;
 
 @Transactional
@@ -83,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpAuthenticationException {
+	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpStatusException {
 		UserContext principal = authenticate(logInUser.getEmailOrUsername(), logInUser.getPassword());
 		User user = principal.getUser();
 		String newToken = tokenManager.createLoginToken(user);
@@ -202,17 +207,31 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserContext authenticate(String emailOrUsername, String password) throws HttpAuthenticationException {
+	public UserContext authenticate(String emailOrUsername, String password) throws HttpStatusException {
 		Authentication authentication = new UsernamePasswordAuthenticationToken(emailOrUsername, password);
 		try {
 			authentication = authenticationManager.authenticate(authentication);
-		} catch (AuthenticationException e) {
-			throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+
+		} catch (BadCredentialsException e) {
+			// if the credentials are wrong
+			Optional<User> foundUser = userDAO.findByEmailOrUsername(emailOrUsername);
+			if (foundUser.isPresent()) {
+				User user = foundUser.get();
+				userDAO.updateFailAttempts(user);
+			}
+			throw new HttpAuthenticationException(HttpError.UNAUTHORIZED);
+		} catch (LockedException e) {
+			// if the account is suspended
+			throw new HttpFailedDependencyException(HttpError.ACCOUNT_SUSPENDED);
+		} catch (DisabledException e) {
+			// if the account is not verified yet
+			throw new HttpFailedDependencyException(HttpError.ACCOUNT_NOT_VERIFIED);
 		}
 
 		// Here principal=UserDetails (UserContext in our case), credentials=null (security reasons)
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		UserContext principal = (UserContext) authentication.getPrincipal();
+		userDAO.resetFailAttempts(principal.getUser());
 
 		return principal;
 	}
@@ -239,21 +258,15 @@ public class AuthServiceImpl implements AuthService {
 
 			if (tokenType.equals(TokenType.LOGIN)) {
 
-				// the app should not give a token in first time
-				if (!user.getStatus().equals(User.AccountStatus.VERIFIED)) {
-					log.warn("The account is not verified yet");
-					throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
-				}
-
 				// Already managed by Spring security saying: User account is locked
 				if (user.getStatus().equals(User.AccountStatus.SUSPENDED)) {
 					log.warn("The account has been suspended");
-					throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+					throw new HttpAuthenticationException(HttpError.UNAUTHORIZED);
 				}
 			}
 
 			if (user.getLastLogout() != null) {
-				DateTime lastLogout = LocalDateUtils.getDateTimeFromMilliSeconds(user.getLastLogout());
+				DateTime lastLogout = LocalDateUtils.getDateTimeFromDate(user.getLastLogout());
 				DateTime issuedAt = LocalDateUtils.getDateTimeFromDate(claimsBody.getIssuedAt());
 				if (issuedAt.isAfter(lastLogout)) {
 					return new UserContext(user);
@@ -264,13 +277,13 @@ public class AuthServiceImpl implements AuthService {
 
 		}
 
-		throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_API);
+		throw new HttpAuthenticationException(HttpError.UNAUTHORIZED);
 	}
 
 	@Override
 	public void logout() {
 		User user = currentUser();
-		user.setLastLogout(LocalDateUtils.getTodayInMillis());
+		user.setLastLogout(LocalDateUtils.getTodayDate());
 		userDAO.update(user);
 
 		SecurityContextHolder.clearContext();

@@ -24,7 +24,7 @@ import com.company.project.api.exception.HttpStatusException;
 public interface AuthRestService {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser) throws HttpAuthenticationException;
+	public @ResponseBody AuthEntityResponseVO login(@RequestBody @Valid AuthLogInUserVO logInUser) throws HttpStatusException;
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public @ResponseBody AuthEntityResponseVO signup(@RequestBody @Valid AuthSignUpUserVO signupUser) throws HttpAuthenticationException;

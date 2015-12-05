@@ -1,5 +1,6 @@
 package com.company.project.persistence.dao.interfaces;
 
+import com.company.project.persistence.dao.implementations.UserDAOImpl.UserAttempt;
 import com.company.project.persistence.dao.interfaces.base.BaseDAO;
 import com.company.project.persistence.entities.User;
 import com.company.project.persistence.entities.User.Provider;
@@ -12,5 +13,13 @@ public interface UserDAO extends BaseDAO<User> {
 	Optional<User> findByEmail(String email);
 
 	Optional<User> findByProvider(Provider provider, String providerId);
+
+	Optional<User> findByEmailOrUsername(String emailOrUsername);
+
+	UserAttempt getUserAttempts(User user);
+
+	void updateFailAttempts(User user);
+
+	void resetFailAttempts(User user);
 
 }

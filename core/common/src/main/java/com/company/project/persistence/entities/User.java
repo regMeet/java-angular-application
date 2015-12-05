@@ -5,6 +5,7 @@ package com.company.project.persistence.entities;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -83,8 +86,9 @@ public class User extends BaseEntity implements Serializable {
 	@Column(name = "mobile")
 	private String mobile;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_logout")
-	private Long lastLogout;
+	private Date lastLogout;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "account_status")
@@ -94,11 +98,18 @@ public class User extends BaseEntity implements Serializable {
 	private String language;
 
 	public enum AccountStatus {
-		VERIFIED, TO_BE_VERIFIED, SUSPENDED
+		VERIFIED,
+		TO_BE_VERIFIED,
+		SUSPENDED
 	}
 
 	public enum Provider {
-		FACEBOOK("facebook"), GOOGLE("google"), LINKEDIN("linkedin"), GITHUB("github"), FOURSQUARE("foursquare"), TWITTER("twitter");
+		FACEBOOK("facebook"),
+		GOOGLE("google"),
+		LINKEDIN("linkedin"),
+		GITHUB("github"),
+		FOURSQUARE("foursquare"),
+		TWITTER("twitter");
 
 		String name;
 

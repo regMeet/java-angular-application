@@ -24,7 +24,7 @@ public class AuthRestServiceImpl implements AuthRestService {
 	}
 
 	@Override
-	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpAuthenticationException {
+	public AuthEntityResponseVO login(AuthLogInUserVO logInUser) throws HttpStatusException {
 		return authService.login(logInUser);
 	}
 

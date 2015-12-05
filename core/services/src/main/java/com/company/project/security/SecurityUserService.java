@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.company.project.persistence.dao.interfaces.UserDAO;
 import com.company.project.persistence.entities.User;
-import com.company.project.persistence.entities.User.AccountStatus;
-import com.company.project.services.implementations.AuthServiceImpl;
 import com.google.common.base.Optional;
 
 /**
@@ -20,8 +18,6 @@ import com.google.common.base.Optional;
  */
 @Service("securityUserService")
 public class SecurityUserService implements UserDetailsService {
-	private static final Logger log = Logger.getLogger(SecurityUserService.class);
-
 	private UserDAO userDAO;
 
 	@Autowired
@@ -36,23 +32,14 @@ public class SecurityUserService implements UserDetailsService {
 	 * {@link AuthenticationManager#authenticate(org.springframework.security.core.Authentication)}. Easy.
 	 */
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> foundUser = userDAO.findByEmail(username);
-		if (!foundUser.isPresent()) {
-			foundUser = userDAO.findByUsername(username);
-		}
+	public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
+		Optional<User> foundUser = userDAO.findByEmailOrUsername(emailOrUsername);
 
 		if (foundUser.isPresent()) {
-			User user = foundUser.get();
-			AccountStatus status = user.getStatus();
-			if (!status.equals(User.AccountStatus.TO_BE_VERIFIED) && !status.equals(User.AccountStatus.SUSPENDED)) {
-				return new UserContext(user);
-			} else {
-				log.error("Error trying to log in the user " + user);
-			}
+			return new UserContext(foundUser.get());
 		}
 
-		throw new UsernameNotFoundException("User " + username + " not found");
+		throw new UsernameNotFoundException("User " + emailOrUsername + " not found");
 	}
 
 }

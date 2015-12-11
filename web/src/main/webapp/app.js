@@ -10,9 +10,12 @@ angular.module('myApp', [
     'myApp.directives',
     'mgcrea.ngStrap',
     'ngMessages',
-    'ui.router'
+    'ui.router',
+    'pascalprecht.translate'
 ])
-    .config(['$stateProvider', '$authProvider', '$httpProvider', function ($stateProvider, $authProvider, $httpProvider) {
+    .config(['$stateProvider', '$authProvider', '$httpProvider', 'LOCALES', '$translateProvider', 
+             function ($stateProvider, $authProvider, $httpProvider, LOCALES, $translateProvider) {
+
         $stateProvider
             .state('unauthorized', {
                 url: '/unauthorized',
@@ -42,4 +45,14 @@ angular.module('myApp', [
         $authProvider.google({
             clientId: '84302306491-ff8lnfb0un9j7dgcvs5iejo9fhrv9lik.apps.googleusercontent.com'
         });
+
+        //$translateProvider.useMissingTranslationHandlerLog();
+
+        $translateProvider.useStaticFilesLoader({
+            prefix: LOCALES.LANGUAGE_PATH + '/locale-',// path to translations files
+            suffix: '.json'// suffix, currently- extension of the translations
+        });
+        $translateProvider.preferredLanguage(LOCALES.DEFAULT_LANGUAGE);// is applied on first load
+        //$translateProvider.useLocalStorage();// saves selected language to localStorage
+
     }]);

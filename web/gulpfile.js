@@ -30,6 +30,7 @@ var paths = {
 	    assets_img:         assets_path + '{img/**/*.*,img/*.*}',
 	    assets_js:         	assets_path + 'js/**/*.*',
 	    assets_libs:        assets_path + 'libs/**/*.*',
+	    assets_languages:   assets_path + 'languages/*.*',
 	    html_templates:     components_path + '**/*.html',
 	    app_scripts:        components_path + '**/*.js',
 	    shared:				shared_path + '**/*.*',
@@ -112,6 +113,11 @@ gulp.task('copy-icon', function() {
         .pipe(gulp.dest('target/overlay'));
 });
 
+gulp.task('copy-languages', function() {
+    return gulp.src(paths.assets_languages)
+        .pipe(gulp.dest('target/overlay/languages'));
+});
+
 /**
  * Watch custom files
  */
@@ -121,6 +127,7 @@ gulp.task('watch', function() {
     gulp.watch([paths.app_scripts, paths.index ], ['keep-index-html', 'minify-css-js']);
     gulp.watch([paths.app], ['minify-css-js']);
     gulp.watch([paths.shared_directives], ['minify-css-js']);
+    gulp.watch([paths.assets_languages], ['copy-languages']);
     
     // gulp-plumber
     // https://github.com/floatdrop/gulp-plumber
@@ -142,6 +149,6 @@ gulp.on('err', function (err) {
 	throw err;
 });
 
-gulp.task('build', ['lint', 'keep-index-html', 'minify-css-js', 'copy-templates', 'copy-shared-templates', 'copy-images', 'copy-icon']);
+gulp.task('build', ['lint', 'keep-index-html', 'minify-css-js', 'copy-templates', 'copy-shared-templates', 'copy-images', 'copy-icon', 'copy-languages']);
 gulp.task('default', ['build']);
 gulp.task('start', ['webserver', 'watch']);

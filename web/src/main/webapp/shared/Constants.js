@@ -11,4 +11,13 @@ angular.module('myApp.auth')
   ADMIN: 'ADMIN',
   USER: 'USER',
   public: 'public_role'
+})
+
+.constant('LOCALES', {
+    'locales': {
+        'es_AR': 'Español',
+        'en_US': 'English'
+    },
+    'DEFAULT_LANGUAGE': 'es_AR',
+    'LANGUAGE_PATH': '/languages'
 });

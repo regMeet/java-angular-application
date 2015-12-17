@@ -34,6 +34,11 @@
 	    <li ng-if="vm.isAuthenticated()" access="USER,ADMIN"><a href="/#/profile">Profile</a></li>
 	    <li ng-if="vm.isAuthenticated()" access="ADMIN"><a href="/#/user-list">Users</a></li>
 	  </ul>
+	  <ul class="nav navbar-nav pull-right">
+	  	<li >
+	  		<a ng-translate-language-select></a></li>
+	  	</li>
+	  </ul>
 	  <ul ng-if="!vm.isAuthenticated()" class="nav navbar-nav pull-right">
 	    <li><a href="/#/login">Login</a></li>
 	    <li><a href="/#/signup">Sign up</a></li>
@@ -62,6 +67,9 @@
 	<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 	<script src="bower_components/angular-translate/angular-translate.min.js"></script>
 	<script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+	<script src="bower_components/angular-dynamic-locale/tmhDynamicLocale.min.js"></script>
+	<script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
+	<script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:scripts scripts/app.min.js -->
@@ -79,6 +87,8 @@
 	<script src="components/users/userRoutes.js"></script>
 	<script src="components/users/userController.js"></script>
 	<script src="components/users/userServiceHttp.js"></script>
+	<script src="components/tranlation/LanguageSelectDirective.js"></script>
+	<script src="components/tranlation/LocaleService.js"></script>
 	<script src="shared/directives/passwordMatch.js"></script>
 	<script src="shared/directives/passwordStrength.js"></script>
 	<script src="shared/directives/authorizationAccess.js"></script>

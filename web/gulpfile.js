@@ -15,6 +15,7 @@ var minifyHTML = require('gulp-minify-html');
 
 
 var webapp_path = 'src/main/webapp/';
+var bower_path = 'src/main/webapp/bower_components/';
 var components_path = webapp_path + 'components/'
 var assets_path = webapp_path + 'assets/'
 var shared_path = webapp_path + 'shared/'
@@ -31,6 +32,7 @@ var paths = {
 	    assets_js:         	assets_path + 'js/**/*.*',
 	    assets_libs:        assets_path + 'libs/**/*.*',
 	    assets_languages:   assets_path + 'languages/*.*',
+	    i18n_languages:     bower_path + 'angular-i18n/' + '{angular-locale_es-ar.js,angular-locale_en-us.js,angular-locale_pt-br.js}',
 	    html_templates:     components_path + '**/*.html',
 	    app_scripts:        components_path + '**/*.js',
 	    shared:				shared_path + '**/*.*',
@@ -118,6 +120,11 @@ gulp.task('copy-languages', function() {
         .pipe(gulp.dest('target/overlay/languages'));
 });
 
+gulp.task('copy-i18n', function() {
+    return gulp.src(paths.i18n_languages)
+        .pipe(gulp.dest('target/overlay/i18n'));
+});
+
 /**
  * Watch custom files
  */
@@ -149,6 +156,6 @@ gulp.on('err', function (err) {
 	throw err;
 });
 
-gulp.task('build', ['lint', 'keep-index-html', 'minify-css-js', 'copy-templates', 'copy-shared-templates', 'copy-images', 'copy-icon', 'copy-languages']);
+gulp.task('build', ['lint', 'keep-index-html', 'minify-css-js', 'copy-templates', 'copy-shared-templates', 'copy-images', 'copy-icon', 'copy-languages', 'copy-i18n']);
 gulp.task('default', ['build']);
 gulp.task('start', ['webserver', 'watch']);

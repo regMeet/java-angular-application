@@ -26,7 +26,7 @@ import com.google.gson.Gson;
 @Repository
 public class FacebookDAOImpl implements FacebookDAO {
 	private static final Logger log = Logger.getLogger(FacebookDAOImpl.class);
-	private static final String API_VERSION = "v2.4";
+	private static final String API_VERSION = "v2.5";
 	private static final String FB_API_URL = "https://graph.facebook.com/" + API_VERSION;
 
 	private static final String LONG_ACCESS_TOKEN = FB_API_URL + "/oauth/access_token";

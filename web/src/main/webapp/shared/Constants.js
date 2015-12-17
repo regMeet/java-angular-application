@@ -19,5 +19,6 @@ angular.module('myApp.auth')
         'en_US': 'English'
     },
     'DEFAULT_LANGUAGE': 'es_AR',
-    'LANGUAGE_PATH': '/languages'
+    'LANGUAGE_PATH': '/languages',
+    'I18N_PATH': '/i18n'
 });

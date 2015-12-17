@@ -8,13 +8,15 @@ angular.module('myApp', [
     'myApp.profile',
     'myApp.users',
     'myApp.directives',
-    'mgcrea.ngStrap',
+    'myApp.translation',
+    'mgcrea.ngStrap', // model http://mgcrea.github.io/angular-strap/
     'ngMessages',
     'ui.router',
-    'pascalprecht.translate'
+    'pascalprecht.translate', // angular-translate
+    'tmh.dynamicLocale' // angular-dynamic-locale
 ])
-    .config(['$stateProvider', '$authProvider', '$httpProvider', 'LOCALES', '$translateProvider', 
-             function ($stateProvider, $authProvider, $httpProvider, LOCALES, $translateProvider) {
+    .config(['$stateProvider', '$authProvider', '$httpProvider', 'LOCALES', '$translateProvider', 'tmhDynamicLocaleProvider',
+             function ($stateProvider, $authProvider, $httpProvider, LOCALES, $translateProvider, tmhDynamicLocaleProvider) {
 
         $stateProvider
             .state('unauthorized', {
@@ -46,13 +48,20 @@ angular.module('myApp', [
             clientId: '84302306491-ff8lnfb0un9j7dgcvs5iejo9fhrv9lik.apps.googleusercontent.com'
         });
 
-        //$translateProvider.useMissingTranslationHandlerLog();
+        $translateProvider.useMissingTranslationHandlerLog();
 
         $translateProvider.useStaticFilesLoader({
             prefix: LOCALES.LANGUAGE_PATH + '/locale-',// path to translations files
             suffix: '.json'// suffix, currently- extension of the translations
         });
         $translateProvider.preferredLanguage(LOCALES.DEFAULT_LANGUAGE);// is applied on first load
-        //$translateProvider.useLocalStorage();// saves selected language to localStorage
+
+        //$translateProvider.useSanitizeValueStrategy('sanitize');
+        $translateProvider.useSanitizeValueStrategy('escapeParameters');
+
+        // TODO: what is this for?
+        $translateProvider.useLocalStorage();// saves selected language to localStorage
+
+        tmhDynamicLocaleProvider.localeLocationPattern(LOCALES.I18N_PATH + '/angular-locale_{{locale}}.js');
 
     }]);

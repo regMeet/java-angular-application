@@ -6,12 +6,10 @@ angular.module('myApp.home', ['ui.router'])
         $stateProvider
             .state('base', {
                 url: '/',
-                templateUrl: '/templates/home/home.html'
-                // controller: 'HomeCtrl'
+                templateUrl: '/templates/home/home.html',
             })
             .state('home', {
                 url: '/home',
-                templateUrl: 'templates/home/home.html'
-                // controller: 'HomeCtrl'
+                templateUrl: 'templates/home/home.html',
             });
     }]);

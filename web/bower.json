@@ -9,8 +9,14 @@
     "angular-cookies": "1.4.x",
     "font-awesome": "4.0.3",
     "bootstrap": "3.1.1",
-    "satellizer": "0.12.5",
+    "satellizer": "0.13.1",
     "angular-strap": "2.2.4",
-    "angular-ui-router": "0.2.15"
+    "angular-ui-router": "0.2.15",
+    "angular-translate": "~2.8.1",
+    "angular-translate-loader-static-files": "~2.8.1",
+    "angular-dynamic-locale": "~0.1.28",
+    "angular-i18n": "1.5.0-build.4441+sha.c7ed8a3",
+    "angular-translate-handler-log": "~2.8.1",
+    "angular-translate-storage-local":  "~2.8.1"
   }
 }

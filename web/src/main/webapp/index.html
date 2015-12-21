@@ -14,6 +14,7 @@
 	<!-- build:stylesheets styles/style.min.css -->
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+	<link rel="stylesheet" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css">
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="app.css">
 	<!-- endbuild -->
@@ -25,37 +26,59 @@
 
 </head>
 <body>
-	<div ng-controller="HomeCtrl as vm" class="navbar navbar-default navbar-static-top">
-	  <div class="navbar-header">
-	    <a class="navbar-brand" href="/#/"><i class="ion-ios7-pulse-strong"></i> Company</a>
-	  </div>
-	  <ul class="nav navbar-nav">
-	    <li><a href="/#/home">{{ "HOME" | translate }}</a></li>
-	    <li ng-if="vm.isAuthenticated()" access="USER,ADMIN"><a href="/#/profile">Profile</a></li>
-	    <li ng-if="vm.isAuthenticated()" access="ADMIN"><a href="/#/user-list">Users</a></li>
-	  </ul>
-	  <ul class="nav navbar-nav pull-right">
-	  	<li >
-	  		<a ng-translate-language-select></a></li>
-	  	</li>
-	  </ul>
-	  <ul ng-if="!vm.isAuthenticated()" class="nav navbar-nav pull-right">
-	    <li><a href="/#/login">Login</a></li>
-	    <li><a href="/#/signup">Sign up</a></li>
-	  </ul>
-	  <ul ng-if="vm.isAuthenticated()" class="nav navbar-nav pull-right">
-	  	<li><a >Hello {{ vm.currentUser }}</a></li>
-	    <li><a href="/#/logout">Logout</a></li>
-	  </ul>
+	<div ng-controller="HandlingErrorCtrl as vmError">
+	
+		<div ng-controller="HomeCtrl as vm" class="navbar navbar-default navbar-static-top">
+		  <div class="navbar-header">
+		    <a class="navbar-brand" href="/#/"><i class="ion-ios7-pulse-strong"></i> Company</a>
+		  </div>
+		  <ul class="nav navbar-nav">
+		    <li><a href="/#/home">{{ "HOME" | translate }}</a></li>
+		    <li ng-if="vm.isAuthenticated()" access="USER,ADMIN"><a href="/#/profile">Profile</a></li>
+		    <li ng-if="vm.isAuthenticated()" access="ADMIN"><a href="/#/user-list">Users</a></li>
+		  </ul>
+		  <ul class="nav navbar-nav pull-right">
+		  	<li >
+		  		<a ng-translate-language-select></a></li>
+		  	</li>
+		  </ul>
+		  <ul ng-if="!vm.isAuthenticated()" class="nav navbar-nav pull-right">
+		    <li><a href="/#/login">Login</a></li>
+		    <li><a href="/#/signup">Sign up</a></li>
+		  </ul>
+		  <ul ng-if="vm.isAuthenticated()" class="nav navbar-nav pull-right">
+		  	<li><a >Hello {{ vm.currentUser }}</a></li>
+		    <li><a href="/#/logout">Logout</a></li>
+		  </ul>
+		</div>
+
+		<!-- 
+		<div ng-show="vmError.error">
+			<h4>
+				<div class="alert alert-danger fade in" data-ng-show="vmError.error">
+					<button type="button" class="close" data-dismiss="alert" aria-label="close" >x</button>
+					<strong>Error!</strong> {{ vmError.error | translate }}
+				</div>
+			</h4>
+		</div>
+
+		<uib-alert type="danger" close="vmError.closeError()" ng-if="vmError.error" dismiss-on-timeout="2000">{{ vmError.error | translate }}</uib-alert>
+		 -->
+
+		<uib-alert ng-repeat="alert in vmError.alerts | unique: 'msg'" type="{{alert.type}}" close="vmError.closeAlert($index)" ng-if="vmError.alerts" dismiss-on-timeout="2000">
+			{{alert.msg | translate }}
+		</uib-alert>
+
+		<div ui-view class="fadeZoom"></div>
+
 	</div>
-
-	<div ui-view class="fadeZoom"></div>
-
 	<!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
  	<![endif]-->
 
 	<!-- build:vendor scripts/vendor.min.js -->
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/angular-resource/angular-resource.js"></script>
 	<script src="bower_components/satellizer/satellizer.js"></script>
@@ -70,6 +93,9 @@
 	<script src="bower_components/angular-dynamic-locale/tmhDynamicLocale.min.js"></script>
 	<script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.min.js"></script>
 	<script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	<script src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:scripts scripts/app.min.js -->
@@ -89,6 +115,7 @@
 	<script src="components/users/userServiceHttp.js"></script>
 	<script src="components/tranlation/LanguageSelectDirective.js"></script>
 	<script src="components/tranlation/LocaleService.js"></script>
+	<script src="components/handling-error/handlingErrorController.js"></script>
 	<script src="shared/directives/passwordMatch.js"></script>
 	<script src="shared/directives/passwordStrength.js"></script>
 	<script src="shared/directives/authorizationAccess.js"></script>

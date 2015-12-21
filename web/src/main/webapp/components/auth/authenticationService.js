@@ -71,7 +71,7 @@ angular.module('myApp.auth')
 		    })
 		    .catch(function(response){
 		        // Si ha habido errores llegamos a esta parte
-		    	console.log("errores en el login", response);
+//		    	console.log("errores en el login", response);
 		    });
 	    }
 

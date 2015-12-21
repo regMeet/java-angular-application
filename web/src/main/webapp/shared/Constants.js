@@ -7,6 +7,11 @@ angular.module('myApp.auth')
   notAuthorized: 'auth-not-authorized'
 })
 
+.constant('ERROR', {
+  failedDependency: 'failedDependency',
+  badRequest: 'badRequest'
+})
+
 .constant('USER_ROLES', {
   ADMIN: 'ADMIN',
   USER: 'USER',

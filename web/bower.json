@@ -17,6 +17,8 @@
     "angular-dynamic-locale": "~0.1.28",
     "angular-i18n": "1.5.0-build.4441+sha.c7ed8a3",
     "angular-translate-handler-log": "~2.8.1",
-    "angular-translate-storage-local":  "~2.8.1"
+    "angular-translate-storage-local": "~2.8.1",
+    "angular-bootstrap": "0.14.3",
+    "angular-filter": "0.2.3"
   }
 }

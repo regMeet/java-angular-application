@@ -1,5 +1,7 @@
 {
 	"directives.language-select.Language": "Lenguaje",
 	"HOME": "Principal",
-    "GREETINGS": "Bienvenido a la página"
+    "GREETINGS": "Bienvenido a la página",
+    "error.happening": "error !!! ",
+    "project.account.suspended": "Tu cuenta fue suspendida, por favor contactese con el administrador"
 }

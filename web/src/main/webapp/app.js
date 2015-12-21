@@ -9,9 +9,12 @@ angular.module('myApp', [
     'myApp.users',
     'myApp.directives',
     'myApp.translation',
+    'myApp.handling-error',
     'mgcrea.ngStrap', // model http://mgcrea.github.io/angular-strap/
     'ngMessages',
     'ui.router',
+    'ui.bootstrap',
+    'angular.filter', // filter unique -- ui.filters -- ui.unique -- angular-ui-utils": "0.2.3" https://github.com/a8m/angular-filter#get-started
     'pascalprecht.translate', // angular-translate
     'tmh.dynamicLocale' // angular-dynamic-locale
 ])
@@ -48,7 +51,7 @@ angular.module('myApp', [
             clientId: '84302306491-ff8lnfb0un9j7dgcvs5iejo9fhrv9lik.apps.googleusercontent.com'
         });
 
-        $translateProvider.useMissingTranslationHandlerLog();
+//        $translateProvider.useMissingTranslationHandlerLog();
 
         $translateProvider.useStaticFilesLoader({
             prefix: LOCALES.LANGUAGE_PATH + '/locale-',// path to translations files

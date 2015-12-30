@@ -117,9 +117,8 @@ public class AuthServiceImpl implements AuthService {
 		Locale locale = new Locale(userToSave.getLanguage());
 		String name = getUserName(userToSave, locale);
 
-		String subject = i18nService.getMessage("email.confirmation.subject", userToSave.getLanguage());
 		String verifyUrl = urlFactory.getVerifyUrl() + newToken;
-		emailService.sendConfirmationMessage(userToSave.getEmail(), subject, locale, name, verifyUrl);
+		emailService.sendConfirmationMessage(userToSave.getEmail(), locale, name, verifyUrl);
 	}
 
 	private String getUserName(User userToSave, Locale locale) {
@@ -144,9 +143,8 @@ public class AuthServiceImpl implements AuthService {
 		Locale locale = new Locale(user.getLanguage());
 		String name = getUserName(user, locale);
 
-		String subject = i18nService.getMessage("email.forgot.password.subject", user.getLanguage());
 		String verifyUrl = urlFactory.getForgotPassUrl() + newToken;
-		emailService.sendForgotPasswordMessage(user.getEmail(), subject, locale, name, verifyUrl);
+		emailService.sendForgotPasswordMessage(user.getEmail(), locale, name, verifyUrl);
 	}
 
 	@Override

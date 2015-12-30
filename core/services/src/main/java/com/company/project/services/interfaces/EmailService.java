@@ -7,10 +7,10 @@ public interface EmailService {
 
     void sendMail(String to, String subject, String body);
 
-	void sendHTMLMessage(String to, String subject, Locale locale, String templateName, Map<String, String> templateVars);
+    void sendHTMLMessage(String to, String subject, Locale locale, String templateName, Map<String, String> templateVars);
 
-	void sendConfirmationMessage(String to, String subject, Locale locale, String name, String link);
+    void sendConfirmationMessage(String to, Locale locale, String name, String link);
 
-	void sendForgotPasswordMessage(String to, String subject, Locale locale, String name, String link);
+    void sendForgotPasswordMessage(String to, Locale locale, String name, String link);
 
 }

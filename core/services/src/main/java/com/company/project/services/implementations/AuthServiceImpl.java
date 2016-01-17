@@ -1,9 +1,6 @@
 package com.company.project.services.implementations;
 
-import io.jsonwebtoken.Claims;
-
 import java.util.Collection;
-import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -57,6 +54,8 @@ import com.company.project.transformers.UserTransformer;
 import com.company.project.transformers.UserVOTransformer;
 import com.company.project.utils.LocalDateUtils;
 import com.google.common.base.Optional;
+
+import io.jsonwebtoken.Claims;
 
 @Transactional
 @Service
@@ -114,19 +113,19 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private void sendConfirmationEmail(User userToSave, String newToken) {
-		Locale locale = new Locale(userToSave.getLanguage());
-		String name = getUserName(userToSave, locale);
+		String language = userToSave.getLanguage();
+		String name = getUserName(userToSave, language);
 
 		String verifyUrl = urlFactory.getVerifyUrl() + newToken;
-		emailService.sendConfirmationMessage(userToSave.getEmail(), locale, name, verifyUrl);
+		emailService.sendConfirmationMessage(userToSave.getEmail(), language, name, verifyUrl);
 	}
 
-	private String getUserName(User userToSave, Locale locale) {
+	private String getUserName(User userToSave, String language) {
 		String firstname = userToSave.getFirstname();
 		String lastname = userToSave.getLastname();
 		String username = userToSave.getUsername();
 
-		String name = i18nService.getMessage("email.default.name", locale);
+		String name;
 		if (StringUtils.isNotBlank(firstname)) {
 			name = firstname;
 		} else if (StringUtils.isNotBlank(lastname)) {
@@ -134,17 +133,16 @@ public class AuthServiceImpl implements AuthService {
 		} else if (StringUtils.isNotBlank(username)) {
 			name = username;
 		} else {
-			name = i18nService.getMessage("email.default.name", userToSave.getLanguage());
+			name = i18nService.getMessage("email.default.name", language);
 		}
 		return name;
 	}
 
 	private void sendForgotPasswordEmail(User user, String newToken) {
-		Locale locale = new Locale(user.getLanguage());
-		String name = getUserName(user, locale);
+		String name = getUserName(user, user.getLanguage());
 
 		String verifyUrl = urlFactory.getForgotPassUrl() + newToken;
-		emailService.sendForgotPasswordMessage(user.getEmail(), locale, name, verifyUrl);
+		emailService.sendForgotPasswordMessage(user.getEmail(), user.getLanguage(), name, verifyUrl);
 	}
 
 	@Override

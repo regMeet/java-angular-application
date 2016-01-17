@@ -16,29 +16,28 @@ import com.company.project.services.interfaces.EmailService;
 @ContextConfiguration(locations = "classpath:testApplicationContext.xml")
 public class EmailServiceImplIntegrationTest {
 
-	private static final Locale SPANISH = new Locale("es");
-	@Autowired
-	private EmailService emailService;
+    private static final Locale SPANISH = new Locale("es");
+    @Autowired
+    private EmailService emailService;
 
-	@Before
-	public void setUp() {
-	}
+    @Before
+    public void setUp() {
+    }
 
-	@Ignore
-	@Test
-	public void testSendSimpleEmail() {
-		String to = "alan.albertengo@gmail.com";
-		String subject = "subject";
-		String body = "body";
-		emailService.sendMail(to, subject, body);
-	}
+    @Ignore
+    @Test
+    public void testSendSimpleEmail() {
+        String to = "alan.albertengo@gmail.com";
+        String subject = "subject";
+        String body = "body";
+        emailService.sendMail(to, subject, body);
+    }
 
-	@Ignore
-	@Test
-	public void testSendHTMLEmail() {
-		String to = "alan.albertengo@gmail.com";
-		String subject = "subject";
-		emailService.sendConfirmationMessage(to, subject, SPANISH, "Alan", "linkValue");
-	}
+    @Ignore
+    @Test
+    public void testSendHTMLEmail() {
+        String to = "alan.albertengo@gmail.com";
+        emailService.sendConfirmationMessage(to, SPANISH, "Alan1", "linkValue");
+    }
 
 }

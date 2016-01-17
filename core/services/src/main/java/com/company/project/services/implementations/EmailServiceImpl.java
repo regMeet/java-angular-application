@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.company.project.services.interfaces.EmailService;
+import com.company.project.services.utils.InternationalizationService;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -27,80 +28,87 @@ import freemarker.template.TemplateException;
 @Transactional
 @Service
 public class EmailServiceImpl implements EmailService {
-	private static final String CONFIRMATION_TEMPLATE = "confirmation.ftl";
-	private static final String FORGOT_PASSWORD_TEMPLATE = "forgotPassword.ftl";
+    private static final String CONFIRMATION_TEMPLATE = "confirmation.ftl";
+    private static final String FORGOT_PASSWORD_TEMPLATE = "forgotPassword.ftl";
 
-	private JavaMailSender mailSender;
-	private Configuration config;
+    private static final String CONFIRMATION_SUBJECT = "email.confirmation.subject";
+    private static final String NEW_PASSWORD_SUBJECT = "email.forgot.password.subject";
 
-	@Value("${smtp.from}")
-	private String name;
+    private final InternationalizationService i18nService;
+    private JavaMailSender mailSender;
+    private Configuration config;
 
-	@Value("${smtp.username}")
-	private String email;
+    @Value("${smtp.from}")
+    private String name;
 
-	@Autowired
-	public EmailServiceImpl(JavaMailSender mailSender, Configuration config) {
-		this.mailSender = mailSender;
-		this.config = config;
-	}
+    @Value("${smtp.username}")
+    private String email;
 
-	private Template getTemplate(String templateName, Locale locale) throws IOException, TemplateException {
-		return config.getTemplate(templateName, locale);
-	}
+    @Autowired
+    public EmailServiceImpl(JavaMailSender mailSender, Configuration config, InternationalizationService i18nService) {
+        this.mailSender = mailSender;
+        this.config = config;
+        this.i18nService = i18nService;
+    }
 
-	@Async
-	@Override
-	public void sendMail(String to, String subject, String body) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(to);
-		message.setSubject(subject);
-		message.setText(body);
-		mailSender.send(message);
-	}
+    private Template getTemplate(String templateName, Locale locale) throws IOException, TemplateException {
+        return config.getTemplate(templateName, locale);
+    }
 
-	@Override
-	public void sendHTMLMessage(String to, String subject, Locale locale, String templateName, Map<String, String> templateVars) {
-		try {
-			Template template = getTemplate(templateName, locale);
-			String body = FreeMarkerTemplateUtils.processTemplateIntoString(template, templateVars);
+    @Async
+    @Override
+    public void sendMail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        mailSender.send(message);
+    }
 
-			MimeMessage message = mailSender.createMimeMessage();
-			message.setSubject(subject);
-			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-			String from = String.format("%s <%s>", name, email);
-			helper.setFrom(from);
-			helper.setTo(to);
-			helper.setText(body, true);
-			mailSender.send(message);
+    @Override
+    public void sendHTMLMessage(String to, String subject, Locale locale, String templateName, Map<String, String> templateVars) {
+        try {
+            Template template = getTemplate(templateName, locale);
+            String body = FreeMarkerTemplateUtils.processTemplateIntoString(template, templateVars);
 
-		} catch (IOException | TemplateException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
-	}
+            MimeMessage message = mailSender.createMimeMessage();
+            message.setSubject(subject);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            String from = String.format("%s <%s>", name, email);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setText(body, true);
+            mailSender.send(message);
 
-	@Async
-	@Override
-	public void sendConfirmationMessage(String to, String subject, Locale locale, String name, String link) {
-		Map<String, String> templateVars = new HashMap<String, String>();
-		templateVars.put("name", name);
-		templateVars.put("confirmationLink", link);
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 
-		sendHTMLMessage(to, subject, locale, CONFIRMATION_TEMPLATE, templateVars);
-	}
+    @Async
+    @Override
+    public void sendConfirmationMessage(String to, Locale locale, String name, String link) {
+        Map<String, String> templateVars = new HashMap<String, String>();
+        templateVars.put("name", name);
+        templateVars.put("confirmationLink", link);
 
-	@Async
-	@Override
-	public void sendForgotPasswordMessage(String to, String subject, Locale locale, String name, String link) {
-		Map<String, String> templateVars = new HashMap<String, String>();
-		templateVars.put("name", name);
-		templateVars.put("forgotPasswordLink", link);
-		// TODO: create new link
-		templateVars.put("forgotPasswordNotRequestedLink", "create new link");
+        String subject = i18nService.getMessage(CONFIRMATION_SUBJECT, locale.getLanguage());
+        sendHTMLMessage(to, subject, locale, CONFIRMATION_TEMPLATE, templateVars);
+    }
 
-		sendHTMLMessage(to, subject, locale, FORGOT_PASSWORD_TEMPLATE, templateVars);
-	}
+    @Async
+    @Override
+    public void sendForgotPasswordMessage(String to, Locale locale, String name, String link) {
+        Map<String, String> templateVars = new HashMap<String, String>();
+        templateVars.put("name", name);
+        templateVars.put("forgotPasswordLink", link);
+        // TODO: create new link
+        templateVars.put("forgotPasswordNotRequestedLink", "create new link");
+
+        String subject = i18nService.getMessage(NEW_PASSWORD_SUBJECT, locale.getLanguage());
+        sendHTMLMessage(to, subject, locale, FORGOT_PASSWORD_TEMPLATE, templateVars);
+    }
 
 }

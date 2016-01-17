@@ -37,4 +37,8 @@ angular.module('myApp.handling-error', [])
 		//[{"field":"emailOrUsername","message":"forgot.emailOrUsername.length"}]
 	});
 
+	$scope.$on('$stateChangeStart', function (event, next) {
+	    vm.alerts = [];
+	});
+
 } ]);

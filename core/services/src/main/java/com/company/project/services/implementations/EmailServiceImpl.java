@@ -71,17 +71,17 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendHTMLMessage(String to, String subject, Locale locale, String templateName, Map<String, String> templateVars) throws Exception {
-        Template template = getTemplate(templateName, locale);
-        String body = FreeMarkerTemplateUtils.processTemplateIntoString(template, templateVars);
+            Template template = getTemplate(templateName, locale);
+            String body = FreeMarkerTemplateUtils.processTemplateIntoString(template, templateVars);
 
-        MimeMessage message = mailSender.createMimeMessage();
-        message.setSubject(subject);
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        String from = String.format("%s <%s>", name, email);
-        helper.setFrom(from);
-        helper.setTo(to);
-        helper.setText(body, true);
-        mailSender.send(message);
+            MimeMessage message = mailSender.createMimeMessage();
+            message.setSubject(subject);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            String from = String.format("%s <%s>", name, email);
+            helper.setFrom(from);
+            helper.setTo(to);
+            helper.setText(body, true);
+            mailSender.send(message);
     }
 
     @Async
@@ -101,9 +101,9 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public Future<Boolean> sendConfirmationMessage(String to, String language, String name, String link) {
         try {
-            Map<String, String> templateVars = new HashMap<String, String>();
-            templateVars.put("name", name);
-            templateVars.put("confirmationLink", link);
+        Map<String, String> templateVars = new HashMap<String, String>();
+        templateVars.put("name", name);
+        templateVars.put("confirmationLink", link);
 
             String subject = i18nService.getMessage(CONFIRMATION_SUBJECT, language);
             sendHTMLMessage(to, subject, new Locale(language), CONFIRMATION_TEMPLATE, templateVars);
@@ -119,11 +119,11 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public Future<Boolean> sendForgotPasswordMessage(String to, String language, String name, String link) {
         try {
-            Map<String, String> templateVars = new HashMap<String, String>();
-            templateVars.put("name", name);
-            templateVars.put("forgotPasswordLink", link);
-            // TODO: create new link
-            templateVars.put("forgotPasswordNotRequestedLink", "create new link");
+        Map<String, String> templateVars = new HashMap<String, String>();
+        templateVars.put("name", name);
+        templateVars.put("forgotPasswordLink", link);
+        // TODO: create new link
+        templateVars.put("forgotPasswordNotRequestedLink", "create new link");
 
             String subject = i18nService.getMessage(NEW_PASSWORD_SUBJECT, language);
             sendHTMLMessage(to, subject, new Locale(language), FORGOT_PASSWORD_TEMPLATE, templateVars);

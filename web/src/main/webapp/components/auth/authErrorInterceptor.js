@@ -2,12 +2,14 @@
 
 angular.module('myApp.auth')
 
-.factory('authInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
+.factory('authInterceptor', function ($rootScope, $q, AUTH_EVENTS, ERROR) {
   return {
     responseError: function (response) {
       $rootScope.$broadcast({
         401: AUTH_EVENTS.notAuthenticated,
-        403: AUTH_EVENTS.notAuthorized
+        403: AUTH_EVENTS.notAuthorized,
+        424: ERROR.failedDependency,
+        400: ERROR.badRequest
       }[response.status], response);
       return $q.reject(response);
     }

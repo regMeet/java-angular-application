@@ -1,5 +1,7 @@
 {
 	"directives.language-select.Language": "Language",
 	"HOME": "Home",
-    "GREETINGS": "Welcome to this page"
+    "GREETINGS": "Welcome to this page",
+    "error.happening": "error !!! ",
+    "project.account.suspended": "Your account was suspended, please contact the administrator"
 }

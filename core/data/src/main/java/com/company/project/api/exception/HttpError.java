@@ -16,7 +16,8 @@ public enum HttpError {
 	ACCOUNT_NOT_VERIFIED("project.account.not.verified"),
 	FORGET_PASSWORD_LINK_EXPIRED("project.account.forget.password.link.expired"),
 	CONTACT_ADMIN("project.contact.administrator"),
-	ACCOUNT_LINKED_NEEDED_PRECONDITION_FAILED_API("project.acount.linked.needed");
+	ACCOUNT_LINKED_NEEDED_PRECONDITION_FAILED_API("project.acount.linked.needed"),
+	INTERNAL_ERROR("project.internal.error");
 
 	private String messageKey;
 

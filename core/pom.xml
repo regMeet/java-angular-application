@@ -39,6 +39,7 @@
 		<mockito.version>1.10.19</mockito.version>
 		<jjwt.version>0.5.1</jjwt.version>
 		<lombok.version>1.16.6</lombok.version>
+        <jackson.version>2.6.1</jackson.version>
 
 		<!-- Rest layer -->
 		<spring.version>4.2.2.RELEASE</spring.version>

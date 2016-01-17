@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.company.project.VO.ErrorVO;
+import com.company.project.VO.errors.SimpleError;
 import com.company.project.api.exception.HttpError;
 import com.google.gson.Gson;
 
@@ -31,7 +31,7 @@ public final class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
 		response.setContentType(APPLICATION_JSON);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-		ErrorVO error = new ErrorVO();
+		SimpleError error = new SimpleError();
 		error.setMessage(HttpError.UNAUTHORIZED.getMessageKey());
 
 		response.getWriter().println(new Gson().toJson(error));

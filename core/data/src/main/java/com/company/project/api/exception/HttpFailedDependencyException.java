@@ -11,15 +11,4 @@ public class HttpFailedDependencyException extends HttpStatusException {
 		super(httpError);
 	}
 
-	public HttpFailedDependencyException(HttpError httpError, String message) {
-		super(httpError, message);
-	}
-
-	public HttpFailedDependencyException(HttpError httpError, Throwable cause) {
-		super(httpError, cause);
-	}
-
-	public HttpFailedDependencyException(HttpError httpError, String message, Throwable cause) {
-		super(httpError, message, cause);
-	}
 }

@@ -9,7 +9,8 @@ angular.module('myApp.auth')
 
 .constant('ERROR', {
   failedDependency: 'failedDependency',
-  badRequest: 'badRequest'
+  badRequest: 'badRequest',
+  internalError: 'internalError'
 })
 
 .constant('USER_ROLES', {

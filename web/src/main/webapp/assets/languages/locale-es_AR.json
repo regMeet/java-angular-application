@@ -3,5 +3,6 @@
 	"HOME": "Principal",
     "GREETINGS": "Bienvenido a la página",
     "error.happening": "error !!! ",
-    "project.account.suspended": "Tu cuenta fue suspendida, por favor contactese con el administrador"
+    "project.account.suspended": "Tu cuenta fue suspendida, por favor contactese con el administrador",
+    "project.internal.error": "Ops. Hubo un problema, pruebe intentanto luego de nuevo"
 }

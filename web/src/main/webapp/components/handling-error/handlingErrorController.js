@@ -29,12 +29,16 @@ angular.module('myApp.handling-error', [])
 	});
 
 	$scope.$on(ERROR.failedDependency, function(event, response) {
-		vm.alerts.push({type: 'danger', msg: response.data.message});
+		vm.alerts.push({type: 'danger', msg: response.data.message, time: 2000});
 	});
 
 	$scope.$on(ERROR.badRequest, function(event, response) {
 		//vm.alerts.push({type: 'danger', msg: response.data.message});
 		//[{"field":"emailOrUsername","message":"forgot.emailOrUsername.length"}]
+	});
+
+	$scope.$on(ERROR.internalError, function(event, response) {
+		vm.alerts.push({type: 'warning', msg: response.data.message, time: 1000});
 	});
 
 	$scope.$on('$stateChangeStart', function (event, next) {

@@ -9,7 +9,8 @@ angular.module('myApp.auth')
         401: AUTH_EVENTS.notAuthenticated,
         403: AUTH_EVENTS.notAuthorized,
         424: ERROR.failedDependency,
-        400: ERROR.badRequest
+        400: ERROR.badRequest,
+        500: ERROR.internalError,
       }[response.status], response);
       return $q.reject(response);
     }

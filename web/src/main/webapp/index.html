@@ -65,7 +65,7 @@
 		<uib-alert type="danger" close="vmError.closeError()" ng-if="vmError.error" dismiss-on-timeout="2000">{{ vmError.error | translate }}</uib-alert>
 		 -->
 
-		<uib-alert ng-repeat="alert in vmError.alerts | unique: 'msg'" type="{{alert.type}}" close="vmError.closeAlert($index)" ng-if="vmError.alerts" dismiss-on-timeout="2000">
+		<uib-alert ng-repeat="alert in vmError.alerts | unique: 'msg'" type="{{alert.type}}" close="vmError.closeAlert($index)" ng-if="vmError.alerts" dismiss-on-timeout="{{alert.time}}">
 			{{alert.msg | translate }}
 		</uib-alert>
 
